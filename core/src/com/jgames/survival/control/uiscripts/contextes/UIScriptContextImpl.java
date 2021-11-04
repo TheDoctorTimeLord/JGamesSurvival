@@ -1,7 +1,6 @@
 package com.jgames.survival.control.uiscripts.contextes;
 
 import com.badlogic.gdx.utils.Null;
-import com.jgames.survival.control.SingleActiveScriptMachine;
 import com.jgames.survival.control.UIAction;
 import com.jgames.survival.control.uiscripts.UIScriptMachine;
 
@@ -17,13 +16,6 @@ public class UIScriptContextImpl implements UIScriptContext {
     @Null
     public UIAction getDispatchedAction() {
         return dispatchedAction;
-    }
-
-    @Override
-    public void resetActiveScript() {
-        if (scriptMachine instanceof SingleActiveScriptMachine) {
-            ((SingleActiveScriptMachine)scriptMachine).resetActiveScript();
-        }
     }
 
     @Override

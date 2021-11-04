@@ -1,5 +1,7 @@
 package com.jgames.survival.ui.uiscriptelements;
 
+import java.util.Set;
+
 import com.jgames.survival.control.UIAction;
 import com.jgames.survival.control.uiscripts.UIScriptElement;
 import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
@@ -15,8 +17,8 @@ public class WithPatternPrinter implements UIScriptElement<CommandAndCellState> 
     }
 
     @Override
-    public boolean needWait() {
-        return false;
+    public boolean isRunnableElement() {
+        return true;
     }
 
     @Override
@@ -25,7 +27,17 @@ public class WithPatternPrinter implements UIScriptElement<CommandAndCellState> 
     }
 
     @Override
+    public Set<Class<? extends UIAction>> getWaitedActions() {
+        return null;
+    }
+
+    @Override
     public void handle(UIScriptElementContext context, CommandAndCellState state) {
         textInformation.addText(String.format(pattern, state.getMapCell().getRow(), state.getMapCell().getColumn()));
+    }
+
+    @Override
+    public boolean rollback(UIAction action, CommandAndCellState state) {
+        return true;
     }
 }

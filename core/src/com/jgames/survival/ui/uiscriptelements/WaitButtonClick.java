@@ -1,5 +1,8 @@
 package com.jgames.survival.ui.uiscriptelements;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.jgames.survival.control.UIAction;
 import com.jgames.survival.control.actions.CommandButtonClicked;
 import com.jgames.survival.control.uiscripts.UIScriptElement;
@@ -14,8 +17,8 @@ public class WaitButtonClick implements UIScriptElement<CommandAndCellState> {
     }
 
     @Override
-    public boolean needWait() {
-        return true;
+    public boolean isRunnableElement() {
+        return false;
     }
 
     @Override
@@ -25,12 +28,22 @@ public class WaitButtonClick implements UIScriptElement<CommandAndCellState> {
     }
 
     @Override
+    public Set<Class<? extends UIAction>> getWaitedActions() {
+        return Collections.singleton(CommandButtonClicked.class);
+    }
+
+    @Override
     public void handle(UIScriptElementContext context, CommandAndCellState state) {
-        CommandButtonClicked commandButtonClicked = (CommandButtonClicked)context.getDispatchedAction();
-        if (commandButton.equals(commandButtonClicked.getCommandButton())) {
-            state.setCommandButton(commandButton);
-        } else {
-            context.resetActiveScript();
+        state.setCommandButton(commandButton);
+    }
+
+    @Override
+    public boolean rollback(UIAction action, CommandAndCellState state) {
+        if (action instanceof CommandButtonClicked && commandButton.equals(((CommandButtonClicked)action).getCommandButton())) {
+            return false;
         }
+
+        state.setCommandButton(null);
+        return true;
     }
 }

@@ -5,5 +5,4 @@ import com.jgames.survival.control.UIAction;
 
 public interface UIScriptElementContext {
     @Null UIAction getDispatchedAction();
-    void resetActiveScript(); //TODO ИЗБАВСЯ ОТ ЭТОГО!
 }
