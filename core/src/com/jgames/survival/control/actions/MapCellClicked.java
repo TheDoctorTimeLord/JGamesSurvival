@@ -2,7 +2,7 @@ package com.jgames.survival.control.actions;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.jgames.survival.control.UIAction;
-import com.jgames.survival.ui.clickable.MapCell;
+import com.jgames.survival.ui.widgets.MapCell;
 
 public class MapCellClicked implements UIAction, Poolable {
     private MapCell clickedCell;

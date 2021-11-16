@@ -5,13 +5,13 @@ import java.util.Set;
 import com.jgames.survival.control.UIAction;
 import com.jgames.survival.control.uiscripts.UIScriptElement;
 import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
-import com.jgames.survival.ui.TextInformation;
+import com.jgames.survival.ui.widgets.TextListWidget;
 
 public class WithPatternPrinter implements UIScriptElement<CommandAndCellState> {
     private final String pattern;
-    private final TextInformation textInformation;
+    private final TextListWidget textInformation;
 
-    public WithPatternPrinter(String pattern, TextInformation textInformation) {
+    public WithPatternPrinter(String pattern, TextListWidget textInformation) {
         this.pattern = pattern;
         this.textInformation = textInformation;
     }

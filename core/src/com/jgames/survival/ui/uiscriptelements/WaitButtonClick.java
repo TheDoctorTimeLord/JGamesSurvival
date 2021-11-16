@@ -7,7 +7,7 @@ import com.jgames.survival.control.UIAction;
 import com.jgames.survival.control.actions.CommandButtonClicked;
 import com.jgames.survival.control.uiscripts.UIScriptElement;
 import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
-import com.jgames.survival.ui.clickable.CommandButton;
+import com.jgames.survival.ui.widgets.CommandButton;
 
 public class WaitButtonClick implements UIScriptElement<CommandAndCellState> {
     private final CommandButton commandButton;

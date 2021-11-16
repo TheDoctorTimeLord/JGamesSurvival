@@ -1,4 +1,4 @@
-package com.jgames.survival.ui.clickable;
+package com.jgames.survival.ui.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

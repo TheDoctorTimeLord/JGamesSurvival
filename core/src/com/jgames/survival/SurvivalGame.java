@@ -1,68 +1,65 @@
 package com.jgames.survival;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jgames.survival.control.clickhandlers.CommandButtonClickHandler;
 import com.jgames.survival.control.clickhandlers.MapCellClickHandler;
 import com.jgames.survival.control.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.control.uiscripts.scriptmachines.MultipleActiveScriptMachine;
-import com.jgames.survival.ui.CommandPanel;
-import com.jgames.survival.ui.MapTable;
-import com.jgames.survival.ui.TextInformation;
+import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
+import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
+import com.jgames.survival.ui.uicomponents.CommandPanelComponent;
+import com.jgames.survival.ui.uicomponents.LeftTopInformationComponent;
+import com.jgames.survival.ui.uicomponents.MapTableComponent;
+import com.jgames.survival.utils.GameProperties;
 
 public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
-	private static final boolean DEBUG_MODE = false;
+	private boolean isDebugMode;
 
 	private Stage stage;
-	private ScrollPane textInformationScrollPane;
+
+	private Texture boardingTexture;
 
 	@Override
-	public void create () {
-		DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
+	public void create() {
+		initGlobalParameters();
 
+		boardingTexture = new Texture("cell.png"); //TODO добавить инициализацию графики
+
+		DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
 		stage = new Stage(new ScreenViewport());
 
-		MapTable globalMapTable = new MapTable(20, 20, new MapCellClickHandler(scriptMachine));
-		ScrollPane globalMapTableScrollPane = globalMapTable.getScrollPaneWrapper();
-		globalMapTableScrollPane.setFillParent(true);
-		stage.addActor(globalMapTableScrollPane);
+		UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage);
 
-		TextInformation textInformation = new TextInformation();
-		textInformationScrollPane = textInformation.getScrollPaneWrapper(300, 600);
-		textInformationScrollPane.setPosition(0, stage.getHeight() - 600);
-		stage.addActor(textInformationScrollPane);
+		componentRegistrar.registerComponent(new MapTableComponent(20, 20, new MapCellClickHandler(scriptMachine)));
+		componentRegistrar.registerComponent(new LeftTopInformationComponent(boardingTexture, 300, 300));
+		componentRegistrar.registerComponent(new CommandPanelComponent(new CommandButtonClickHandler(scriptMachine)));
 
-		UIElements uiElements = new UIElements(scriptMachine, textInformation);
-
-		CommandPanel commandPanel = new CommandPanel(uiElements, new CommandButtonClickHandler(scriptMachine));
-		commandPanel.align(Align.center | Align.bottom);
-		commandPanel.setFillParent(true);
-		stage.addActor(commandPanel);
-
-		if (DEBUG_MODE) {
-			globalMapTable.setDebug(true);
-			globalMapTableScrollPane.setDebug(true);
-			commandPanel.setDebug(true);
-			textInformation.setDebug(true);
-		}
+		UIElements uiElements = componentRegistrar.createInterface();
 
 		Gdx.input.setInputProcessor(stage);
+
+		if (isDebugMode) {
+			uiElements.setDebug(true);
+		}
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
-		textInformationScrollPane.setPosition(0, stage.getHeight() - 600);
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		stage.act();
@@ -70,7 +67,28 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 	}
 	
 	@Override
-	public void dispose () {
+	public void dispose() {
 		stage.dispose();
+		boardingTexture.dispose();
+	}
+
+	private void initGlobalParameters() {
+		GameProperties globalSettings = getGlobalSettings();
+		isDebugMode = globalSettings.getProperty("isDebugEnable");
+	}
+
+	private static GameProperties getGlobalSettings() {
+		try {
+			FileHandle globalSettingsUrl = Gdx.files.internal("gameconfig.properties");
+			Properties globalSettings = new Properties();
+			globalSettings.load(globalSettingsUrl.read());
+			return new GameProperties(globalSettings, true);
+		}
+		catch (IOException e) {
+			Gdx.app.error(SurvivalGame.class.getSimpleName(), "Error with global settings", e);
+			GameProperties defaultProperties = new GameProperties();
+			defaultProperties.setProperty("isDebugEnable", false);
+			return defaultProperties;
+		}
 	}
 }

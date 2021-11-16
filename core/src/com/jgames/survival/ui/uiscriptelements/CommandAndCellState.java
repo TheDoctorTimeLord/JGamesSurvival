@@ -1,8 +1,8 @@
 package com.jgames.survival.ui.uiscriptelements;
 
 import com.jgames.survival.control.uiscripts.UIScriptState;
-import com.jgames.survival.ui.clickable.CommandButton;
-import com.jgames.survival.ui.clickable.MapCell;
+import com.jgames.survival.ui.widgets.CommandButton;
+import com.jgames.survival.ui.widgets.MapCell;
 
 public class CommandAndCellState implements UIScriptState {
     private CommandButton commandButton;

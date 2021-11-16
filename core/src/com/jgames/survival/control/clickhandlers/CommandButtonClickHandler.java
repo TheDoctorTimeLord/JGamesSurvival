@@ -4,8 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Pools;
 import com.jgames.survival.control.UIActionDispatcher;
 import com.jgames.survival.control.actions.CommandButtonClicked;
-import com.jgames.survival.ui.clickable.CommandButton;
-import com.jgames.survival.ui.clickable.CommandButton.ClickOnCommandButton;
+import com.jgames.survival.ui.widgets.CommandButton;
+import com.jgames.survival.ui.widgets.CommandButton.ClickOnCommandButton;
 
 public class CommandButtonClickHandler implements ClickOnCommandButton {
     private final UIActionDispatcher actionDispatcher;
