@@ -6,13 +6,14 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.jgames.survival.control.uiscripts.UIScriptMachine;
+import com.jgames.survival.model.GameActionSender;
 
 public class JavaClassUIComponentRegistrar implements UIComponentRegistrar {
     private final UIElements uiElements;
     private final List<UIComponent> registeredComponents = new ArrayList<>();
 
-    public JavaClassUIComponentRegistrar(UIScriptMachine scriptMachine, Stage stage) {
-        this.uiElements = new UIElements(scriptMachine, stage);
+    public JavaClassUIComponentRegistrar(UIScriptMachine scriptMachine, Stage stage, GameActionSender actionSender) {
+        this.uiElements = new UIElements(scriptMachine, stage, actionSender);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.jgames.survival.ui.UIComponent;
 import com.jgames.survival.ui.UIElements;
+import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
 import com.jgames.survival.ui.widgets.MapCell.ClickOnMapCell;
 
@@ -14,6 +15,7 @@ public class MapTableComponent implements UIComponent {
     private final int width;
     private final int height;
     private final ClickOnMapCell cellCallback;
+    private GlobalMapWrapper<MapCell> globalMap;
 
     private ScrollPane mapTableScrollableWrapper;
 
@@ -28,16 +30,16 @@ public class MapTableComponent implements UIComponent {
         Texture texture = new Texture("cell.png"); //TODO централизовать работу с assets
         TextureRegion region = new TextureRegion(texture);
 
-        Table globalMap = createGlobalMap(region);
+        globalMap = createGlobalMap(region);
         createGlobalMapScrollableWrapper(globalMap);
     }
 
-    private void createGlobalMapScrollableWrapper(Table mapTable) {
-        mapTableScrollableWrapper = new ScrollPane(mapTable);
+    private void createGlobalMapScrollableWrapper(GlobalMapWrapper<MapCell> mapTable) {
+        mapTableScrollableWrapper = new ScrollPane(mapTable.getWrapped());
         mapTableScrollableWrapper.setFillParent(true);
     }
 
-    private Table createGlobalMap(TextureRegion region) {
+    private GlobalMapWrapper<MapCell> createGlobalMap(TextureRegion region) {
         Table mapTable = new Table();
 
         for (int x = 0; x < width; x++) {
@@ -46,7 +48,7 @@ public class MapTableComponent implements UIComponent {
             }
             mapTable.row();
         }
-        return mapTable;
+        return new GlobalMapWrapper<>(mapTable);
     }
 
     @Override
@@ -56,6 +58,6 @@ public class MapTableComponent implements UIComponent {
 
     @Override
     public Actor getActionableComponent() {
-        return null;
+        return globalMap;
     }
 }

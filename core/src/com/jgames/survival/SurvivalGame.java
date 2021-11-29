@@ -14,6 +14,9 @@ import com.jgames.survival.control.clickhandlers.CommandButtonClickHandler;
 import com.jgames.survival.control.clickhandlers.MapCellClickHandler;
 import com.jgames.survival.control.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.control.uiscripts.scriptmachines.MultipleActiveScriptMachine;
+import com.jgames.survival.model.AbstractGameHandler;
+import com.jgames.survival.model.GameConfiguration;
+import com.jgames.survival.model.MainGameHandler;
 import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
 import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
@@ -25,8 +28,8 @@ import com.jgames.survival.utils.GameProperties;
 public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
 	private boolean isDebugMode;
 
+	private AbstractGameHandler gameHandler;
 	private Stage stage;
-
 	private Texture boardingTexture;
 
 	@Override
@@ -35,10 +38,13 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
 		boardingTexture = new Texture("cell.png"); //TODO добавить инициализацию графики
 
+		gameHandler = new MainGameHandler(new GameConfiguration());
+		gameHandler.start();
+
 		DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
 		stage = new Stage(new ScreenViewport());
 
-		UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage);
+		UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler);
 
 		componentRegistrar.registerComponent(new MapTableComponent(20, 20, new MapCellClickHandler(scriptMachine)));
 		componentRegistrar.registerComponent(new LeftTopInformationComponent(boardingTexture, 300, 300));
@@ -68,6 +74,14 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 	
 	@Override
 	public void dispose() {
+		gameHandler.stopGame();
+		try {
+			gameHandler.join();
+		}
+		catch (InterruptedException e) {
+			Gdx.app.error("INTERRUPTED", "Game was interrupted and not joining", e);
+		}
+
 		stage.dispose();
 		boardingTexture.dispose();
 	}
