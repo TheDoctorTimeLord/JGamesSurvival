@@ -1,4 +1,4 @@
-package com.jgames.survival.ui.uiscriptelements;
+package com.jgames.survival.ui.uiscriptelements.commandpanel;
 
 import com.jgames.survival.control.uiscripts.UIScriptState;
 import com.jgames.survival.ui.widgets.CommandButton;

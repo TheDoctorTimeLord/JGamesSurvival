@@ -1,38 +1,43 @@
-package com.jgames.survival.ui.uiscriptelements;
+package com.jgames.survival.ui.uiscriptelements.commandpanel;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.jgames.survival.control.UIAction;
-import com.jgames.survival.control.actions.MapCellClicked;
 import com.jgames.survival.control.uiscripts.UIScriptElement;
 import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
+import com.jgames.survival.ui.widgets.TextListWidget;
 
-public class WaitMapCell implements UIScriptElement<CommandAndCellState> {
+public class WithPatternPrinter implements UIScriptElement<CommandAndCellState> {
+    private final String pattern;
+    private final TextListWidget textInformation;
+
+    public WithPatternPrinter(String pattern, TextListWidget textInformation) {
+        this.pattern = pattern;
+        this.textInformation = textInformation;
+    }
+
     @Override
     public boolean isRunnableElement() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isValid(UIAction action) {
-        return action instanceof MapCellClicked;
+        return true;
     }
 
     @Override
     public Set<Class<? extends UIAction>> getWaitedActions() {
-        return Collections.singleton(MapCellClicked.class);
+        return null;
     }
 
     @Override
     public void handle(UIScriptElementContext context, CommandAndCellState state) {
-        MapCellClicked mapCellClicked = (MapCellClicked)context.getDispatchedAction();
-        state.setMapCell(mapCellClicked.getClickedCell());
+        textInformation.addText(String.format(pattern, state.getMapCell().getRow(), state.getMapCell().getColumn()));
     }
 
     @Override
     public boolean rollback(UIAction action, CommandAndCellState state) {
-        state.setMapCell(null);
         return true;
     }
 }

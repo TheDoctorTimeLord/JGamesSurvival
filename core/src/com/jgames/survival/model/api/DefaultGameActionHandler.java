@@ -1,10 +1,12 @@
-package com.jgames.survival.model.api.actionhandlers;
+package com.jgames.survival.model.api;
 
 import com.badlogic.gdx.Gdx;
-import com.jgames.survival.model.api.GameAction;
-import com.jgames.survival.model.api.GameActionHandler;
+import com.jgames.survival.model.game.logic.GameBattleHandler;
 
 public class DefaultGameActionHandler implements GameActionHandler<GameAction> {
+    @Override
+    public void configure(GameBattleHandler battleHandler) {}
+
     @Override
     public Class<?> getHandlingActionClass() {
         return null;

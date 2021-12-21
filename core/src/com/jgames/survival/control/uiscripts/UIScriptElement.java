@@ -5,7 +5,7 @@ import java.util.Set;
 import com.jgames.survival.control.UIAction;
 import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
 
-public interface UIScriptElement<S extends UIScriptState> {
+public interface UIScriptElement<S extends UIScriptState> { //TODO сделать дробление на ранабл и не ранабл
     Set<Class<? extends UIAction>> getWaitedActions();
     boolean isRunnableElement();
 

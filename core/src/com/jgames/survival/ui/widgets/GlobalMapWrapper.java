@@ -28,6 +28,7 @@ public class GlobalMapWrapper<C extends Actor> extends Actor {
             throw new IllegalArgumentException("Row must be in [0; " + wrapped.getRows() + ")");
         }
 
-        return (C)wrapped.getCells().get(row * wrapped.getColumns() + column).getActor();
+        int index = (wrapped.getRows() - row - 1) * wrapped.getColumns() + column;
+        return (C)wrapped.getCells().get(index).getActor();
     }
 }

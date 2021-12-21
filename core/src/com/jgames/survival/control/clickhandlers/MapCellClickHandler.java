@@ -19,6 +19,6 @@ public class MapCellClickHandler implements ClickOnMapCell {
         MapCellClicked action = Pools.obtain(MapCellClicked.class);
         action.setClickedCell(mapCell);
 
-        actionDispatcher.dispatch(action, mapCellAction -> Pools.free(action));
+        actionDispatcher.dispatch(action, Pools::free);
     }
 }

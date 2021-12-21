@@ -17,7 +17,7 @@ public class Publisher<I, S extends Subscriber<I>> {
     public void notify(I information) {
         subscribers.forEach(subscriber -> {
             if (subscriber.needNotify(information)) {
-                subscriber.subscribe(information, this);
+                subscriber.notify(information, this);
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.jgames.survival.ui.uiscriptelements;
+package com.jgames.survival.ui.uiscriptelements.commandpanel;
 
 import java.util.Collections;
 import java.util.Set;

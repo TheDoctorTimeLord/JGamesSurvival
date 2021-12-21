@@ -15,4 +15,12 @@ public class GameBattleHandler {
 
         battleMaster.prepareBattle(new SimpleBattleGenerator(), registrar, behaviorsManager);
     }
+
+    public void onStart() {
+        battleMaster.informationAboutInitialize();
+    }
+
+    public BattleMaster getBattleMaster() {
+        return battleMaster;
+    }
 }

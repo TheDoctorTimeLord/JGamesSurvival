@@ -12,6 +12,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jgames.survival.control.clickhandlers.CommandButtonClickHandler;
 import com.jgames.survival.control.clickhandlers.MapCellClickHandler;
+import com.jgames.survival.control.clickhandlers.PhaseOrTurnClickedHandler;
+import com.jgames.survival.control.gamechangeshangling.GameChangeHandlersRegistrar;
+import com.jgames.survival.control.gamechangeshangling.PresentingGameState;
+import com.jgames.survival.control.gamechangeshangling.handlers.CommonBattleChangesHandler;
 import com.jgames.survival.control.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.control.uiscripts.scriptmachines.MultipleActiveScriptMachine;
 import com.jgames.survival.model.AbstractGameHandler;
@@ -23,6 +27,7 @@ import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.uicomponents.CommandPanelComponent;
 import com.jgames.survival.ui.uicomponents.LeftTopInformationComponent;
 import com.jgames.survival.ui.uicomponents.MapTableComponent;
+import com.jgames.survival.ui.uicomponents.PhaseAndTurnPanelComponent;
 import com.jgames.survival.utils.GameProperties;
 
 public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
@@ -31,6 +36,7 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 	private AbstractGameHandler gameHandler;
 	private Stage stage;
 	private Texture boardingTexture;
+	private Texture[] personDirections;
 
 	@Override
 	public void create() {
@@ -38,17 +44,32 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
 		boardingTexture = new Texture("cell.png"); //TODO добавить инициализацию графики
 
+		personDirections = new Texture[] {
+				new Texture("personUp.png"),
+				new Texture("personRight.png"),
+				new Texture("personDown.png"),
+				new Texture("personLeft.png")
+		};
+
 		gameHandler = new MainGameHandler(new GameConfiguration());
 		gameHandler.start();
+
+		PresentingGameState presentingGameState = new PresentingGameState(); //TODO исправить добавление обработчиков(выглядит дико)
+		GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState);
+		gameChangeHandlersRegistrar.registerGameChangeHandler(new CommonBattleChangesHandler());
+
+		gameHandler.onStart();
 
 		DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
 		stage = new Stage(new ScreenViewport());
 
-		UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler);
+		UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler,
+				presentingGameState);
 
-		componentRegistrar.registerComponent(new MapTableComponent(20, 20, new MapCellClickHandler(scriptMachine)));
+		componentRegistrar.registerComponent(new MapTableComponent(5, 5, new MapCellClickHandler(scriptMachine), personDirections));
 		componentRegistrar.registerComponent(new LeftTopInformationComponent(boardingTexture, 300, 300));
-		componentRegistrar.registerComponent(new CommandPanelComponent(new CommandButtonClickHandler(scriptMachine)));
+		componentRegistrar.registerComponent(new CommandPanelComponent(new CommandButtonClickHandler(scriptMachine), boardingTexture));
+		componentRegistrar.registerComponent(new PhaseAndTurnPanelComponent(boardingTexture, new PhaseOrTurnClickedHandler(scriptMachine), personDirections));
 
 		UIElements uiElements = componentRegistrar.createInterface();
 
@@ -84,6 +105,10 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
 		stage.dispose();
 		boardingTexture.dispose();
+
+		for (Texture personDirection : personDirections) {
+			personDirection.dispose();
+		}
 	}
 
 	private void initGlobalParameters() {

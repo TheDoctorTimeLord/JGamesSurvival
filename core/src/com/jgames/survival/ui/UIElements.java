@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.jgames.survival.control.gamechangeshangling.PresentingGameState;
 import com.jgames.survival.control.uiscripts.UIScriptMachine;
 import com.jgames.survival.model.GameActionSender;
 
@@ -12,15 +13,21 @@ public class UIElements {
     private final UIScriptMachine scriptMachine;
     private final Stage gameStage;
     private final GameActionSender actionSender;
+    private final PresentingGameState presentingGameState;
     private final Map<String, Actor> widgets = new ConcurrentHashMap<>();
 
-    public UIElements(UIScriptMachine scriptMachine, Stage gameStage,
-            GameActionSender actionSender, Actor... widgets) {
+    public UIElements(UIScriptMachine scriptMachine, Stage gameStage, GameActionSender actionSender,
+            PresentingGameState presentingGameState, Actor... widgets) {
         this.scriptMachine = scriptMachine;
         this.gameStage = gameStage;
         this.actionSender = actionSender;
+        this.presentingGameState = presentingGameState;
 
         addWidgets(widgets);
+    }
+
+    public PresentingGameState getPresentingGameState() {
+        return presentingGameState;
     }
 
     public UIScriptMachine getScriptMachine() {

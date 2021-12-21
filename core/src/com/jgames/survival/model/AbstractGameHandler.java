@@ -35,5 +35,7 @@ public abstract class AbstractGameHandler extends Thread implements GameActionSe
         }
     }
 
+    public abstract void onStart();
+
     public abstract void run();
 }

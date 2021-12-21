@@ -8,28 +8,27 @@ import com.badlogic.gdx.utils.Align;
 import com.jgames.survival.control.uiscripts.sctipts.UIScriptBuilder;
 import com.jgames.survival.ui.UIComponent;
 import com.jgames.survival.ui.UIElements;
-import com.jgames.survival.ui.widgets.TextListWidget;
+import com.jgames.survival.ui.uiscriptelements.commandpanel.CommandAndCellState;
+import com.jgames.survival.ui.uiscriptelements.commandpanel.WaitButtonClick;
+import com.jgames.survival.ui.uiscriptelements.commandpanel.WaitMapCell;
+import com.jgames.survival.ui.uiscriptelements.commandpanel.WithPatternPrinter;
 import com.jgames.survival.ui.widgets.CommandButton;
 import com.jgames.survival.ui.widgets.CommandButton.ClickOnCommandButton;
-import com.jgames.survival.ui.uiscriptelements.CommandAndCellState;
-import com.jgames.survival.ui.uiscriptelements.WaitButtonClick;
-import com.jgames.survival.ui.uiscriptelements.WaitMapCell;
-import com.jgames.survival.ui.uiscriptelements.WithPatternPrinter;
+import com.jgames.survival.ui.widgets.TextListWidget;
 
 public class CommandPanelComponent implements UIComponent { //TODO добавить возможность изменения команд
     private final ClickOnCommandButton commandCallback;
+    private final TextureRegion region;
 
     private Table commandPanel;
 
-    public CommandPanelComponent(ClickOnCommandButton commandCallback) {
+    public CommandPanelComponent(ClickOnCommandButton commandCallback, Texture commandBackground) {
         this.commandCallback = commandCallback;
+        this.region = new TextureRegion(commandBackground);
     }
 
     @Override
-    public void prepareComponent(UIElements uiElements) {
-        Texture texture = new Texture("cell.png"); //TODO централизовать работу с изображениями
-        TextureRegion region = new TextureRegion(texture);
-
+    public void prepareComponent(UIElements uiElements) {//TODO централизовать работу с изображениями
         commandPanel = new Table();
 
         TextListWidget textInformation = uiElements.getWidget("infoPanel", TextListWidget.class);

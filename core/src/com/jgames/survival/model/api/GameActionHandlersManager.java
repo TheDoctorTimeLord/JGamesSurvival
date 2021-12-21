@@ -1,4 +1,4 @@
-package com.jgames.survival.model.api.actionhandlers;
+package com.jgames.survival.model.api;
 
 import java.util.List;
 import java.util.Map;
@@ -7,8 +7,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
-import com.jgames.survival.model.api.GameAction;
-import com.jgames.survival.model.api.GameActionHandler;
+import com.jgames.survival.model.game.logic.GameBattleHandler;
 
 @Bean
 public class GameActionHandlersManager {
@@ -23,6 +22,10 @@ public class GameActionHandlersManager {
         }
 
         this.actionHandlers = builder.build();
+    }
+
+    public void configure(GameBattleHandler battleHandler) {
+        actionHandlers.values().forEach(gameActionHandler -> gameActionHandler.configure(battleHandler));
     }
 
     @SuppressWarnings("unchecked")

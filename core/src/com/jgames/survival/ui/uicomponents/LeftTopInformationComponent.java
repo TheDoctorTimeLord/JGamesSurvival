@@ -56,7 +56,7 @@ public class LeftTopInformationComponent implements UIComponent {
     private void createListWidget(NinePatch backgroundNinePatch) {
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = new BitmapFont();
-        labelStyle.fontColor = new Color(0.5f, 0.5f, 0.5f, 1);
+        labelStyle.fontColor = new Color(0f, 0f, 0f, 1);
 
         listWidget = new TextListWidget(backgroundNinePatch, "infoPanel");
         listWidget.setLabelStyle(labelStyle);

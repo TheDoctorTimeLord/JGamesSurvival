@@ -19,6 +19,6 @@ public class CommandButtonClickHandler implements ClickOnCommandButton {
         CommandButtonClicked action = Pools.obtain(CommandButtonClicked.class);
         action.setCommandButton(commandButton);
 
-        actionDispatcher.dispatch(action, mapCellAction -> Pools.free(action));
+        actionDispatcher.dispatch(action, Pools::free);
     }
 }
