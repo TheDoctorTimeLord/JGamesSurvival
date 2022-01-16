@@ -3,17 +3,12 @@ package com.jgames.survival.ui.uiscriptelements.commandpanel;
 import java.util.Collections;
 import java.util.Set;
 
-import com.jgames.survival.control.UIAction;
-import com.jgames.survival.control.actions.MapCellClicked;
-import com.jgames.survival.control.uiscripts.UIScriptElement;
-import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
+import com.jgames.survival.presenter.core.UIAction;
+import com.jgames.survival.presenter.filling.actions.MapCellClicked;
+import com.jgames.survival.presenter.core.uiscripts.UIWaitedScriptElement;
+import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 
-public class WaitMapCell implements UIScriptElement<CommandAndCellState> {
-    @Override
-    public boolean isRunnableElement() {
-        return false;
-    }
-
+public class WaitMapCell implements UIWaitedScriptElement<CommandAndCellState> {
     @Override
     public boolean isValid(UIAction action) {
         return action instanceof MapCellClicked;

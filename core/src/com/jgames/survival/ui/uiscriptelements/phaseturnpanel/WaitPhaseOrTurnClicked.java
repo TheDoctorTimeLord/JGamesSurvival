@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.jgames.survival.control.UIAction;
-import com.jgames.survival.control.actions.PhaseOrTurnClicked;
-import com.jgames.survival.control.uiscripts.EmptyScriptState;
-import com.jgames.survival.control.uiscripts.UIScriptElement;
-import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
+import com.jgames.survival.presenter.core.UIAction;
+import com.jgames.survival.presenter.filling.actions.PhaseOrTurnClicked;
+import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
+import com.jgames.survival.presenter.core.uiscripts.UIWaitedScriptElement;
+import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 
-public class WaitPhaseOrTurnClicked implements UIScriptElement<EmptyScriptState> {
+public class WaitPhaseOrTurnClicked implements UIWaitedScriptElement<EmptyScriptState> {
     private final TextButton waitedButton;
 
     public WaitPhaseOrTurnClicked(TextButton waitedButton) {
@@ -20,11 +20,6 @@ public class WaitPhaseOrTurnClicked implements UIScriptElement<EmptyScriptState>
     @Override
     public Set<Class<? extends UIAction>> getWaitedActions() {
         return Collections.singleton(PhaseOrTurnClicked.class);
-    }
-
-    @Override
-    public boolean isRunnableElement() {
-        return false;
     }
 
     @Override

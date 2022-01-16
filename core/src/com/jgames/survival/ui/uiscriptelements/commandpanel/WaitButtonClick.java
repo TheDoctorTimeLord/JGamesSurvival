@@ -3,22 +3,17 @@ package com.jgames.survival.ui.uiscriptelements.commandpanel;
 import java.util.Collections;
 import java.util.Set;
 
-import com.jgames.survival.control.UIAction;
-import com.jgames.survival.control.actions.CommandButtonClicked;
-import com.jgames.survival.control.uiscripts.UIScriptElement;
-import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
+import com.jgames.survival.presenter.core.UIAction;
+import com.jgames.survival.presenter.filling.actions.CommandButtonClicked;
+import com.jgames.survival.presenter.core.uiscripts.UIWaitedScriptElement;
+import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 import com.jgames.survival.ui.widgets.CommandButton;
 
-public class WaitButtonClick implements UIScriptElement<CommandAndCellState> {
+public class WaitButtonClick implements UIWaitedScriptElement<CommandAndCellState> {
     private final CommandButton commandButton;
 
     public WaitButtonClick(CommandButton commandButton) {
         this.commandButton = commandButton;
-    }
-
-    @Override
-    public boolean isRunnableElement() {
-        return false;
     }
 
     @Override

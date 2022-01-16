@@ -5,23 +5,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.jgames.survival.control.gamechangeshangling.PresentingGameState;
-import com.jgames.survival.control.uiscripts.UIScriptMachine;
+import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
+import com.jgames.survival.presenter.core.uiscripts.UIScriptMachine;
 import com.jgames.survival.model.GameActionSender;
+import com.jgames.survival.utils.assets.TextureStorage;
 
 public class UIElements {
     private final UIScriptMachine scriptMachine;
     private final Stage gameStage;
     private final GameActionSender actionSender;
     private final PresentingGameState presentingGameState;
+    private final TextureStorage textureStorage;
     private final Map<String, Actor> widgets = new ConcurrentHashMap<>();
 
     public UIElements(UIScriptMachine scriptMachine, Stage gameStage, GameActionSender actionSender,
-            PresentingGameState presentingGameState, Actor... widgets) {
+            PresentingGameState presentingGameState, TextureStorage textureStorage,
+            Actor... widgets) {
         this.scriptMachine = scriptMachine;
         this.gameStage = gameStage;
         this.actionSender = actionSender;
         this.presentingGameState = presentingGameState;
+        this.textureStorage = textureStorage;
 
         addWidgets(widgets);
     }
@@ -50,6 +54,10 @@ public class UIElements {
             }
             this.widgets.put(widgetName, widget);
         }
+    }
+
+    public TextureStorage getTextureStorage() {
+        return textureStorage;
     }
 
     @SuppressWarnings("unchecked")

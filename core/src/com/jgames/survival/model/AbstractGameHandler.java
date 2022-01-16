@@ -28,6 +28,11 @@ public abstract class AbstractGameHandler extends Thread implements GameActionSe
         changesPublisher.addSubscriber(listener);
     }
 
+    @Override
+    public void removeGameChangeListener(GameChangeListener listener) {
+        changesPublisher.removeSubscriber(listener);
+    }
+
     public void stopGame() {
         isGameRunning = false;
         synchronized (this) {

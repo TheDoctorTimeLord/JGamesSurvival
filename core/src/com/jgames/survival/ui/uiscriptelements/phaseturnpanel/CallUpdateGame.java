@@ -1,15 +1,15 @@
 package com.jgames.survival.ui.uiscriptelements.phaseturnpanel;
 
-import java.util.Set;
-
-import com.jgames.survival.control.UIAction;
-import com.jgames.survival.control.uiscripts.EmptyScriptState;
-import com.jgames.survival.control.uiscripts.UIScriptElement;
-import com.jgames.survival.control.uiscripts.contextes.UIScriptElementContext;
+import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
+import com.jgames.survival.presenter.core.uiscripts.UIRunnableScript;
+import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 import com.jgames.survival.model.GameActionSender;
 import com.jgames.survival.model.api.actions.NewTurnBattleAction;
 
-public class CallUpdateGame implements UIScriptElement<EmptyScriptState> {
+/**
+ * Исполняемый шаг скрипта, который вызывает действие обработки нового хода боя
+ */
+public class CallUpdateGame implements UIRunnableScript<EmptyScriptState> {
     private final GameActionSender actionSender;
 
     public CallUpdateGame(GameActionSender actionSender) {
@@ -17,27 +17,7 @@ public class CallUpdateGame implements UIScriptElement<EmptyScriptState> {
     }
 
     @Override
-    public Set<Class<? extends UIAction>> getWaitedActions() {
-        return null;
-    }
-
-    @Override
-    public boolean isRunnableElement() {
-        return true;
-    }
-
-    @Override
-    public boolean isValid(UIAction action) {
-        return true;
-    }
-
-    @Override
     public void handle(UIScriptElementContext context, EmptyScriptState state) {
         actionSender.sendGameAction(new NewTurnBattleAction());
-    }
-
-    @Override
-    public boolean rollback(UIAction action, EmptyScriptState state) {
-        return true;
     }
 }

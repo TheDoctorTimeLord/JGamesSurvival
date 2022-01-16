@@ -1,6 +1,6 @@
 package com.jgames.survival.ui;
 
 public interface UIComponentRegistrar {
-    void registerComponent(UIComponent component);
+    UIComponentRegistrar registerComponent(UIFactory component);
     UIElements createInterface();
 }
