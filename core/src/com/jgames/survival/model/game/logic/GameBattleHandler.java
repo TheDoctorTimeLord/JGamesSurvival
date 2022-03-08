@@ -13,7 +13,7 @@ public class GameBattleHandler {
         BattleCommandRegistrar registrar = container.getBean(BattleCommandRegistrar.class);
         BehaviorObjectsManager behaviorsManager = container.getBean(BehaviorObjectsManager.class);
 
-        battleMaster.prepareBattle(new SimpleBattleGenerator(), registrar, behaviorsManager);
+        battleMaster.prepareBattle(new InitialBattleGenerator(), registrar, behaviorsManager);
     }
 
     public void onStart() {
