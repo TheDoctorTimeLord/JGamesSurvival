@@ -1,4 +1,4 @@
-sourceCompatibility = 1.8
+sourceCompatibility = 1.17
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
@@ -6,5 +6,6 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 eclipse.project.name = appName + "-core"
 
 dependencies {
-    compile files('../libs/GameBeanContainer.jar')
+    implementation files('../libs/GameBeanContainer.jar')
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
