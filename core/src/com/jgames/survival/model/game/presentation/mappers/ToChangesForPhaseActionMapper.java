@@ -38,6 +38,10 @@ public class ToChangesForPhaseActionMapper implements ToGameChangeMapper, Battle
 
     @Override
     public void subscribe(SubscribeType subscribeType, Collection<BattleAction> actions) {
+        if (actions.isEmpty()) {
+            return;
+        }
+
         changeSender.sendGameChange(new NewPhase());
         actions.stream()
                 .map(ToChangesForPhaseActionMapper::convertActionToChange)

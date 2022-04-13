@@ -32,12 +32,14 @@ public class UpdatedCellsModule implements PresentingStateModule<UpdatedCellsMod
 
     @Override
     public synchronized void updateToNextPhase() {
-        updatedCells.removeFirst();
+        if (!updatedCells.isEmpty()) {
+            updatedCells.removeFirst();
+        }
     }
 
     @Override
     public synchronized Collection<Point> getUpdatedCells() {
-        return new HashSet<>(updatedCells.getFirst());
+        return updatedCells.isEmpty() ? Collections.emptySet() : new HashSet<>(updatedCells.getFirst());
     }
 
     @Override

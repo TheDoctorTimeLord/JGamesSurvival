@@ -18,6 +18,7 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
 
     public MainGameHandler(GameConfiguration configuration) {
         setName("Main logic game thread");
+        setDaemon(true);
 
         gameContainer = new JEngineContainer();
         gameContainer.initializeCommonContexts(ContainerConfiguration.build(MainModule.class).addAdditionalBean(this));

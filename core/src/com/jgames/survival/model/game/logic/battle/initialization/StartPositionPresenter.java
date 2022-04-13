@@ -1,15 +1,15 @@
 package com.jgames.survival.model.game.logic.battle.initialization;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.ExtendedBattleContext;
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.battlepresenter.initializebattle.InitializationPresenter;
 import ru.jengine.battlemodule.core.state.BattleState;
-import ru.jengine.battlemodule.standardfilling.model.DynamicModel;
+import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 import ru.test.annotation.battle.battleactions.initializeBattle.StartPositionAction;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Класс, генерирующий список действий в бою после инициализации боя.

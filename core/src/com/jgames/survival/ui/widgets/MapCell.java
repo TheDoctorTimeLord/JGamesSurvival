@@ -1,27 +1,23 @@
 package com.jgames.survival.ui.widgets;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class MapCell extends ImageButton { //TODO перейти на контейнер объектов
+public class MapCell extends Stack {
     private final int row;
     private final int column;
+    private final TextureRegion defaultTexture;
 
-    private final Drawable defaultTextureUp;
-    private final Drawable defaultTextureDown;
-
-    public MapCell(int row, int column, TextureRegion sprite, ClickOnMapCell callback) {
-        super(createMapCellStyle(sprite)); //TODO перейти к Skin
+    public MapCell(int row, int column, TextureRegion defaultTexture, ClickOnMapCell callback) {
+        super();
         this.row = row;
         this.column = column;
+        this.defaultTexture = defaultTexture;
 
-        defaultTextureUp = new TextureRegionDrawable(sprite);
-        defaultTextureDown = new TextureRegionDrawable(sprite).tint(new Color(0.9f, 0.9f, 0.9f, 1f));
+        MapHelper.makeCellEmpty(this);
 
         addListener(new ClickListener() {
             @Override
@@ -31,29 +27,26 @@ public class MapCell extends ImageButton { //TODO перейти на конте
         });
     }
 
-    private static ImageButtonStyle createMapCellStyle(TextureRegion sprite) {
-        ImageButtonStyle style = new ImageButtonStyle();
-        style.up = new TextureRegionDrawable(sprite);
-        style.down = new TextureRegionDrawable(sprite).tint(new Color(0.9f, 0.9f, 0.9f, 1f));
-        return style;
-    }
-
     public int getColumn() {
         return column;
+    }
+
+    public TextureRegion getDefaultTexture() {
+        return defaultTexture;
     }
 
     public int getRow() {
         return row;
     }
 
-    public void setTexture(TextureRegion sprite) { //TODO придумать что-то получше, чем сетить текстуру
-        getStyle().up = new TextureRegionDrawable(sprite);
-        getStyle().down = new TextureRegionDrawable(sprite).tint(new Color(0.9f, 0.9f, 0.9f, 1f));
+    public MapCell addPart(Actor cellPart) {
+        add(cellPart);
+        return this;
     }
 
-    public void resetTexture() {
-        getStyle().up = defaultTextureUp;
-        getStyle().down = defaultTextureDown;
+    public MapCell clearCell() {
+        clearChildren();
+        return this;
     }
 
     @FunctionalInterface

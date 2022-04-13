@@ -14,6 +14,7 @@ import com.jgames.survival.ui.UIFactory;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
 import com.jgames.survival.ui.widgets.MapCell.ClickOnMapCell;
+import com.jgames.survival.ui.widgets.MapHelper;
 import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
 import com.jgames.survival.utils.assets.TextureStorage;
 
@@ -53,8 +54,10 @@ public class MapTableFactory implements UIFactory {
     private void fillGlobalMap(PersonDataPresenter personDataPresenter, TextureRegion[] directedPersonTextures) {
         for (PersonData personData : personDataPresenter.getDataForAllPersons()) {
             Point position = personData.getPosition();
-            globalMap.getTableCell(position.getY(), position.getX())
-                    .setTexture(directedPersonTextures[personData.getDirection().ordinal()]);
+            MapHelper.createCellFilling(globalMap.getTableCell(position.getX(), position.getY()), true)
+                    .setMainTexture(directedPersonTextures[personData.getDirection().ordinal()])
+                    .setHpLabel(personData.getHp())
+                    .build();
         }
     }
 

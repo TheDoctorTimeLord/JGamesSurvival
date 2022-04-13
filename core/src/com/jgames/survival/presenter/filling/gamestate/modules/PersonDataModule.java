@@ -54,10 +54,15 @@ public class PersonDataModule implements PresentingStateModule<PersonDataPresent
                 .map(Deque::getFirst)
                 .filter(personData -> !personData.isKilled())
                 .forEach(personData -> currentPersonsPosition.remove(personData.getPosition()));
-        personsDataStates.forEach((id, states) -> states.removeFirst());
+        personsDataStates.forEach((id, states) -> {
+            if (states.size() > 1) {
+                states.removeFirst();
+            }
+        });
         personsDataStates.values().stream()
                 .map(Deque::getFirst)
-                .filter(personData -> !personData.isKilled())
+                .filter(PersonData::isKilled)
+                .filter(personData -> currentPersonsPosition.containsKey(personData.getPosition()))
                 .forEach(personData -> currentPersonsPosition.put(personData.getPosition(), personData.getId()));
     }
 

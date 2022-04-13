@@ -14,6 +14,7 @@ import com.jgames.survival.presenter.filling.gamestate.presenters.PersonDataPres
 import com.jgames.survival.presenter.filling.gamestate.presenters.UpdatedCellsPresenter;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
+import com.jgames.survival.ui.widgets.MapHelper;
 
 /**
  * Исполняемый шаг скрипта, применяющий все изменения в игре, которые были произведены в рамках одной фазы
@@ -40,18 +41,41 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
         for (Point updated : updatedCellsPresenter.getUpdatedCells()) {
             Integer id = personDataPresenter.getPersonOnPosition(updated);
             if (id == null) {
-                globalMap.getTableCell(updated.getY(), updated.getX()).resetTexture();
+                resetMapCell(updated);
                 continue;
             }
 
             PersonData personState = personDataPresenter.getCurrentPersonState(id);
             if (personState.isKilled()) {
-                globalMap.getTableCell(updated.getY(), updated.getX()).resetTexture();
+                fillMapCellWithCorpse(personState);
                 continue;
             }
 
-            globalMap.getTableCell(updated.getY(), updated.getX())
-                    .setTexture(directedPersonsTextures[personState.getDirection().ordinal()]);
+            fillMapCell(personState);
         }
+    }
+
+    private void resetMapCell(Point coordinate) {
+        MapHelper.makeCellEmpty(globalMap.getTableCell(coordinate.getX(), coordinate.getY()));
+    }
+
+    private void fillMapCell(PersonData personState) {
+        Point position = personState.getPosition();
+
+        MapHelper.createCellFilling(globalMap.getTableCell(position.getX(), position.getY()), true)
+                .setMainTexture(directedPersonsTextures[personState.getDirection().ordinal()])
+                .setHpLabel(personState.getHp())
+                .build();
+    }
+
+    private void fillMapCellWithCorpse(PersonData personState) {
+        Point position = personState.getPosition();
+        MapCell cell = globalMap.getTableCell(position.getX(), position.getY());
+
+        MapHelper.createCellFilling(cell, true)
+                .setMainTexture(directedPersonsTextures[personState.getDirection().ordinal()])
+                .setHpLabel(personState.getHp())
+                .setTint(cell.getDefaultTexture())
+                .build();
     }
 }

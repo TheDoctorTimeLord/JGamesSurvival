@@ -20,15 +20,15 @@ public class GlobalMapWrapper<C extends Actor> extends Actor {
         return GLOBAL_MAP_NAME;
     }
 
-    public C getTableCell(int row, int column) {
-        if (column < 0 || wrapped.getColumns() <= column) {
+    public C getTableCell(int x, int y) {
+        if (x < 0 || wrapped.getColumns() <= x) {
             throw new IllegalArgumentException("Column must be in [0; " + wrapped.getColumns() + ")");
         }
-        if (row < 0 || wrapped.getRows() <= row) {
+        if (y < 0 || wrapped.getRows() <= y) {
             throw new IllegalArgumentException("Row must be in [0; " + wrapped.getRows() + ")");
         }
 
-        int index = (wrapped.getRows() - row - 1) * wrapped.getColumns() + column;
+        int index = (wrapped.getRows() - y - 1) * wrapped.getColumns() + x;
         return (C)wrapped.getCells().get(index).getActor();
     }
 }
