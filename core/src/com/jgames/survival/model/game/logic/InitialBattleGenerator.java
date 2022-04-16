@@ -15,13 +15,13 @@ import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.serviceclasses.PointPool;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
-import ru.jengine.battlemodule.standardfilling.model.DynamicModel;
+import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 import ru.jengine.utils.RandomUtils;
 
 /**
  * Базовая генерация состояния боя.
  */
-public class InitialBattleGenerator implements BattleGenerator {
+public class InitialBattleGenerator extends BattleGenerator {
     private static final int MAP_SIZE = 5;
     private IdGenerator idGenerator;
 
