@@ -1,13 +1,16 @@
 package com.jgames.survival.model.game.logic.attributes;
 
-import com.jgames.survival.model.game.logic.attributes.characterStringAttributes.AttributesConstants.*;
-import com.jgames.survival.model.game.logic.attributes.characterStringAttributes.StateConstants;
 import ru.jengine.battlemodule.core.modelattributes.AttributesContainer;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
+
+import com.jgames.survival.model.game.logic.attributes.constants.AttributesConstants.Attributes;
+import com.jgames.survival.model.game.logic.attributes.constants.AttributesConstants.BodyPartsConstants;
+import com.jgames.survival.model.game.logic.attributes.constants.AttributesConstants.Features;
+import com.jgames.survival.model.game.logic.attributes.constants.StateConstants;
 
 /**
  * Создание и назначение первоначального набора атрибутов для персонажа

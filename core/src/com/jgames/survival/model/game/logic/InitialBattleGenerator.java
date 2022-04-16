@@ -16,6 +16,7 @@ import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 import ru.jengine.utils.RandomUtils;
 
+import com.jgames.survival.model.game.logic.attributes.AttributeGenerator;
 import com.jgames.survival.model.game.logic.battle.utils.ObjectPlacementUtils;
 
 /**
@@ -43,6 +44,8 @@ public class InitialBattleGenerator extends BattleGenerator {
             model.setPosition(position);
             model.setDirection(RandomUtils.chooseInCollection(Arrays.asList(Direction.values())));
             dynamicModels.add(model);
+
+            AttributeGenerator.setInitialAttributesKit(model);
         }
 
         for (int i = 0; i < 5; i++) {

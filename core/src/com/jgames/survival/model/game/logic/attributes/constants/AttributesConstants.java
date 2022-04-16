@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.attributes.characterStringAttributes;
+package com.jgames.survival.model.game.logic.attributes.constants;
 
 /**
  * Содержит строковые константы, формирующие дерево атрибутов
