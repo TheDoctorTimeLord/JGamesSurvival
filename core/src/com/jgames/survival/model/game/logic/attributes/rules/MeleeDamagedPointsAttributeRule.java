@@ -14,7 +14,10 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 
 import java.util.List;
 
-public class MeleeDamagedPointsAttributeHandler implements AttributeRule {
+/**
+ * Правило, по которому изменяется атрибут meleeDamagePoints некоторой модели на поле боя
+ */
+public class MeleeDamagedPointsAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
         return List.of(new CodeWithPathPrefixCondition(StateConstants.STATE, List.of(BodyPartsConstants.LEFT_ARM)),

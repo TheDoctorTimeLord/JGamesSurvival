@@ -9,6 +9,9 @@ import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 
+/**
+ * Создание и назначение первоначального набора атрибутов для персонажа
+ */
 public class AttributeGenerator {
     /**
      * Назначение персонажу первоначального набора атрибутов
