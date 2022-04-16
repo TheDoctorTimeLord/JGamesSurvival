@@ -14,11 +14,15 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 
 import java.util.List;
 
-public class CanVisionAttributeHandler implements AttributeRule {
+/**
+ * Правило, по которому изменяется атрибут canVision у некоторой модели на поле боя
+ */
+public class CanVisionAttributeRule implements AttributeRule {
 
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
-        return List.of(new CodeWithPathPrefixCondition(BodyPartsConstants.HEAD, List.of(BodyPartsConstants.BODY_PARTS)));
+        return List.of(new CodeWithPathPrefixCondition(BodyPartsConstants.HEAD,
+                List.of(BodyPartsConstants.BODY_PARTS)));
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.jgames.survival.model.game.logic.attributes.characterStringAttributes;
 
+/**
+ * Содержит строковые константы, формирующие дерево атрибутов
+ */
 public interface AttributesConstants {
     interface BodyPartsConstants {
         String BODY_PARTS = "bodyParts";

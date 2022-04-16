@@ -15,7 +15,10 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 
 import java.util.List;
 
-public class VisionDistanceAttributeHandler implements AttributeRule {
+/**
+ * Правило, по которому изменяется атрибут visionDistance некоторой модели на поле боя
+ */
+public class VisionDistanceAttributeRule implements AttributeRule {
 
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
