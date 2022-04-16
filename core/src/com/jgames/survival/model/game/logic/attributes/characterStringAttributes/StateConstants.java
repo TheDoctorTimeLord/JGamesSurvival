@@ -3,6 +3,9 @@ package com.jgames.survival.model.game.logic.attributes.characterStringAttribute
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Константы состояния атрибутов
+ */
 public interface StateConstants {
     String STATE = "state";
     String GOOD = "good";

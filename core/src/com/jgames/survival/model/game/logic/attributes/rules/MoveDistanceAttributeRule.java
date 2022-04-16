@@ -15,7 +15,10 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 
 import java.util.List;
 
-public class MoveDistanceAttributeHandler implements AttributeRule {
+/**
+ * Правило, по которому изменяется атрибут moveDistance некоторой модели на поле боя
+ */
+public class MoveDistanceAttributeRule implements AttributeRule {
 
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {

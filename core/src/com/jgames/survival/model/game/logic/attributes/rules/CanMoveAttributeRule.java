@@ -15,7 +15,10 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 
 import java.util.List;
 
-public class CanMoveAttributeHandler implements AttributeRule {
+/**
+ * Правило, по которому изменяется атрибут canMove некоторой модели на поле боя
+ */
+public class CanMoveAttributeRule implements AttributeRule {
 
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {

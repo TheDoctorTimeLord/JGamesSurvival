@@ -14,7 +14,10 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 
 import java.util.List;
 
-public class HitPointsAttributeHandler implements AttributeRule {
+/**
+ * Правило, по которому изменяется атрибут hitPoints некоторой модели на поле боя
+ */
+public class HitPointsAttributeRule implements AttributeRule {
 
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
