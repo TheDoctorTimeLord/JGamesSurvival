@@ -11,3 +11,9 @@
 Распределение:
 Алиса: 1, 3
 Антон: 2, 4
+
+###2 Первоначальная генерация атрибутов персонажей
+
+Распределение:
+Алиса: 1, visionDistance, meleeDamagePoints, canVision
+Антон: 2, 3, moveDistance, hitPoints, canMove
