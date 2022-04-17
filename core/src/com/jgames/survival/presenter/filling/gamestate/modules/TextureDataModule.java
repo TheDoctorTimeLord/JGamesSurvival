@@ -14,22 +14,14 @@ import java.util.Map;
  */
 public class TextureDataModule implements PresentingStateModule<TextureDataPresenter>, TextureDataPresenter {
     public static final String NAME = "textureData";
-    private final Map<String, BoundedTextureData> textureDataMap = new HashMap<>();
     private final Map<String, ActorFactory> actorFactoryMap = new HashMap<>();
     private final Actor defaultActor = null;
 
     /**
-     * Привязать имя к метаданным.
-     */
-    public void addBoundingTextureData(BoundedTextureData textureData) {
-        textureDataMap.put(textureData.getName(), textureData);
-    }
-
-    /**
      * Привязать имя к фабрике актёров.
      */
-    public void addActorFactory(ActorFactory actorFactory) {
-        actorFactoryMap.put(actorFactory.getActorName(), actorFactory);
+    public void addActorFactory(String name, ActorFactory actorFactory) {
+        actorFactoryMap.put(name, actorFactory);
     }
 
     @Override
@@ -37,11 +29,6 @@ public class TextureDataModule implements PresentingStateModule<TextureDataPrese
         ActorFactory textureFactory = actorFactoryMap.get(name);
         if (textureFactory == null) return defaultActor;
         return textureFactory.create(new DrawingContext());
-    }
-
-    @Override
-    public BoundedTextureData getTextureData(String name) {
-        return textureDataMap.get(name);
     }
 
     @Override

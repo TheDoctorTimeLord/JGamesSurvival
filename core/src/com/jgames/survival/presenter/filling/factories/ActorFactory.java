@@ -6,21 +6,9 @@ import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
 /**
  * Фабрика по производству актёров.
  */
-public class ActorFactory {
-    private final String actorName;
-
-    public ActorFactory(String actorName) {
-        this.actorName = actorName;
-    }
-
+public interface ActorFactory {
     /**
      * Создать по метаданным объекта актёра.
      */
-    public Actor create(DrawingContext drawingContext) {
-        return new Actor();
-    }
-
-    public String getActorName() {
-        return actorName;
-    }
+    Actor create(DrawingContext drawingContext);
 }
