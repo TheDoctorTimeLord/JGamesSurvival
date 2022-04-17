@@ -9,15 +9,24 @@ import com.jgames.survival.presenter.filling.factories.ActorFactory;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Мутатор для модуля TextureDataModule.
+ */
 public class TextureDataMutator implements PresentingStateModuleMutator {
     private static final List<String> USED_MODULE_NAMES = Collections.singletonList(TextureDataModule.NAME);
 
     private TextureDataModule textureDataModule;
 
+    /**
+     * Присоединить метаданные о текстуре к TextureDataModule.
+     */
     public void connectBoundingTextureData(BoundedTextureData boundedTextureData) {
         textureDataModule.addBoundingTextureData(boundedTextureData);
     }
 
+    /**
+     * Присоединить фабрику актёров к TextureDataModule.
+     */
     public void connectActorFactory(ActorFactory actorFactory) {
         textureDataModule.addActorFactory(actorFactory);
     }
@@ -30,6 +39,5 @@ public class TextureDataMutator implements PresentingStateModuleMutator {
     @Override
     public void connectWithModule(PresentingStateModule<?>... modules) {
         textureDataModule = (TextureDataModule) modules[0];
-
     }
 }

@@ -5,7 +5,13 @@ import com.jgames.survival.presenter.core.gamestate.ModulePresenter;
 import com.jgames.survival.presenter.filling.gamestate.modules.BoundedTextureData;
 
 public interface TextureDataPresenter extends ModulePresenter {
+    /**
+     * Получить метаданные о текстуре по имени.
+     */
     BoundedTextureData getTextureData(String name);
 
+    /**
+     * Создать
+     */
     Actor createActor(String name);
 }
