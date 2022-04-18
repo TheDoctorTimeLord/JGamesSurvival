@@ -1,9 +1,8 @@
 package com.jgames.survival.presenter.filling.changeshandling;
 
-import ru.test.annotation.battle.battleactions.initializeBattle.StartPositionAction;
-
 import com.jgames.survival.model.api.GameChange;
 import com.jgames.survival.model.api.changes.StartPositionData;
+import com.jgames.survival.model.game.logic.battle.initialization.StartPositionAction;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandler;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.filling.gamestate.mutators.PersonDataMutator;

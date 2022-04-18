@@ -3,6 +3,7 @@ package com.jgames.survival.ui.widgets;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -13,6 +14,7 @@ public class MapCell extends Stack {
 
     public MapCell(int row, int column, TextureRegion defaultTexture, ClickOnMapCell callback) {
         super();
+        setTouchable(Touchable.enabled);
         this.row = row;
         this.column = column;
         this.defaultTexture = defaultTexture;

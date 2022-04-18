@@ -2,9 +2,8 @@ package com.jgames.survival.model.api.changes;
 
 import java.util.Collection;
 
-import ru.test.annotation.battle.battleactions.initializeBattle.StartPositionAction;
-
 import com.jgames.survival.model.api.GameChange;
+import com.jgames.survival.model.game.logic.battle.initialization.StartPositionAction;
 
 public class StartPositionData implements GameChange {
     private final Collection<StartPositionAction> startPositions;

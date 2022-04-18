@@ -12,12 +12,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jgames.survival.model.AbstractGameHandler;
 import com.jgames.survival.model.GameConfiguration;
 import com.jgames.survival.model.MainGameHandler;
+import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandlersRegistrar;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.presenter.core.uiscripts.scriptmachines.MultipleActiveScriptMachine;
-import com.jgames.survival.presenter.filling.changeshandling.CombatChangesHandler;
-import com.jgames.survival.presenter.filling.changeshandling.MotionChangesHandler;
 import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHandler;
 import com.jgames.survival.presenter.filling.changeshandling.StartPositionChangesHandler;
 import com.jgames.survival.presenter.filling.clickhandlers.CommandButtonClickHandler;
@@ -63,8 +62,7 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 		GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
 				.registerGameChangeHandler(new StartPositionChangesHandler())
 				.registerGameChangeHandler(new StartPhaseChangesHandler())
-				.registerGameChangeHandler(new MotionChangesHandler())
-				.registerGameChangeHandler(new CombatChangesHandler());
+				.registerGameChangeHandler(new BattleActionWrapperHandler());
 
 		gameHandler.onStart();
 

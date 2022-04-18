@@ -9,7 +9,6 @@ import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.battlepresenter.initializebattle.InitializationPresenter;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
-import ru.test.annotation.battle.battleactions.initializeBattle.StartPositionAction;
 
 /**
  * Класс, генерирующий список действий в бою после инициализации боя.

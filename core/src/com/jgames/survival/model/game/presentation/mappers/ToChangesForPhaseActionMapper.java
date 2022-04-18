@@ -1,24 +1,21 @@
 package com.jgames.survival.model.game.presentation.mappers;
 
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.battlepresenter.BattlePresenterActionSubscriber;
 import ru.jengine.battlemodule.core.battlepresenter.SubscribeStrategy;
 import ru.jengine.battlemodule.core.battlepresenter.SubscribeType;
 import ru.jengine.beancontainer.annotations.Bean;
-import ru.test.annotation.battle.battleactions.HitBattleAction;
-import ru.test.annotation.battle.battleactions.MoveBattleAction;
-import ru.test.annotation.battle.battleactions.RotateAction;
 
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.GameChangeSender;
 import com.jgames.survival.model.api.GameChange;
 import com.jgames.survival.model.api.changes.NewPhase;
-import com.jgames.survival.model.api.changes.HitChange;
-import com.jgames.survival.model.api.changes.MoveChange;
-import com.jgames.survival.model.api.changes.RotateChange;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
 import com.jgames.survival.model.game.presentation.ToGameChangeMapper;
 
@@ -27,7 +24,14 @@ import com.jgames.survival.model.game.presentation.ToGameChangeMapper;
  */
 @Bean
 public class ToChangesForPhaseActionMapper implements ToGameChangeMapper, BattlePresenterActionSubscriber {
+    private final List<PhaseActionMapper> actionMappers;
     private GameChangeSender changeSender;
+
+    public ToChangesForPhaseActionMapper(List<PhaseActionMapper> actionMappers) {
+        this.actionMappers = actionMappers.stream()
+                .sorted(Comparator.comparingInt(PhaseActionMapper::getMapperPriority))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public void configureMapper(GameChangeSender changeSender, GameBattleHandler battleHandler) {
@@ -44,26 +48,18 @@ public class ToChangesForPhaseActionMapper implements ToGameChangeMapper, Battle
 
         changeSender.sendGameChange(new NewPhase());
         actions.stream()
-                .map(ToChangesForPhaseActionMapper::convertActionToChange)
-                .filter(Objects::nonNull)
+                .flatMap(this::convertActionToChange)
                 .forEach(changeSender::sendGameChange);
     }
 
-    private static GameChange convertActionToChange(BattleAction battleAction) {
-        if (battleAction instanceof MoveBattleAction) {
-            MoveBattleAction action = (MoveBattleAction)battleAction;
-            return new MoveChange(action.getCharacterId(), action.getOldPosition(), action.getNewPosition());
-        }
-        if (battleAction instanceof RotateAction) {
-            RotateAction action = (RotateAction)battleAction;
-            return new RotateChange(action.getCharacterId(), action.getRotateTo());
-        }
-        if (battleAction instanceof HitBattleAction) {
-            HitBattleAction action = (HitBattleAction)battleAction;
-            return new HitChange(action.getTarget(), action.getDamagePoints());
+    private Stream<GameChange> convertActionToChange(BattleAction battleAction) {
+        for (PhaseActionMapper actionMapper : actionMappers) {
+            if (actionMapper.isCanMap(battleAction)) {
+                return actionMapper.map(battleAction);
+            }
         }
 
         Gdx.app.error("ACTION MAPPING", "[" + battleAction + "] was not handled");
-        return null;
+        return Stream.empty();
     }
 }

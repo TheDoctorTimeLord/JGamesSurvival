@@ -9,12 +9,12 @@ import ru.jengine.battlemodule.core.battlepresenter.BattlePresenterActionSubscri
 import ru.jengine.battlemodule.core.battlepresenter.SubscribeStrategy;
 import ru.jengine.battlemodule.core.battlepresenter.SubscribeType;
 import ru.jengine.beancontainer.annotations.Bean;
-import ru.test.annotation.battle.battleactions.initializeBattle.StartPositionAction;
 
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.GameChangeSender;
 import com.jgames.survival.model.api.changes.StartPositionData;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
+import com.jgames.survival.model.game.logic.battle.initialization.StartPositionAction;
 import com.jgames.survival.model.game.presentation.ToGameChangeMapper;
 
 /**
