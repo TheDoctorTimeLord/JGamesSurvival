@@ -1,9 +1,7 @@
 package com.jgames.survival.model.game.logic.battle.behaviours;
 
-import com.google.common.collect.Multimap;
 import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
 import ru.jengine.battlemodule.core.behaviors.Behavior;
-import ru.jengine.battlemodule.core.behaviors.BehaviorObjectsManager;
 import ru.jengine.battlemodule.core.commands.AdditionalBattleCommand;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.commands.BattleCommandPerformElement;
