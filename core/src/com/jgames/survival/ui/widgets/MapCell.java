@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapCell extends Stack {
     private final int row;
     private final int column;
@@ -29,6 +32,16 @@ public class MapCell extends Stack {
         });
     }
 
+    public void update(List<Actor> actors) {
+        clearCell();
+        actors.forEach(this::add);
+    }
+
+    public MapCell addPart(Actor cellPart) {
+        add(cellPart);
+        return this;
+    }
+
     public int getColumn() {
         return column;
     }
@@ -39,11 +52,6 @@ public class MapCell extends Stack {
 
     public int getRow() {
         return row;
-    }
-
-    public MapCell addPart(Actor cellPart) {
-        add(cellPart);
-        return this;
     }
 
     public MapCell clearCell() {
