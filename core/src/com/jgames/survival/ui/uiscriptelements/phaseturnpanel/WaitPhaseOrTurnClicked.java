@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.jgames.survival.presenter.core.UIAction;
-import com.jgames.survival.presenter.filling.actions.PhaseOrTurnClicked;
+import com.jgames.survival.presenter.filling.clickactions.PhaseOrTurnClicked;
 import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.UIWaitedScriptElement;
 import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;

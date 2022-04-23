@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.jgames.survival.presenter.core.UIAction;
-import com.jgames.survival.presenter.filling.actions.MapCellClicked;
+import com.jgames.survival.presenter.filling.clickactions.MapCellClicked;
 import com.jgames.survival.presenter.core.uiscripts.UIWaitedScriptElement;
 import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 

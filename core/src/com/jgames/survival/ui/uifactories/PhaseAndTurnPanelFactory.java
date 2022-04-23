@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.sctipts.CyclicUIScript;
-import com.jgames.survival.presenter.filling.clickhandlers.PhaseOrTurnClickedHandler;
+import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
 import com.jgames.survival.ui.uiscriptelements.phaseturnpanel.ApplyPhaseChanges;

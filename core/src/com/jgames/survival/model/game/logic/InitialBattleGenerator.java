@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.jengine.battlemodule.core.BattleGenerator;
+import ru.jengine.battlemodule.core.modelattributes.AttributesContainer;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
@@ -14,9 +15,12 @@ import ru.jengine.battlemodule.core.serviceclasses.PointPool;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
+import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModelType;
 import ru.jengine.utils.RandomUtils;
 
-import com.jgames.survival.model.game.logic.attributes.AttributeGenerator;
+import com.jgames.survival.model.game.logic.battle.attributes.AttributeGenerator;
+import com.jgames.survival.model.game.logic.battle.models.StaticModel;
+import com.jgames.survival.model.game.logic.battle.models.StaticModelType;
 import com.jgames.survival.model.game.logic.battle.utils.ObjectPlacementUtils;
 
 /**
@@ -36,20 +40,21 @@ public class InitialBattleGenerator extends BattleGenerator {
         List<BattleModel> staticModels = new ArrayList<>();
         BattlefieldLimiter battleFieldLimiter = new SquareBattleFieldLimiter(PointPool.obtain(0, 0), MAP_SIZE);
 
+        DynamicModelType dynamicModelType = new DynamicModelType("person", AttributeGenerator.getInitialAttributesKit());
+        StaticModelType staticModelType = new StaticModelType("wall", new AttributesContainer());
+
         for (int i = 0; i < 5; i++) {
-            DynamicModel model = new DynamicModel(idGenerator.generateId());
+            DynamicModel model = dynamicModelType.createBattleModelByType(idGenerator.generateId());
             Point position = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
 
             mapPosition.computeIfAbsent(position, p -> new ArrayList<>()).add(model.getId());
             model.setPosition(position);
             model.setDirection(RandomUtils.chooseInCollection(Arrays.asList(Direction.values())));
             dynamicModels.add(model);
-
-            AttributeGenerator.setInitialAttributesKit(model);
         }
 
         for (int i = 0; i < 5; i++) {
-            StaticModel model = new StaticModel(idGenerator.generateId());
+            StaticModel model = staticModelType.createBattleModelByType(idGenerator.generateId());
             Point position = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
 
             mapPosition.computeIfAbsent(position, p -> new ArrayList<>()).add(model.getId());

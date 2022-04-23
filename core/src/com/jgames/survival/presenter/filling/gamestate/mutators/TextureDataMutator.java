@@ -1,12 +1,12 @@
 package com.jgames.survival.presenter.filling.gamestate.mutators;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator;
 import com.jgames.survival.presenter.filling.gamestate.modules.TextureDataModule;
-import com.jgames.survival.presenter.filling.factories.ActorFactory;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Мутатор для модуля TextureDataModule.
@@ -19,8 +19,8 @@ public class TextureDataMutator implements PresentingStateModuleMutator {
     /**
      * Присоединить фабрику актёров к TextureDataModule.
      */
-    public void connectActorFactory(String name, ActorFactory actorFactory) {
-        textureDataModule.addActorFactory(name, actorFactory);
+    public void connectActorFactory(String name, CellActorFactory cellActorFactory) {
+        textureDataModule.addActorFactory(name, cellActorFactory);
     }
 
     @Override
