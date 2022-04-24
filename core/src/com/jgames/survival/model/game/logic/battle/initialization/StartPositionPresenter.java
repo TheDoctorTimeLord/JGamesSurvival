@@ -7,27 +7,30 @@ import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.ExtendedBattleContext;
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.battlepresenter.initializebattle.InitializationPresenter;
+import ru.jengine.battlemodule.core.models.HasPosition;
+import ru.jengine.battlemodule.core.serviceclasses.Direction;
+import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;
-import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
+import ru.jengine.battlemodule.standardfilling.dynamicmodel.HasDirection;
 
 /**
- * Класс, генерирующий список действий в бою после инициализации боя.
+ * Класс, передающий данные о начальном положении всех объектов на поле боя
  */
 @BattleBeanPrototype
 public class StartPositionPresenter implements InitializationPresenter {
-    /**
-     * Предоставляет события, которые были собраны за период инициализации боя
-     * @param extendedBattleContext расширенный контекст боя
-     * @return список действий в бою, либо пустой список, если никаких действий не произошло
-     */
     @Override
     public List<BattleAction> presentBattleInitialize(ExtendedBattleContext extendedBattleContext) {
         BattleState battleState = extendedBattleContext.getBattleContext().getBattleState();
-        return battleState.getDynamicObjects().stream()
-                .filter(model -> model instanceof DynamicModel)
-                .map(model -> (DynamicModel)model)
-                .filter(model -> model.hasPosition() && model.hasDirection())
-                .map(model -> new StartPositionAction(model.getId(), model.getPosition(), model.getDirection()))
+        return battleState.getModelsInBattle().stream()
+                .filter(model -> model instanceof HasPosition)
+                .filter(model -> ((HasPosition)model).hasPosition())
+                .map(model -> {
+                    Point position = ((HasPosition)model).getPosition();
+                    Direction direction = model instanceof HasDirection
+                            ? ((HasDirection)model).getDirection()
+                            : null;
+                    return new StartPositionAction(model.getId(), position, direction);
+                })
                 .collect(Collectors.toList());
     }
 }

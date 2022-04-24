@@ -1,4 +1,4 @@
-package com.jgames.survival.presenter.core.changeshangling;
+package com.jgames.survival.presenter.filling.changeshandling;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 

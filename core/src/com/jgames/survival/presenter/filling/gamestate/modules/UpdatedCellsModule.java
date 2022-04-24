@@ -19,7 +19,7 @@ public class UpdatedCellsModule implements PresentingStateModule<UpdatedCellsMod
 
     public UpdatedCellsModule() {
         updatedCells = new ArrayDeque<>();
-        updatedCells.addLast(Collections.emptySet());
+        addState();
     }
 
     public void addState() {

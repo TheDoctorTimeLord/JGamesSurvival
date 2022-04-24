@@ -12,19 +12,21 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jgames.survival.model.AbstractGameHandler;
 import com.jgames.survival.model.GameConfiguration;
 import com.jgames.survival.model.MainGameHandler;
-import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandlersRegistrar;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.presenter.core.uiscripts.scriptmachines.MultipleActiveScriptMachine;
+import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
 import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHandler;
-import com.jgames.survival.presenter.filling.changeshandling.StartPositionChangesHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ModelHpActionHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ObjectTypeActionHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.MapCellClickHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
-import com.jgames.survival.presenter.filling.gamestate.modules.PersonDataModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.UpdatedCellsModule;
-import com.jgames.survival.presenter.filling.gamestate.mutators.PersonDataMutator;
+import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
 import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
 import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
@@ -54,15 +56,18 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 		gameHandler.start();
 
 		PresentingGameState presentingGameState = new PresentingGameState()
-				.addStateModule(new PersonDataModule())
+				.addStateModule(new ModelDataModule())
 				.addStateModule(new UpdatedCellsModule())
-				.addModuleMutator(new PersonDataMutator())
+				.addModuleMutator(new ModelDataMutator())
 				.connectMutatorsWithModules();
 
 		GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
-				.registerGameChangeHandler(new StartPositionChangesHandler())
 				.registerGameChangeHandler(new StartPhaseChangesHandler())
-				.registerGameChangeHandler(new BattleActionWrapperHandler());
+				.registerGameChangeHandler(new BattleActionWrapperHandler(
+						new StartPositionActionHandler(),
+						new ObjectTypeActionHandler(),
+						new ModelHpActionHandler()
+				));
 
 		gameHandler.onStart();
 

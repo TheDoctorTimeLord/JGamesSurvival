@@ -7,13 +7,13 @@ import javax.annotation.Nullable;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 import com.jgames.survival.presenter.core.gamestate.ModulePresenter;
-import com.jgames.survival.presenter.filling.gamestate.modules.PersonData;
+import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
 
-public interface PersonDataPresenter extends ModulePresenter {
-    List<PersonData> getDataForAllPersons();
-    PersonData getCurrentPersonState(int personId);
+public interface ModelDataPresenter extends ModulePresenter {
+    List<ModelData> getDataForAllModels();
+    ModelData getCurrentModelState(int personId);
     void updateToNextPhase();
     boolean isLastPhase();
     @Nullable
-    Integer getPersonOnPosition(Point position);
+    Integer getModelOnPosition(Point position);
 }

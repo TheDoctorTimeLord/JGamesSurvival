@@ -1,4 +1,4 @@
-package com.jgames.survival.model.api.changes;
+package com.jgames.survival.model.api.changes.phase;
 
 import com.jgames.survival.model.api.GameChange;
 

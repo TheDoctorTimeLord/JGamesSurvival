@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.jgames.survival.presenter.filling.gamestate.modules.PersonData;
-import com.jgames.survival.presenter.filling.gamestate.modules.PersonDataModule;
-import com.jgames.survival.presenter.filling.gamestate.presenters.PersonDataPresenter;
+import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
+import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
@@ -39,8 +39,7 @@ public class MapTableFactory implements UIFactory {
 
         globalMap = createGlobalMap(region);
 
-        PersonDataPresenter presenter = uiElements.getPresentingGameState()
-                .getModulePresenter(PersonDataModule.NAME);
+        ModelDataPresenter presenter = uiElements.getPresentingGameState().getModulePresenter(ModelDataModule.NAME);
         fillGlobalMap(presenter, new TextureRegion[] {
                 storage.createSprite(Constants.PERSON_UP),
                 storage.createSprite(Constants.PERSON_RIGHT),
@@ -51,11 +50,14 @@ public class MapTableFactory implements UIFactory {
         createGlobalMapScrollableWrapper(globalMap);
     }
 
-    private void fillGlobalMap(PersonDataPresenter personDataPresenter, TextureRegion[] directedPersonTextures) {
-        for (PersonData personData : personDataPresenter.getDataForAllPersons()) {
+    private void fillGlobalMap(ModelDataPresenter personDataPresenter, TextureRegion[] directedPersonTextures) {
+        for (ModelData personData : personDataPresenter.getDataForAllModels()) {
             Point position = personData.getPosition();
-            MapHelper.createCellFilling(globalMap.getTableCell(position.getX(), position.getY()), true)
-                    .setMainTexture(directedPersonTextures[personData.getDirection().ordinal()])
+            MapCell mapCell = globalMap.getTableCell(position.getX(), position.getY());
+            MapHelper.createCellFilling(mapCell, true)
+                    .setMainTexture(personData.getDirection() == null
+                            ? mapCell.getDefaultTexture()
+                            : directedPersonTextures[personData.getDirection().ordinal()])
                     .setHpLabel(personData.getHp())
                     .build();
         }

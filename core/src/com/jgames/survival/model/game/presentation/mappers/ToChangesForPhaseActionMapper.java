@@ -15,7 +15,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.GameChangeSender;
 import com.jgames.survival.model.api.GameChange;
-import com.jgames.survival.model.api.changes.NewPhase;
+import com.jgames.survival.model.api.changes.phase.NewPhase;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
 import com.jgames.survival.model.game.presentation.ToGameChangeMapper;
 
@@ -29,7 +29,7 @@ public class ToChangesForPhaseActionMapper implements ToGameChangeMapper, Battle
 
     public ToChangesForPhaseActionMapper(List<PhaseActionMapper> actionMappers) {
         this.actionMappers = actionMappers.stream()
-                .sorted(Comparator.comparingInt(PhaseActionMapper::getMapperPriority))
+                .sorted(Comparator.comparingInt(ActionMapper::getMapperPriority))
                 .collect(Collectors.toList());
     }
 
@@ -53,7 +53,7 @@ public class ToChangesForPhaseActionMapper implements ToGameChangeMapper, Battle
     }
 
     private Stream<GameChange> convertActionToChange(BattleAction battleAction) {
-        for (PhaseActionMapper actionMapper : actionMappers) {
+        for (ActionMapper actionMapper : actionMappers) {
             if (actionMapper.isCanMap(battleAction)) {
                 return actionMapper.map(battleAction);
             }
