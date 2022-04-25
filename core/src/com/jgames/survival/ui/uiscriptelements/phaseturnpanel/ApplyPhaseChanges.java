@@ -14,7 +14,6 @@ import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPrese
 import com.jgames.survival.presenter.filling.gamestate.presenters.UpdatedCellsPresenter;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
-import com.jgames.survival.ui.widgets.MapHelper;
 
 /**
  * Исполняемый шаг скрипта, применяющий все изменения в игре, которые были произведены в рамках одной фазы
@@ -25,6 +24,7 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
     private final GlobalMapWrapper<MapCell> globalMap;
     private final TextureRegion[] directedPersonsTextures;
 
+    // TODO: Нужно переделать заполнение и обновление клетки.
     public ApplyPhaseChanges(PresentingGameState gameState, GlobalMapWrapper<MapCell> globalMap,
             TextureRegion[] directedPersonsTextures) {
         this.modelDataPresenter = gameState.getModulePresenter(ModelDataModule.NAME);
@@ -41,7 +41,7 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
         for (Point updated : updatedCellsPresenter.getUpdatedCells()) {
             Integer id = modelDataPresenter.getModelOnPosition(updated);
             if (id == null) {
-                resetMapCell(updated);
+                // resetMapCell(updated); TODO: Переделать
                 continue;
             }
 
@@ -55,27 +55,24 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
         }
     }
 
-    private void resetMapCell(Point coordinate) {
-        MapHelper.makeCellEmpty(globalMap.getTableCell(coordinate.getX(), coordinate.getY()));
-    }
-
     private void fillMapCell(ModelData personState) {
         Point position = personState.getPosition();
+        // TODO: Переделать
 
-        MapHelper.createCellFilling(globalMap.getTableCell(position.getX(), position.getY()), true)
-                .setMainTexture(directedPersonsTextures[personState.getDirection().ordinal()])
-                .setHpLabel(personState.getHp())
-                .build();
+        // MapHelper.createCellFilling(globalMap.getTableCell(position.getX(), position.getY()), true)
+        //        .setMainTexture(directedPersonsTextures[personState.getDirection().ordinal()])
+        //        .setHpLabel(personState.getHp())
+        //        .build();
     }
 
     private void fillMapCellWithCorpse(ModelData personState) {
         Point position = personState.getPosition();
         MapCell cell = globalMap.getTableCell(position.getX(), position.getY());
-
-        MapHelper.createCellFilling(cell, true)
-                .setMainTexture(directedPersonsTextures[personState.getDirection().ordinal()])
-                .setHpLabel(personState.getHp())
-                .setTint(cell.getDefaultTexture())
-                .build();
+        // TODO: Переделать
+        // MapHelper.createCellFilling(cell, true)
+        //         .setMainTexture(directedPersonsTextures[personState.getDirection().ordinal()])
+        //         .setHpLabel(personState.getHp())
+        //         .setTint(cell.getDefaultTexture())
+        //         .build();
     }
 }
