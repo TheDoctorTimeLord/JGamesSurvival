@@ -48,7 +48,7 @@ public class PhaseAndTurnPanelFactory implements UIFactory {
         buttonsBackground.setMiddleHeight(BUTTON_MIDDLE_HEIGHT);
         buttonsBackground.setMiddleWidth(BUTTON_MIDDLE_WIDTH);
 
-        TextureRegion[] directedPersonTextures = new TextureRegion[] {
+        TextureRegion[] directedPersonTextures = new TextureRegion[]{
                 storage.createSprite(Constants.PERSON_UP),
                 storage.createSprite(Constants.PERSON_RIGHT),
                 storage.createSprite(Constants.PERSON_DOWN),

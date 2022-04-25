@@ -38,7 +38,7 @@ public class MapTableFactory implements UIFactory {
         globalMap = createGlobalMap(region);
 
         ModelDataPresenter presenter = uiElements.getPresentingGameState().getModulePresenter(ModelDataModule.NAME);
-        fillGlobalMap(presenter, new TextureRegion[] {
+        fillGlobalMap(presenter, new TextureRegion[]{
                 storage.createSprite(Constants.PERSON_UP),
                 storage.createSprite(Constants.PERSON_RIGHT),
                 storage.createSprite(Constants.PERSON_DOWN),
@@ -51,6 +51,7 @@ public class MapTableFactory implements UIFactory {
     private void fillGlobalMap(ModelDataPresenter personDataPresenter, TextureRegion[] directedPersonTextures) {
         for (ModelData personData : personDataPresenter.getDataForAllModels()) {
             Point position = personData.getPosition();
+            // TODO: Нужно переделать
         }
     }
 

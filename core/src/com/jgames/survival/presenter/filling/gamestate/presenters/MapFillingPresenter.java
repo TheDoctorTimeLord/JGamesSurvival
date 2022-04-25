@@ -6,7 +6,13 @@ import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 import com.jgames.survival.presenter.core.gamestate.ModulePresenter;
 
-public interface UpdatedCellsPresenter extends ModulePresenter {
+public interface MapFillingPresenter extends ModulePresenter {
     Collection<Point> getUpdatedCells();
+
+    /**
+     * Получить список id объектов, которые находятся на этой клетке.
+     */
+    Collection<Integer> getIdsOnCell(Point point);
+
     void updateToNextPhase();
 }
