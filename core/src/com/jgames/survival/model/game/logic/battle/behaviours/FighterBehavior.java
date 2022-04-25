@@ -16,6 +16,8 @@ import ru.jengine.utils.RandomUtils;
 
 import com.jgames.survival.model.game.logic.battle.commands.MeleeAttackCommand;
 import com.jgames.survival.model.game.logic.battle.commands.MeleeAttackParameters;
+import com.jgames.survival.model.game.logic.battle.commands.RangedAttack;
+import com.jgames.survival.model.game.logic.battle.commands.RangedAttackParameters;
 import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
 
 @BattleBeanPrototype
@@ -35,11 +37,15 @@ public class FighterBehavior implements Behavior {
     @Override
     public BattleCommandPerformElement<?> sendAction(int characterId, List<BattleCommand<?>> availableCommands) {
         WaitCommand waitCommand = null;
+        RangedAttack rangedAttack = null;
         MeleeAttackCommand meleeAttackCommand = null;
 
         for (BattleCommand<?> availableCommand : availableCommands) {
             if (availableCommand instanceof MeleeAttackCommand meleeAttack) {
                 meleeAttackCommand = meleeAttack;
+            }
+            if (availableCommand instanceof RangedAttack ranged) {
+                rangedAttack = ranged;
             }
             if (availableCommand instanceof WaitCommand wait) {
                 waitCommand = wait;
@@ -52,6 +58,14 @@ public class FighterBehavior implements Behavior {
             parametersTemplate.selectEnemy(selected);
 
             return new BattleCommandPerformElement<>(characterId, meleeAttackCommand, parametersTemplate);
+        }
+
+        if (rangedAttack != null) {
+            RangedAttackParameters parametersTemplate = rangedAttack.createParametersTemplate();
+            BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getVisibleModels());
+            parametersTemplate.selectEnemy(selected);
+
+            return new BattleCommandPerformElement<>(characterId, rangedAttack, parametersTemplate);
         }
 
         return new BattleCommandPerformElement<>(characterId, waitCommand, NoneParameters.INSTANCE);

@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.sctipts.CyclicUIScript;
-import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
+import com.jgames.survival.presenter.filling.clickactions.PhaseOrTurnClickedHandler;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;

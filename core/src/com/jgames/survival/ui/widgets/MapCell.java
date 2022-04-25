@@ -2,6 +2,9 @@ package com.jgames.survival.ui.widgets;
 
 import java.util.List;
 
+import ru.jengine.battlemodule.core.serviceclasses.Point;
+import ru.jengine.battlemodule.core.serviceclasses.PointPool;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -37,6 +40,10 @@ public class MapCell extends Stack {
 
     public int getRow() {
         return row;
+    }
+
+    public Point getCoordinateAsPoint() {
+        return PointPool.obtain(row, column);
     }
 
     public MapCell clearCell() {

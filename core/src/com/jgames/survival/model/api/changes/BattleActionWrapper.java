@@ -14,4 +14,9 @@ public class BattleActionWrapper implements GameChange {
     public BattleAction getWrapped() {
         return wrapped;
     }
+
+    @Override
+    public String toString() {
+        return "Wrapped {%s}".formatted(wrapped);
+    }
 }

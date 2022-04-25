@@ -7,6 +7,6 @@ sourceSets.test.java.srcDirs = [ "src/test/" ]
 eclipse.project.name = appName + "-core"
 
 dependencies {
-    implementation files('../libs/GameBeanContainer.jar')
+    implementation fileTree(dir: '../libs/', include: ['*.jar'])
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }

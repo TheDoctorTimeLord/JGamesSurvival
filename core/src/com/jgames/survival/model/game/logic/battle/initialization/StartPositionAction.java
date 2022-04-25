@@ -32,7 +32,7 @@ public class StartPositionAction implements BattleAction {
 
     @Override
     public String toString() {
-        return "Start {" +
+        return "StartPositionAction {" +
                 "modelId=" + modelId +
                 ", modelPosition=" + characterPosition +
                 ", modelDirection=" + characterDirection +

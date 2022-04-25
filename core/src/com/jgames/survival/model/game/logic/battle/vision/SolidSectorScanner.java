@@ -2,7 +2,7 @@ package com.jgames.survival.model.game.logic.battle.vision;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.visible.outside.BaseSectorScanner;
@@ -39,6 +39,6 @@ public class SolidSectorScanner implements BaseSectorScanner, TileClassifier {
 
     @Override
     public String getVisibleScope() {
-        return VISIBLE;
+        return VisionScopeConstants.VISIBLE;
     }
 }

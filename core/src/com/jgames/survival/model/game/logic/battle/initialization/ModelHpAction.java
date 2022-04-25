@@ -18,4 +18,12 @@ public class ModelHpAction implements BattleAction {
     public int getModelId() {
         return modelId;
     }
+
+    @Override
+    public String toString() {
+        return "ModelHpAction {" +
+                "modelId=" + modelId +
+                ", hp=" + hp +
+                '}';
+    }
 }

@@ -18,4 +18,12 @@ public class ObjectTypeAction implements BattleAction {
     public String getModelTypeName() {
         return modelTypeName;
     }
+
+    @Override
+    public String toString() {
+        return "ObjectTypeAction {" +
+                "modelId=" + modelId +
+                ", modelTypeName='" + modelTypeName + '\'' +
+                '}';
+    }
 }

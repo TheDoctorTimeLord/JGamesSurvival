@@ -17,4 +17,9 @@ public class AvailableObjectTypeNames implements GameChange {
     public Collection<String> getAvailableTypeNames() {
         return availableTypeNames;
     }
+
+    @Override
+    public String toString() {
+        return "AvailableObjectTypeNames {'%s'}".formatted(String.join("', '", availableTypeNames));
+    }
 }

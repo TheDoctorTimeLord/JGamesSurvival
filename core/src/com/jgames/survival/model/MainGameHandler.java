@@ -14,12 +14,15 @@ import com.jgames.survival.model.game.presentation.ToGameChangeMappersManager;
 
 public class MainGameHandler extends AbstractGameHandler implements GameChangeSender {
     private final GameActionHandlersManager actionHandlersManager;
+    private final GameConfiguration gameConfiguration;
     private final JEngineContainer gameContainer;
     private final GameBattleHandler battleHandler;
 
     public MainGameHandler(GameConfiguration configuration) {
         setName("Main logic game thread");
         setDaemon(true);
+
+        gameConfiguration = configuration;
 
         gameContainer = new JEngineContainer();
         gameContainer.initializeCommonContexts(ContainerConfiguration.build(MainModule.class).addAdditionalBean(this));
@@ -66,6 +69,10 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
 
     @Override
     public void sendGameChange(GameChange gameChange) {
+        if (gameConfiguration.isDebug()) {
+            Gdx.app.log("MainGameHandler_tracer", gameChange.toString());
+        }
+
         changesPublisher.notify(gameChange);
     }
 

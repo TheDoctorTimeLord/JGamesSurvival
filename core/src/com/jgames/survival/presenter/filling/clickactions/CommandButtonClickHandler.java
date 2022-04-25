@@ -1,4 +1,4 @@
-package com.jgames.survival.presenter.filling.clickactionhandlers;
+package com.jgames.survival.presenter.filling.clickactions;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Pools;

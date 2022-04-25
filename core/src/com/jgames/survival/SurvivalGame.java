@@ -22,10 +22,11 @@ import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHa
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.DealingDamageNotificationHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ModelHpActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ObjectTypeActionHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.RangedAttackActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
-import com.jgames.survival.presenter.filling.clickactionhandlers.CommandButtonClickHandler;
-import com.jgames.survival.presenter.filling.clickactionhandlers.MapCellClickHandler;
-import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
+import com.jgames.survival.presenter.filling.clickactions.CommandButtonClickHandler;
+import com.jgames.survival.presenter.filling.clickactions.MapCellClickHandler;
+import com.jgames.survival.presenter.filling.clickactions.PhaseOrTurnClickedHandler;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
@@ -59,7 +60,9 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
         textureStorage = new SimpleTextureStorage().load(new TextureStorageConfiguration());
 
-        gameHandler = new MainGameHandler(new GameConfiguration());
+        gameHandler = new MainGameHandler(new GameConfiguration()
+                .setDebug(isDebugMode)
+        );
         gameHandler.start();
 
         PresentingGameState presentingGameState = new PresentingGameState()
@@ -79,7 +82,8 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
                         new StartPositionActionHandler(),
                         new ObjectTypeActionHandler(),
                         new ModelHpActionHandler(),
-                        new DealingDamageNotificationHandler()
+                        new DealingDamageNotificationHandler(),
+                        new RangedAttackActionHandler()
                 ));
 
         gameHandler.onStart();
