@@ -1,7 +1,5 @@
 package com.jgames.survival.presenter.filling.gamestate.model;
 
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
-
 import javax.annotation.Nullable;
 
 /**

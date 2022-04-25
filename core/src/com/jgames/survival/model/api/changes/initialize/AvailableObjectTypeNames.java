@@ -1,8 +1,8 @@
-package com.jgames.survival.model.api.changes;
-
-import com.jgames.survival.model.api.GameChange;
+package com.jgames.survival.model.api.changes.initialize;
 
 import java.util.Collection;
+
+import com.jgames.survival.model.api.GameChange;
 
 /**
  * Имена типов объектов.

@@ -3,6 +3,7 @@ package com.jgames.survival.model;
 import ru.jengine.beancontainer.dataclasses.ContainerConfiguration;
 import ru.jengine.beancontainer.implementation.JEngineContainer;
 
+import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.api.GameAction;
 import com.jgames.survival.model.api.GameActionHandler;
 import com.jgames.survival.model.api.GameChange;
@@ -41,8 +42,13 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
         while (isGameRunning) {
             while (!actionPool.isEmpty()) {
                 GameAction action = actionPool.poll();
-                GameActionHandler<GameAction> handler = actionHandlersManager.findHandler(action);
-                handler.handle(action);
+                try {
+                    GameActionHandler<GameAction> handler = actionHandlersManager.findHandler(action);
+                    handler.handle(action);
+                }
+                catch (Exception e) {
+                    Gdx.app.error("ACTION", "Handling action error", e);
+                }
             }
 
             try {

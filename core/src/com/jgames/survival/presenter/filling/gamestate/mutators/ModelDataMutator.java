@@ -1,8 +1,6 @@
 package com.jgames.survival.presenter.filling.gamestate.mutators;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -12,7 +10,7 @@ import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.utils.MoveUtils;
@@ -40,9 +38,7 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO Ð
     }
 
     public void setPositionData(int modelId, Point startPosition, @Nullable Direction direction) {
-        modelData.getOrCreateLastModelState(modelId)
-                .setPosition(startPosition)
-                .setDirection(direction);
+        modelData.setPositionData(modelId, startPosition, direction);
 
         mapFilling.addObjectsOnCell(startPosition, modelId);
         mapFilling.markCellAsUpdated(startPosition);
@@ -54,11 +50,14 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO Ð
 
     public void moveModel(int modelId, Point newPosition) {
         Point lastPosition = modelData.getLastModelState(modelId).getPosition();
-        ModelData data = modelData.getLastModelState(modelId);
-        data.setDirection(MoveUtils.getRotate(lastPosition, newPosition));
-        data.setPosition(newPosition);
 
-        mapFilling.updateObjectsOnCell(data.getId(), lastPosition, newPosition);
+        ModelData data = modelData.getLastModelState(modelId);
+        data.setPosition(newPosition);
+        if (data.getDirection() != null) {
+            data.setDirection(MoveUtils.getRotate(lastPosition, newPosition));
+        }
+
+        mapFilling.updateObjectsOnCell(modelId, lastPosition, newPosition);
         mapFilling.markCellAsUpdated(lastPosition);
         mapFilling.markCellAsUpdated(newPosition);
     }

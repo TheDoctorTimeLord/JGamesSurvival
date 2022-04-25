@@ -1,7 +1,5 @@
 package com.jgames.survival.model.game.logic.battle.events;
 
-import com.jgames.survival.model.game.logic.attributes.constants.StateConstants;
-import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
@@ -10,12 +8,15 @@ import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
 import ru.jengine.eventqueue.event.PostHandler;
 import ru.jengine.utils.AttributeUtils;
 
+import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
+
 /**
  * Обрабатывает событие BodyPartDamageEvent
  */
 public class BodyPartDamageEventHandler implements PostHandler<BodyPartDamageEvent> {
     private final BattleState battleState;
-    DispatcherBattleWrapper dispatcher;
+    private final DispatcherBattleWrapper dispatcher;
 
     public BodyPartDamageEventHandler(BattleState battleState, DispatcherBattleWrapper dispatcher)
     {
@@ -36,22 +37,18 @@ public class BodyPartDamageEventHandler implements PostHandler<BodyPartDamageEve
     @Override
     public void handle(BodyPartDamageEvent event) {
         BattleModel targetModel = battleState.resolveId(event.getTargetId());
-        setNewBodyPartState(targetModel, event);
-    }
+        StringAttribute damagedBodyPartStateAttribute =
+                GetAttributeUtils.getBodyPartStateAttribute(targetModel, event.getDamagedBodyPart());
+        if (damagedBodyPartStateAttribute == null) {
+            return;
+        }
 
-    /**
-     * Назначение нового состояния части тела персонажа
-     * @param model объект, представляющий персонажа в бою
-     * @param event событие ближнего боя
-     */
-    private void setNewBodyPartState(BattleModel model, BodyPartDamageEvent event) {
-        StringAttribute damagedBodyPartStateAttribute = GetAttributeUtils
-                .getBodyPartStateAttribute(model, event.getDamagedBodyPart());
         String bodyPartState = damagedBodyPartStateAttribute.getValue();
         int newIntBodyPartState = StateConstants.damageStrength.get(bodyPartState) - 1;
         String newBodyPartState = getNewBodyPartState(newIntBodyPartState);
         damagedBodyPartStateAttribute.setValue(newBodyPartState);
-        AttributeUtils.notifyAboutChange(model.getId(), dispatcher, damagedBodyPartStateAttribute);
+
+        AttributeUtils.notifyAboutChange(targetModel.getId(), dispatcher, damagedBodyPartStateAttribute);
     }
 
     /**
@@ -59,7 +56,7 @@ public class BodyPartDamageEventHandler implements PostHandler<BodyPartDamageEve
      * @param newIntBodyPartState целое число, характеризующее новое состояние части тела персонажа
      * @return строковое значение, характеризующие новое состояние части тела персонажа
      */
-    private String getNewBodyPartState(int newIntBodyPartState) {
+    private static String getNewBodyPartState(int newIntBodyPartState) {
         if (newIntBodyPartState <= 0)
             return StateConstants.DESTROYED;
         if (newIntBodyPartState == 1)

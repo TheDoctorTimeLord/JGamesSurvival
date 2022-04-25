@@ -1,13 +1,15 @@
-package com.jgames.survival.model.game.logic.battle.commands.meleeattackutils.choosedamagedbodypartstrategy;
+package com.jgames.survival.model.game.logic.battle.utils.meleeattackutils;
 
-import com.jgames.survival.model.game.logic.attributes.constants.AttributesConstants;
-import com.jgames.survival.model.game.logic.attributes.constants.StateConstants;
-import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.utils.RandomUtils;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
 
 /**
  * Описывает стратегию выбора части тела противника, по которой будет наноситься удар

@@ -1,4 +1,4 @@
-package com.jgames.survival.presenter.filling.gamestate.modules;
+package com.jgames.survival.presenter.filling.gamestate.model;
 
 import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;

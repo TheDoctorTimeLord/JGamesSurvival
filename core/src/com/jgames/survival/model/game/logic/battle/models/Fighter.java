@@ -1,10 +1,14 @@
-package com.jgames.survival.model.game.logic.battle.commands.meleeattackutils.fighter;
+package com.jgames.survival.model.game.logic.battle.models;
 
-import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
-import com.jgames.survival.model.game.logic.battle.utils.constants.DirectionConstants;
-import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
+import ru.jengine.battlemodule.core.modelattributes.AttributesContainer;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.models.BattleModelType;
@@ -14,21 +18,16 @@ import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 import ru.jengine.utils.AttributeUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
+import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
 
 /**
  * Класс, описывающий бойца
  */
 public class Fighter extends DynamicModel implements HasHealth, CanHit {
-    DispatcherBattleWrapper dispatcher;
-
-    public Fighter(int id, BattleModelType type, int maxHealth, DispatcherBattleWrapper dispatcher) {
-        super(id, type);
-        setHealth(maxHealth);
+    public Fighter(int id, BattleModelType type, AttributesContainer attributes) {
+        super(id, type, attributes);
         setVision(true);
-        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -40,12 +39,14 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
     }
 
     @Override
-    public void damage(int damagePoints) {
-        int newHealthValue = getHealth() - damagePoints;
-        setHealth(newHealthValue);
-        if (newHealthValue <= 0) {
-            AttributeUtils.notifyAboutRemove(getId(), dispatcher,
-                    GetAttributeUtils.getHealthAttribute(this));
+    public void damage(int damagePoints, @Nullable DispatcherBattleWrapper dispatcher) {
+        IntAttribute healthAttribute = GetAttributeUtils.getHealthAttribute(this);
+        if (healthAttribute == null)
+            return;
+        healthAttribute.setValue(getHealth() - damagePoints);
+
+        if (dispatcher != null) {
+            AttributeUtils.notifyAboutChange(getId(), dispatcher, healthAttribute);
         }
     }
 
@@ -60,22 +61,11 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
     }
 
     /**
-     * Назначение нового значения здоровья бойцу
-     * @param newHealthValue новое значение здоровья бойца
-     */
-    private void setHealth(int newHealthValue) {
-        IntAttribute healthAttribute = GetAttributeUtils.getHealthAttribute(this);
-        if (healthAttribute == null)
-            return;
-        healthAttribute.setValue(newHealthValue);
-        AttributeUtils.notifyAboutChange(getId(), dispatcher, healthAttribute);
-    }
-
-    /**
      * Проверяет наличие противников рядом с бойцом
      * @param battleContext контекст битвы
      * @return true, если рядом есть противники, иначе false
      */
+    @Override
     public boolean hasOpponentsNearby(BattleContext battleContext) {
         List<BattleModel> enemies = getNearestBattleModels(battleContext.getBattleState());
         return enemies.isEmpty();
@@ -85,25 +75,25 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
      * Возвращает персонажей, которые находятся рядом с бойцом
      * @param battleState состояние битвы
      */
+    @Override
     public List<BattleModel> getNearestBattleModels(BattleState battleState) {
-        List<BattleModel> enemies = new ArrayList<>();
-        Map<Point, List<Integer>> map = battleState.getMapFilling();
         Point modelPosition = getPosition();
         Direction modelDirection = getDirection();
-        List<Point> pointNeighbour = LocationUtils.getNeighbour(
-                modelPosition, battleState, DirectionConstants.offsets.get(modelDirection));
-        for (Point neighbour : pointNeighbour) {
-            List<Integer> pointContent = map.get(neighbour);
-            if (pointContent.size()!= 0)
-                enemies.addAll(battleState.resolveIds(pointContent));
-        }
-        return enemies;
+        List<Point> pointNeighbour = LocationUtils.getNeighbours( modelPosition, battleState,
+                LocationUtils.getThreeFrontOffsets(modelDirection));
+
+        return pointNeighbour.stream()
+                .map(battleState::getModelsOnPosition)
+                .flatMap(Collection::stream)
+                .filter(model -> model instanceof DynamicModel)
+                .collect(Collectors.toList());
     }
 
     /**
      * Возвращает значение, характеризующее силу удара,
      * с которой персонаж может нанести вред противнику
      */
+    @Override
     public int getMeleeDamagePoints() {
         IntAttribute meleeDamageAttribute = GetAttributeUtils.getMeleeDamageAttribute(this);
         if (meleeDamageAttribute == null)

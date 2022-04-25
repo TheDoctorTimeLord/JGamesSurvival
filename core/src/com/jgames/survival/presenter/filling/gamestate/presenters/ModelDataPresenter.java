@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 import com.jgames.survival.presenter.core.gamestate.ModulePresenter;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
 
 public interface ModelDataPresenter extends ModulePresenter {
     List<ModelData> getDataForAllModels();

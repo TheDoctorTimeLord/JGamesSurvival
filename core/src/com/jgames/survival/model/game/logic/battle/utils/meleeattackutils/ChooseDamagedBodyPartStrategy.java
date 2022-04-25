@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands.meleeattackutils.choosedamagedbodypartstrategy;
+package com.jgames.survival.model.game.logic.battle.utils.meleeattackutils;
 
 import ru.jengine.battlemodule.core.models.BattleModel;
 

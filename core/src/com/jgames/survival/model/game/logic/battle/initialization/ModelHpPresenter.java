@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
-import ru.jengine.battlemodule.core.ExtendedBattleContext;
+import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.battlepresenter.initializebattle.InitializationPresenter;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
@@ -16,10 +16,10 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.Attribut
 @BattleBeanPrototype
 public class ModelHpPresenter implements InitializationPresenter {
     @Override
-    public List<BattleAction> presentBattleInitialize(ExtendedBattleContext extendedBattleContext) {
+    public List<BattleAction> presentBattleInitialize(BattleContext battleContext) {
         List<BattleAction> result = new ArrayList<>();
 
-        for (BattleModel battleModel : extendedBattleContext.getBattleContext().getBattleState().getModelsInBattle()) {
+        for (BattleModel battleModel : battleContext.getBattleState().getModelsInBattle()) {
             IntAttribute hp = AttributeUtils.extractInnerAttribute(
                     battleModel.getAttributes(),
                     List.of(Attributes.ATTRIBUTES),

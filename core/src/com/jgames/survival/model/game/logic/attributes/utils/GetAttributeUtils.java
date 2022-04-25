@@ -1,14 +1,16 @@
 package com.jgames.survival.model.game.logic.attributes.utils;
 
-import com.jgames.survival.model.game.logic.attributes.constants.AttributesConstants;
-import com.jgames.survival.model.game.logic.attributes.constants.StateConstants;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.utils.AttributeUtils;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
 
 /**
  * Вспомогательный класс для получения атрибута, характеризующего часть тела персонажа

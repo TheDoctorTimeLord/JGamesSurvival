@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
 import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
 import com.jgames.survival.ui.UIElements;

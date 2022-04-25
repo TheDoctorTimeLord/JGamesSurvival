@@ -13,6 +13,7 @@ import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
+import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
 
 public class ModelDataModule implements PresentingStateModule<ModelDataPresenter>, ModelDataPresenter {

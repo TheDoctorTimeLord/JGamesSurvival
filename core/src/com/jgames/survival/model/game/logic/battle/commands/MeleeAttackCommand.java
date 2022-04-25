@@ -1,16 +1,16 @@
 package com.jgames.survival.model.game.logic.battle.commands;
 
-import com.jgames.survival.model.game.logic.battle.commands.meleeattackutils
-        .choosedamagedbodypartstrategy.ChooseDamagedBodyPartStrategy;
-import com.jgames.survival.model.game.logic.battle.commands.meleeattackutils.fighter.Fighter;
-import com.jgames.survival.model.game.logic.battle.events.BodyPartDamageEvent;
-import com.jgames.survival.model.game.logic.battle.events.DealingDamageEvent;
+import java.util.List;
+
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
-import java.util.List;
+import com.jgames.survival.model.game.logic.battle.events.BodyPartDamageEvent;
+import com.jgames.survival.model.game.logic.battle.events.DealingDamageEvent;
+import com.jgames.survival.model.game.logic.battle.utils.meleeattackutils.ChooseDamagedBodyPartStrategy;
+import com.jgames.survival.model.game.logic.battle.models.CanHit;
 
 /**
  * Описывает команду ближнего боя, которую будет исполнять динамический объект.
@@ -30,19 +30,17 @@ public class MeleeAttackCommand implements BattleCommand<MeleeAttackParameters> 
     }
 
     @Override
-    public void perform(BattleModel model, BattleContext battleContext,
-                        MeleeAttackParameters executionParameters) {
-        if (model instanceof Fighter fighter) {
+    public void perform(BattleModel model, BattleContext battleContext, MeleeAttackParameters executionParameters) {
+        if (model instanceof CanHit canHit) {
             BattleModel enemy = executionParameters.getEnemy();
-            List<BattleModel> nearEnemies = fighter.getNearestBattleModels(battleContext.getBattleState());
+            List<BattleModel> nearEnemies = canHit.getNearestBattleModels(battleContext.getBattleState());
             if (nearEnemies.contains(enemy)) {
                 DispatcherBattleWrapper dispatcher = battleContext.getDispatcher();
                 String bodyPart = chooseDamagedBodyPartStrategy.chooseDamagedBodyPart(enemy);
                 if (bodyPart == null || enemy == null)
                     return;
-                dispatcher.handle(new BodyPartDamageEvent(fighter.getId(), enemy.getId(), bodyPart));
-                dispatcher.handle(new DealingDamageEvent(
-                        fighter.getId(), enemy.getId(), fighter.getMeleeDamagePoints()));
+                dispatcher.handle(new BodyPartDamageEvent(model.getId(), enemy.getId(), bodyPart));
+                dispatcher.handle(new DealingDamageEvent(model.getId(), enemy.getId(), canHit.getMeleeDamagePoints()));
             }
         }
     }

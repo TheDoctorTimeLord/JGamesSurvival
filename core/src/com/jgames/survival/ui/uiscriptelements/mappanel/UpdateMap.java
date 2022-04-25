@@ -5,7 +5,7 @@ import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.UIRunnableScript;
 import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;

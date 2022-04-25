@@ -14,11 +14,11 @@ import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.serviceclasses.PointPool;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
-import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
-import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModelType;
 import ru.jengine.utils.RandomUtils;
 
 import com.jgames.survival.model.game.logic.battle.attributes.AttributeGenerator;
+import com.jgames.survival.model.game.logic.battle.models.Fighter;
+import com.jgames.survival.model.game.logic.battle.models.FighterType;
 import com.jgames.survival.model.game.logic.battle.models.StaticModel;
 import com.jgames.survival.model.game.logic.battle.models.StaticModelType;
 import com.jgames.survival.model.game.logic.battle.utils.ObjectPlacementUtils;
@@ -40,11 +40,11 @@ public class InitialBattleGenerator extends BattleGenerator {
         List<BattleModel> staticModels = new ArrayList<>();
         BattlefieldLimiter battleFieldLimiter = new SquareBattleFieldLimiter(PointPool.obtain(0, 0), MAP_SIZE);
 
-        DynamicModelType dynamicModelType = new DynamicModelType("person", AttributeGenerator.getInitialAttributesKit());
+        FighterType fighterType = new FighterType("person", AttributeGenerator.getInitialAttributesKit());
         StaticModelType staticModelType = new StaticModelType("wall", new AttributesContainer());
 
         for (int i = 0; i < 5; i++) {
-            DynamicModel model = dynamicModelType.createBattleModelByType(idGenerator.generateId());
+            Fighter model = fighterType.createBattleModelByType(idGenerator.generateId());
             Point position = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
 
             mapPosition.computeIfAbsent(position, p -> new ArrayList<>()).add(model.getId());

@@ -1,14 +1,14 @@
 package com.jgames.survival.presenter.filling.gamestate.modules;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
+import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.resolvers.ModelDataResolver;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class NameObjectResolvingModule implements PresentingStateModule<NameObjectResolvingPresenter>, NameObjectResolvingPresenter {
     public static final String NAME = "nameObjectResolving";
