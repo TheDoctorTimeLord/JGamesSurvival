@@ -6,7 +6,6 @@ import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.ui.cellactorfactories.TextureFactory;
-import com.jgames.survival.ui.widgets.TextListWidget;
 import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
 import com.jgames.survival.utils.assets.TextureStorage;
 
@@ -51,8 +50,7 @@ public class DrawingModule implements PresentingStateModule<DrawingModulePresent
 
     @Override
     public Actor getActor(String objectTypeName, DrawingContext drawingContext) {
-        return !cellActorFactoryMap.containsKey(objectTypeName)
-                ? defaultActor
-                : cellActorFactoryMap.get(objectTypeName).create(drawingContext);
+        CellActorFactory factory = cellActorFactoryMap.get(objectTypeName);
+        return factory == null ? defaultActor : factory.create(drawingContext);
     }
 }

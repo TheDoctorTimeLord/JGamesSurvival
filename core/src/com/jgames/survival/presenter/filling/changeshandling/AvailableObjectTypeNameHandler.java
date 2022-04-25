@@ -40,7 +40,7 @@ public class AvailableObjectTypeNameHandler implements GameChangeHandler {
         AvailableObjectTypeNames availableObjectTypeNames = (AvailableObjectTypeNames) information;
         for (String name : availableObjectTypeNames.getAvailableTypeNames()) {
             CellActorFactory actorFactory = ActorFactoryConfig
-                    .ActorFactoriesMap
+                    .ACTOR_FACTORIES_MAP
                     .getOrDefault(name, defaultTextureFactory)
                     .apply(textureStorage);
             drawingRegistrar.connectCellActorFactory(name, actorFactory);
