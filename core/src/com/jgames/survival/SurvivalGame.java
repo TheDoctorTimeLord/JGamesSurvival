@@ -1,8 +1,5 @@
 package com.jgames.survival;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -22,7 +19,6 @@ import com.jgames.survival.presenter.filling.changeshandling.battleactionhandler
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ObjectTypeActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.CommandButtonClickHandler;
-import com.jgames.survival.presenter.filling.clickactionhandlers.MapCellClickHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.UpdatedCellsModule;
@@ -32,107 +28,107 @@ import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.uifactories.CommandPanelFactory;
 import com.jgames.survival.ui.uifactories.LeftTopInformationFactory;
-import com.jgames.survival.ui.uifactories.MapTableFactory;
 import com.jgames.survival.ui.uifactories.PhaseAndTurnPanelFactory;
 import com.jgames.survival.utils.GameProperties;
 import com.jgames.survival.utils.assets.SimpleTextureStorage;
 import com.jgames.survival.utils.assets.TextureStorage;
 import com.jgames.survival.utils.assets.TextureStorageConfiguration;
 
+import java.io.IOException;
+import java.util.Properties;
+
 public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
-	private boolean isDebugMode;
+    private boolean isDebugMode;
 
-	private AbstractGameHandler gameHandler;
-	private Stage stage;
-	private TextureStorage textureStorage;
+    private AbstractGameHandler gameHandler;
+    private Stage stage;
+    private TextureStorage textureStorage;
 
-	@Override
-	public void create() {
-		initGlobalParameters();
+    @Override
+    public void create() {
+        initGlobalParameters();
 
-		textureStorage = new SimpleTextureStorage().load(new TextureStorageConfiguration());
+        textureStorage = new SimpleTextureStorage().load(new TextureStorageConfiguration());
 
-		gameHandler = new MainGameHandler(new GameConfiguration());
-		gameHandler.start();
+        gameHandler = new MainGameHandler(new GameConfiguration());
+        gameHandler.start();
 
-		PresentingGameState presentingGameState = new PresentingGameState()
-				.addStateModule(new ModelDataModule())
-				.addStateModule(new UpdatedCellsModule())
-				.addModuleMutator(new ModelDataMutator())
-				.connectMutatorsWithModules();
+        PresentingGameState presentingGameState = new PresentingGameState()
+                .addStateModule(new ModelDataModule())
+                .addStateModule(new UpdatedCellsModule())
+                .addModuleMutator(new ModelDataMutator())
+                .connectMutatorsWithModules();
 
-		GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
-				.registerGameChangeHandler(new StartPhaseChangesHandler())
-				.registerGameChangeHandler(new BattleActionWrapperHandler(
-						new StartPositionActionHandler(),
-						new ObjectTypeActionHandler(),
-						new ModelHpActionHandler()
-				));
+        GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
+                .registerGameChangeHandler(new StartPhaseChangesHandler())
+                .registerGameChangeHandler(new BattleActionWrapperHandler(
+                        new StartPositionActionHandler(),
+                        new ObjectTypeActionHandler(),
+                        new ModelHpActionHandler()
+                ));
 
-		gameHandler.onStart();
+        gameHandler.onStart();
 
-		DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
-		stage = new Stage(new ScreenViewport());
+        DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
+        stage = new Stage(new ScreenViewport());
 
-		UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler, presentingGameState, textureStorage)
-				.registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
-				.registerComponent(new LeftTopInformationFactory(300, 300))
-				.registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
-				.registerComponent(new PhaseAndTurnPanelFactory(new PhaseOrTurnClickedHandler(scriptMachine)));
+        UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler, presentingGameState, textureStorage)
+//                .registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
+                .registerComponent(new LeftTopInformationFactory(300, 300))
+                .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
+                .registerComponent(new PhaseAndTurnPanelFactory(new PhaseOrTurnClickedHandler(scriptMachine)));
 
-		UIElements uiElements = componentRegistrar.createInterface();
+        UIElements uiElements = componentRegistrar.createInterface();
 
-		Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
 
-		if (isDebugMode) {
-			uiElements.setDebug(true);
-		}
-	}
+        if (isDebugMode) {
+            uiElements.setDebug(true);
+        }
+    }
 
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 
-	@Override
-	public void render() {
-		ScreenUtils.clear(0, 0, 0, 1);
+    @Override
+    public void render() {
+        ScreenUtils.clear(0, 0, 0, 1);
 
-		stage.act();
-		stage.draw();
-	}
-	
-	@Override
-	public void dispose() {
-		gameHandler.stopGame();
-		try {
-			gameHandler.join();
-		}
-		catch (InterruptedException e) {
-			Gdx.app.error("INTERRUPTED", "Game was interrupted and not joining", e);
-		}
+        stage.act();
+        stage.draw();
+    }
 
-		stage.dispose();
-		textureStorage.dispose();
-	}
+    @Override
+    public void dispose() {
+        gameHandler.stopGame();
+        try {
+            gameHandler.join();
+        } catch (InterruptedException e) {
+            Gdx.app.error("INTERRUPTED", "Game was interrupted and not joining", e);
+        }
 
-	private void initGlobalParameters() {
-		GameProperties globalSettings = getGlobalSettings();
-		isDebugMode = globalSettings.getProperty("isDebugEnable");
-	}
+        stage.dispose();
+        textureStorage.dispose();
+    }
 
-	private static GameProperties getGlobalSettings() {
-		try {
-			FileHandle globalSettingsUrl = Gdx.files.internal("gameconfig.properties");
-			Properties globalSettings = new Properties();
-			globalSettings.load(globalSettingsUrl.read());
-			return new GameProperties(globalSettings, true);
-		}
-		catch (IOException e) {
-			Gdx.app.error(SurvivalGame.class.getSimpleName(), "Error with global settings", e);
-			GameProperties defaultProperties = new GameProperties();
-			defaultProperties.setProperty("isDebugEnable", false);
-			return defaultProperties;
-		}
-	}
+    private void initGlobalParameters() {
+        GameProperties globalSettings = getGlobalSettings();
+        isDebugMode = globalSettings.getProperty("isDebugEnable");
+    }
+
+    private static GameProperties getGlobalSettings() {
+        try {
+            FileHandle globalSettingsUrl = Gdx.files.internal("gameconfig.properties");
+            Properties globalSettings = new Properties();
+            globalSettings.load(globalSettingsUrl.read());
+            return new GameProperties(globalSettings, true);
+        } catch (IOException e) {
+            Gdx.app.error(SurvivalGame.class.getSimpleName(), "Error with global settings", e);
+            GameProperties defaultProperties = new GameProperties();
+            defaultProperties.setProperty("isDebugEnable", false);
+            return defaultProperties;
+        }
+    }
 }

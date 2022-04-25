@@ -1,7 +1,5 @@
 package com.jgames.survival.ui.uifactories;
 
-import ru.jengine.battlemodule.core.serviceclasses.Point;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -14,9 +12,9 @@ import com.jgames.survival.ui.UIFactory;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
 import com.jgames.survival.ui.widgets.MapCell.ClickOnMapCell;
-import com.jgames.survival.ui.widgets.MapHelper;
 import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
 import com.jgames.survival.utils.assets.TextureStorage;
+import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 public class MapTableFactory implements UIFactory {
     private final int width;
@@ -53,13 +51,6 @@ public class MapTableFactory implements UIFactory {
     private void fillGlobalMap(ModelDataPresenter personDataPresenter, TextureRegion[] directedPersonTextures) {
         for (ModelData personData : personDataPresenter.getDataForAllModels()) {
             Point position = personData.getPosition();
-            MapCell mapCell = globalMap.getTableCell(position.getX(), position.getY());
-            MapHelper.createCellFilling(mapCell, true)
-                    .setMainTexture(personData.getDirection() == null
-                            ? mapCell.getDefaultTexture()
-                            : directedPersonTextures[personData.getDirection().ordinal()])
-                    .setHpLabel(personData.getHp())
-                    .build();
         }
     }
 
@@ -74,6 +65,7 @@ public class MapTableFactory implements UIFactory {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 mapTable.add(new MapCell(x, y, region, cellCallback));
+                // TODO: Нужно реализовать инициализацию карты
             }
             mapTable.row();
         }
