@@ -3,40 +3,31 @@ package com.jgames.survival.model.game.logic.battle.events;
 import ru.jengine.battlemodule.core.events.BattleEvent;
 
 /**
- * Событие, описывающее ближнюю атаку
+ * Событие, описывающее повреждение части тела
  */
-public class MeleeAttackEvent extends BattleEvent {
-    private final int attacker;
-    private final int target;
-    private final int damagePoints;
+public class BodyPartDamageEvent extends BattleEvent {
+    private final int attackerId;
+    private final int targetId;
     private final String damagedBodyPart;
 
-    public MeleeAttackEvent(int attacker, int target, int damagePoints, String damagedBodyPart) {
-        this.attacker = attacker;
-        this.target = target;
-        this.damagePoints = damagePoints;
+    public BodyPartDamageEvent(int attackerId, int targetId, String damagedBodyPart) {
+        this.attackerId = attackerId;
+        this.targetId = targetId;
         this.damagedBodyPart = damagedBodyPart;
-    }
-
-    /**
-     * Возвращает наносимый урон
-     */
-    public int getDamagePoints() {
-        return damagePoints;
     }
 
     /**
      * Возвращает идентификатор атакующего персонажа
      */
-    public int getAttacker() {
-        return attacker;
+    public int getAttackerId() {
+        return attackerId;
     }
 
     /**
      * Возвращает идентификатор персонажа, получающего урон
      */
-    public int getTarget() {
-        return target;
+    public int getTargetId() {
+        return targetId;
     }
 
     /**

@@ -2,18 +2,18 @@ package com.jgames.survival.model.game.logic.battle.commands.meleeattackutils.ch
 
 import com.jgames.survival.model.game.logic.attributes.constants.AttributesConstants;
 import com.jgames.survival.model.game.logic.attributes.constants.StateConstants;
+import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.utils.RandomUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Описывает выбора части тела противника, по которой будет наноситься удар
+ * Описывает стратегию выбора части тела противника, по которой будет наноситься удар
  * Стратегия: выбор части тела производиться произвольным образом
  */
-public class DamagedBodyPartRandomStrategy {
+public class DamagedBodyPartRandomStrategy implements ChooseDamagedBodyPartStrategy{
     /**
      * Возвращает часть тела противника, по которой будет наноситься удар
      * @param enemy противник
@@ -21,22 +21,14 @@ public class DamagedBodyPartRandomStrategy {
      * если все части тела противника максимально повреждены и урон нанести уже нельзя
      */
     @Nullable
-    public static String chooseDamagedBodyPart(BattleModel enemy) {
-        List<String> bodyParts = new ArrayList<>(
-                List.of("HEAD", "BODY", "LEFT_ARM", "RIGHT_ARM", "LEFT_LEG", "RIGHT_LEG"));
-        while(bodyParts.size() > 0) {
-            String bodyPart = chooseRandomBodyPart(bodyParts);
-            String bodyPartState = enemy
-                    .getAttributes()
-                    .getAsContainer(AttributesConstants.BodyPartsConstants.BODY_PARTS)
-                    .getAsContainer(bodyPart)
-                    .getAsString(StateConstants.STATE).getValue();
-            if (StateConstants.DESTROYED.equals(bodyPartState)) {
-                bodyParts.remove(bodyPart);
-            }
-            else {
-                return bodyPart;
-            }
+    public String chooseDamagedBodyPart(BattleModel enemy) {
+        List<String> availableEnemyBodyParts = AttributesConstants.BodyPartsConstants.bodyParts
+                .stream()
+                .filter(bodyPart -> !StateConstants.DESTROYED.equals(
+                        GetAttributeUtils.getBodyPartStateAttribute(enemy, bodyPart).getValue()))
+                .toList();
+        if (availableEnemyBodyParts.size() > 0) {
+            return chooseRandomBodyPart(availableEnemyBodyParts);
         }
         return null;
     }

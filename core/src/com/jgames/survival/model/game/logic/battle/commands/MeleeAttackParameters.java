@@ -2,8 +2,8 @@ package com.jgames.survival.model.game.logic.battle.commands;
 
 import ru.jengine.battlemodule.core.commands.CommandExecutionParameters;
 import ru.jengine.battlemodule.core.models.BattleModel;
-import ru.jengine.utils.RandomUtils;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,19 +16,19 @@ public class MeleeAttackParameters implements CommandExecutionParameters {
 
     public MeleeAttackParameters(List<BattleModel> enemies) {
         this.enemies = (enemies != null) ? enemies : Collections.emptyList();
-        appointOpponent();
     }
 
     /**
-     * Возвращает противников
+     * Возвращает противников, доступных для выбора
      */
     public List<BattleModel> getEnemies() {
         return enemies;
     }
 
     /**
-     * Возвращает противника
+     * Возвращает выбранного противника
      */
+    @Nullable
     public BattleModel getEnemy() {
         return enemy;
     }
@@ -36,7 +36,7 @@ public class MeleeAttackParameters implements CommandExecutionParameters {
     /**
      * Назначает противника
      */
-    public void appointOpponent() {
-        this.enemy = RandomUtils.chooseInCollection(enemies);
+    public void selectEnemy(BattleModel targetModel) {
+        this.enemy = targetModel;
     }
 }

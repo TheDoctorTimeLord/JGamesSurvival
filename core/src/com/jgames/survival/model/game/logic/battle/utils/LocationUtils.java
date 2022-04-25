@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands.meleeattackutils;
+package com.jgames.survival.model.game.logic.battle.utils;
 
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;

@@ -1,17 +1,16 @@
 package com.jgames.survival.model.game.logic.battle.events;
 
-import com.jgames.survival.model.game.logic.battle.commands.MeleeAttackNotification;
 import ru.jengine.battlemodule.core.battlepresenter.BattleActionRegistrar;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
 import ru.jengine.eventqueue.event.PostHandler;
 
 /**
- * Отправляет на регистрацию событие MeleeAttackEvent
+ * Отправляет на регистрацию событие DealingDamageEvent
  */
-public class MeleeAttackEventNotifier implements PostHandler<MeleeAttackEvent> {
+public class DealingDamageEventNotifier implements PostHandler<DealingDamageEvent> {
     private final BattleActionRegistrar actionRegistrar;
 
-    public MeleeAttackEventNotifier(BattleActionRegistrar actionRegistrar) {
+    public DealingDamageEventNotifier(BattleActionRegistrar actionRegistrar) {
         this.actionRegistrar = actionRegistrar;
     }
 
@@ -21,13 +20,13 @@ public class MeleeAttackEventNotifier implements PostHandler<MeleeAttackEvent> {
     }
 
     @Override
-    public Class<MeleeAttackEvent> getHandlingEventType() {
-        return MeleeAttackEvent.class;
+    public Class<DealingDamageEvent> getHandlingEventType() {
+        return DealingDamageEvent.class;
     }
 
     @Override
-    public void handle(MeleeAttackEvent event) {
-        MeleeAttackNotification notification = new MeleeAttackNotification(event);
+    public void handle(DealingDamageEvent event) {
+        DealingDamageNotification notification = new DealingDamageNotification(event);
         actionRegistrar.registerAction(notification);
     }
 }
