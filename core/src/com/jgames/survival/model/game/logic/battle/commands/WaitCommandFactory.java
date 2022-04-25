@@ -1,5 +1,6 @@
 package com.jgames.survival.model.game.logic.battle.commands;
 
+import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommandFactory;
