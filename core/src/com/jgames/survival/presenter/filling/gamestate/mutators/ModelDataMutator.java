@@ -44,7 +44,7 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO Ð
                 .setPosition(startPosition)
                 .setDirection(direction);
 
-        mapFilling.addObjectsOnCell(startPosition, getObjectIds(modelId));
+        mapFilling.addObjectsOnCell(startPosition, modelId);
         mapFilling.markCellAsUpdated(startPosition);
     }
 
@@ -80,9 +80,5 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO Ð
     public void startNewPhase() {
         modelData.addState();
         mapFilling.addState();
-    }
-
-    private Collection<Integer> getObjectIds(@Nullable Integer objectId) {
-        return objectId != null && objectId != Integer.MIN_VALUE ? List.of(objectId) : Collections.emptyList();
     }
 }
