@@ -9,9 +9,9 @@ import com.jgames.survival.presenter.core.uiscripts.UIRunnableScript;
 import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.UpdatedCellsModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
-import com.jgames.survival.presenter.filling.gamestate.presenters.UpdatedCellsPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
 
@@ -20,7 +20,7 @@ import com.jgames.survival.ui.widgets.MapCell;
  */
 public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
     private final ModelDataPresenter modelDataPresenter;
-    private final UpdatedCellsPresenter updatedCellsPresenter;
+    private final MapFillingPresenter updatedCellsPresenter;
     private final GlobalMapWrapper<MapCell> globalMap;
     private final TextureRegion[] directedPersonsTextures;
 
@@ -28,7 +28,7 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
     public ApplyPhaseChanges(PresentingGameState gameState, GlobalMapWrapper<MapCell> globalMap,
             TextureRegion[] directedPersonsTextures) {
         this.modelDataPresenter = gameState.getModulePresenter(ModelDataModule.NAME);
-        this.updatedCellsPresenter = gameState.getModulePresenter(UpdatedCellsModule.NAME);
+        this.updatedCellsPresenter = gameState.getModulePresenter(MapFillingModule.NAME);
         this.globalMap = globalMap;
         this.directedPersonsTextures = directedPersonsTextures;
     }

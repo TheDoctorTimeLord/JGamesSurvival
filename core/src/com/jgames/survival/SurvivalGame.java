@@ -22,8 +22,8 @@ import com.jgames.survival.presenter.filling.changeshandling.battleactionhandler
 import com.jgames.survival.presenter.filling.clickactionhandlers.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.UpdatedCellsModule;
 import com.jgames.survival.presenter.filling.gamestate.mutators.DrawingRegistrar;
 import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
 import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
@@ -58,7 +58,7 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
         PresentingGameState presentingGameState = new PresentingGameState()
                 .addStateModule(new ModelDataModule())
-                .addStateModule(new UpdatedCellsModule())
+                .addStateModule(new MapFillingModule())
                 .addStateModule(new DrawingModule(textureStorage))
                 .addModuleMutator(new ModelDataMutator())
                 .addModuleMutator(new DrawingRegistrar())

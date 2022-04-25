@@ -8,6 +8,9 @@ import com.jgames.survival.utils.assets.TextureStorage;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Простой конфиг для имен объектов и привязанным к ним фабрик актёров.
+ */
 public class ActorFactoryConfig {
     public static final Map<String, Function<TextureStorage, CellActorFactory>> ACTOR_FACTORIES_MAP = new
             ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()

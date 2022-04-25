@@ -1,6 +1,8 @@
 package com.jgames.survival.presenter.filling.gamestate.mutators;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -12,14 +14,14 @@ import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelData;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.UpdatedCellsModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.utils.MoveUtils;
 
 public class ModelDataMutator implements PresentingStateModuleMutator { //TODO перенести синхронизацию сюда из модулей
-    private static final List<String> USED_MODULE_NAMES = Arrays.asList(ModelDataModule.NAME, UpdatedCellsModule.NAME);
+    private static final List<String> USED_MODULE_NAMES = Arrays.asList(ModelDataModule.NAME, MapFillingModule.NAME);
 
     private ModelDataModule modelData;
-    private UpdatedCellsModule updatedCells;
+    private MapFillingModule mapFilling;
 
     @Override
     public List<String> getUsedModuleNames() {
@@ -28,8 +30,8 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO �
 
     @Override
     public void connectWithModule(PresentingStateModule<?>... modules) {
-        modelData = (ModelDataModule)modules[0];
-        updatedCells = (UpdatedCellsModule)modules[1];
+        modelData = (ModelDataModule) modules[0];
+        mapFilling = (MapFillingModule) modules[1];
     }
 
     public void setHp(int modelId, int hp) {
@@ -42,7 +44,8 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO �
                 .setPosition(startPosition)
                 .setDirection(direction);
 
-        updatedCells.markCellAsUpdated(startPosition);
+        mapFilling.addObjectsOnCell(startPosition, modelId);
+        mapFilling.markCellAsUpdated(startPosition);
     }
 
     public void setObjectType(int modelId, String objectTypeName) {
@@ -55,26 +58,27 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO �
         data.setDirection(MoveUtils.getRotate(lastPosition, newPosition));
         data.setPosition(newPosition);
 
-        updatedCells.markCellAsUpdated(lastPosition);
-        updatedCells.markCellAsUpdated(newPosition);
+        mapFilling.updateObjectsOnCell(data.getId(), lastPosition, newPosition);
+        mapFilling.markCellAsUpdated(lastPosition);
+        mapFilling.markCellAsUpdated(newPosition);
     }
 
     public void rotateModel(int modelId, Direction newDirection) {
         ModelData modelState = modelData.getLastModelState(modelId);
         modelState.setDirection(newDirection);
 
-        updatedCells.markCellAsUpdated(modelState.getPosition());
+        mapFilling.markCellAsUpdated(modelState.getPosition());
     }
 
     public void damageModel(int modelId, int damagePoints) {
         ModelData modelState = modelData.getLastModelState(modelId);
         modelState.damage(damagePoints);
 
-        updatedCells.markCellAsUpdated(modelState.getPosition());
+        mapFilling.markCellAsUpdated(modelState.getPosition());
     }
 
     public void startNewPhase() {
         modelData.addState();
-        updatedCells.addState();
+        mapFilling.addState();
     }
 }
