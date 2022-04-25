@@ -7,11 +7,12 @@ import com.jgames.survival.presenter.filling.gamestate.resolvers.ModelDataResolv
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class NameObjectResolvingModule implements PresentingStateModule<NameObjectResolvingPresenter>, NameObjectResolvingPresenter {
     public static final String NAME = "nameObjectResolving";
-    private final Collection<ModelDataResolver> modelDataResolvers = new ArrayList<>();
+    private final List<ModelDataResolver> modelDataResolvers = new ArrayList<>();
 
     /**
      * Зарегистрировать резолвера метаданных.
@@ -21,7 +22,7 @@ public class NameObjectResolvingModule implements PresentingStateModule<NameObje
     }
 
     @Override
-    public Collection<ResolvingContext> resolveModelData(Collection<ModelData> modelDataCollection) {
+    public List<ResolvingContext> resolveModelData(List<ModelData> modelDataCollection) {
         return modelDataResolvers
                 .stream()
                 .map(modelDataResolver -> modelDataResolver.resolve(modelDataCollection))

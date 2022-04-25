@@ -15,12 +15,12 @@ import com.jgames.survival.ui.widgets.MapCell;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Скрипт для обновления поля боя.
  */
 public class UpdateMap implements UIRunnableScript<EmptyScriptState> {
-    public final static String NAME = "initializeMap";
     private final GlobalMapWrapper<MapCell> globalMap;
     private final MapFillingPresenter mapFillingPresenter;
     private final ModelDataPresenter modelDataPresenter;
@@ -43,10 +43,10 @@ public class UpdateMap implements UIRunnableScript<EmptyScriptState> {
     public void handle(UIScriptElementContext context, EmptyScriptState state) {
         Collection<Point> points = mapFillingPresenter.getUpdatedCells();
         for (Point point : points) {
-            Collection<Integer> objectIds = mapFillingPresenter.getIdsOnCell(point);
-            Collection<ModelData> modelDataCollection = objectIds.stream().map(modelDataPresenter::getCurrentModelState).toList();
-            Collection<ResolvingContext> resolvingContexts = nameObjectResolvingModule.resolveModelData(modelDataCollection);
-            Collection<Actor> actors = resolvingContexts.stream().map(resolvingContext -> drawingModulePresenter.getActor(
+            List<Integer> objectIds = mapFillingPresenter.getIdsOnCell(point);
+            List<ModelData> modelDataCollection = objectIds.stream().map(modelDataPresenter::getCurrentModelState).toList();
+            List<ResolvingContext> resolvingContexts = nameObjectResolvingModule.resolveModelData(modelDataCollection);
+            List<Actor> actors = resolvingContexts.stream().map(resolvingContext -> drawingModulePresenter.getActor(
                     resolvingContext.getObjectTypeName(),
                     resolvingContext.getDrawingContext())).toList();
             globalMap.getTableCell(point.getX(), point.getY()).update(actors);

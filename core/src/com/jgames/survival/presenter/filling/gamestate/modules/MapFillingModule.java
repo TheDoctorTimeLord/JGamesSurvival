@@ -10,7 +10,7 @@ import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPres
 public class MapFillingModule implements PresentingStateModule<MapFillingModule>, MapFillingPresenter {
     public static final String NAME = "mapFilling";
     private final Deque<Set<Point>> updatedCells;
-    private final Deque<Map<Point, Collection<Integer>>> objectsOnCell;
+    private final Deque<Map<Point, List<Integer>>> objectsOnCell;
 
     public MapFillingModule() {
         updatedCells = new ArrayDeque<>();
@@ -27,14 +27,12 @@ public class MapFillingModule implements PresentingStateModule<MapFillingModule>
         updatedCells.getLast().add(cellCoordinate);
     }
 
-    public synchronized void addObjectsOnCell(Point point, Integer objectId) {
-        Map<Point, Collection<Integer>> lastState = objectsOnCell.getLast();
-        if (!lastState.containsKey(point)) lastState.put(point, new ArrayList<>());
-        if (objectId != null && objectId != Integer.MIN_VALUE) lastState.get(point).add(objectId);
+    public synchronized void addObjectsOnCell(Point point, int objectId) {
+        objectsOnCell.getLast().computeIfAbsent(point, p -> new ArrayList<>()).add(objectId);
     }
 
     public synchronized void updateObjectsOnCell(Integer objectId, Point lastPosition, Point newPosition) {
-        Map<Point, Collection<Integer>> lastState = objectsOnCell.getLast();
+        Map<Point, List<Integer>> lastState = objectsOnCell.getLast();
         lastState.get(lastPosition).remove(objectId);
         lastState.get(newPosition).add(objectId);
     }
@@ -53,7 +51,7 @@ public class MapFillingModule implements PresentingStateModule<MapFillingModule>
     }
 
     @Override
-    public Collection<Integer> getIdsOnCell(Point point) {
+    public List<Integer> getIdsOnCell(Point point) {
         return objectsOnCell.isEmpty() ? Collections.emptyList() : objectsOnCell.getFirst().get(point);
     }
 
