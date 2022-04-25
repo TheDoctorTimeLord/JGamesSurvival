@@ -24,6 +24,7 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
     private final GlobalMapWrapper<MapCell> globalMap;
     private final TextureRegion[] directedPersonsTextures;
 
+    // TODO: Нужно переделать заполнение и обновление клетки.
     public ApplyPhaseChanges(PresentingGameState gameState, GlobalMapWrapper<MapCell> globalMap,
             TextureRegion[] directedPersonsTextures) {
         this.modelDataPresenter = gameState.getModulePresenter(ModelDataModule.NAME);
@@ -40,7 +41,7 @@ public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
         for (Point updated : updatedCellsPresenter.getUpdatedCells()) {
             Integer id = modelDataPresenter.getModelOnPosition(updated);
             if (id == null) {
-            // resetMapCell(updated); TODO: Переделать
+                // resetMapCell(updated); TODO: Переделать
                 continue;
             }
 

@@ -1,15 +1,17 @@
 package com.jgames.survival.ui.cellactorfactories;
 
+import com.google.common.collect.ImmutableMap;
 import com.jgames.survival.presenter.core.CellActorFactory;
-import com.jgames.survival.utils.assets.SimpleTextureStorage;
+import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
 import com.jgames.survival.utils.assets.TextureStorage;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 public class ActorFactoryConfig {
-    public static Map<String, Function<TextureStorage, CellActorFactory>> ActorFactoriesMap = new HashMap<>() {{
-        put("cell", textureStorage -> new TextureFactory(textureStorage.createSprite(SimpleTextureStorage.Constants.COMMON)));
-    }};
+    public static final Map<String, Function<TextureStorage, CellActorFactory>> ActorFactoriesMap = new
+            ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()
+            .put("common", textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.COMMON)))
+            .put("tint", textureStorage -> new DeadObjectTint(textureStorage.createSprite(Constants.COMMON)))
+            .build();
 }

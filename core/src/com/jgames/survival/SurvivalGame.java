@@ -13,6 +13,7 @@ import com.jgames.survival.presenter.core.changeshangling.GameChangeHandlersRegi
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.presenter.core.uiscripts.scriptmachines.MultipleActiveScriptMachine;
+import com.jgames.survival.presenter.filling.changeshandling.AvailableObjectTypeNameHandler;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
 import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ModelHpActionHandler;
@@ -20,8 +21,10 @@ import com.jgames.survival.presenter.filling.changeshandling.battleactionhandler
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
+import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.UpdatedCellsModule;
+import com.jgames.survival.presenter.filling.gamestate.mutators.DrawingRegistrar;
 import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
 import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
 import com.jgames.survival.ui.UIComponentRegistrar;
@@ -56,11 +59,14 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
         PresentingGameState presentingGameState = new PresentingGameState()
                 .addStateModule(new ModelDataModule())
                 .addStateModule(new UpdatedCellsModule())
+                .addStateModule(new DrawingModule(textureStorage))
                 .addModuleMutator(new ModelDataMutator())
+                .addModuleMutator(new DrawingRegistrar())
                 .connectMutatorsWithModules();
 
         GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
                 .registerGameChangeHandler(new StartPhaseChangesHandler())
+                .registerGameChangeHandler(new AvailableObjectTypeNameHandler())
                 .registerGameChangeHandler(new BattleActionWrapperHandler(
                         new StartPositionActionHandler(),
                         new ObjectTypeActionHandler(),
