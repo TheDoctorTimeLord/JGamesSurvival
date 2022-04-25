@@ -27,8 +27,14 @@ public class MapFillingModule implements PresentingStateModule<MapFillingModule>
         updatedCells.getLast().add(cellCoordinate);
     }
 
-    public synchronized void updateObjectsOnCell(Point point, Collection<Integer> objectIds) {
+    public synchronized void addObjectsOnCell(Point point, Collection<Integer> objectIds) {
         objectsOnCell.getLast().put(point, objectIds);
+    }
+
+    public synchronized void updateObjectsOnCell(Integer objectId, Point lastPosition, Point newPosition) {
+        Map<Point, Collection<Integer>> lastState = objectsOnCell.getLast();
+        lastState.get(lastPosition).remove(objectId);
+        lastState.get(newPosition).add(objectId);
     }
 
     @Override
