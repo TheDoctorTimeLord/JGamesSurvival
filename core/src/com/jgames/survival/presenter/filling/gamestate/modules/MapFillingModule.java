@@ -20,7 +20,9 @@ public class MapFillingModule implements PresentingStateModule<MapFillingModule>
 
     public void addState() {
         updatedCells.addLast(new HashSet<>());
-        objectsOnCell.addLast(new HashMap<>());
+        objectsOnCell.addLast(objectsOnCell.isEmpty()
+                ? new HashMap<>()
+                : new HashMap<>(objectsOnCell.getLast()));
     }
 
     public synchronized void markCellAsUpdated(Point cellCoordinate) {
@@ -52,7 +54,9 @@ public class MapFillingModule implements PresentingStateModule<MapFillingModule>
 
     @Override
     public List<Integer> getIdsOnCell(Point point) {
-        return objectsOnCell.isEmpty() ? Collections.emptyList() : objectsOnCell.getFirst().get(point);
+        return objectsOnCell.isEmpty()
+                ? Collections.emptyList()
+                : objectsOnCell.getFirst().getOrDefault(point, Collections.emptyList());
     }
 
     @Override

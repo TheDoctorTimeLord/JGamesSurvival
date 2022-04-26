@@ -1,6 +1,9 @@
 package com.jgames.survival.model.game.logic.battle.behaviours;
 
-import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import ru.jengine.battlemodule.core.behaviors.Behavior;
 import ru.jengine.battlemodule.core.commands.AdditionalBattleCommand;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
@@ -9,12 +12,12 @@ import ru.jengine.battlemodule.core.commands.executioncontexts.NoneParameters;
 import ru.jengine.battlemodule.core.information.InformationCenter;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
 
 /**
  * Определяет поведение ожидания.
  */
+//@BattleBeanPrototype
 public class WaitingBehavior implements Behavior {
 
     /**

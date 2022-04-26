@@ -1,5 +1,8 @@
 package com.jgames.survival;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -16,29 +19,32 @@ import com.jgames.survival.presenter.core.uiscripts.scriptmachines.MultipleActiv
 import com.jgames.survival.presenter.filling.changeshandling.AvailableObjectTypeNameHandler;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
 import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.DealingDamageNotificationHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ModelHpActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ObjectTypeActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.CommandButtonClickHandler;
+import com.jgames.survival.presenter.filling.clickactionhandlers.MapCellClickHandler;
 import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
 import com.jgames.survival.presenter.filling.gamestate.mutators.DrawingRegistrar;
+import com.jgames.survival.presenter.filling.gamestate.mutators.FakeNameObjectResolvingModuleMutator;
 import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
 import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
 import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.uifactories.CommandPanelFactory;
 import com.jgames.survival.ui.uifactories.LeftTopInformationFactory;
+import com.jgames.survival.ui.uifactories.MapTableFactory;
 import com.jgames.survival.ui.uifactories.PhaseAndTurnPanelFactory;
+import com.jgames.survival.ui.uiscriptelements.mappanel.UpdateMapAction;
 import com.jgames.survival.utils.GameProperties;
 import com.jgames.survival.utils.assets.SimpleTextureStorage;
 import com.jgames.survival.utils.assets.TextureStorage;
 import com.jgames.survival.utils.assets.TextureStorageConfiguration;
-
-import java.io.IOException;
-import java.util.Properties;
 
 public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
     private boolean isDebugMode;
@@ -60,17 +66,20 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
                 .addStateModule(new ModelDataModule())
                 .addStateModule(new MapFillingModule())
                 .addStateModule(new DrawingModule(textureStorage))
+                .addStateModule(new NameObjectResolvingModule())
                 .addModuleMutator(new ModelDataMutator())
                 .addModuleMutator(new DrawingRegistrar())
+                .addModuleMutator(new FakeNameObjectResolvingModuleMutator())
                 .connectMutatorsWithModules();
 
         GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
                 .registerGameChangeHandler(new StartPhaseChangesHandler())
-                .registerGameChangeHandler(new AvailableObjectTypeNameHandler())
+                .registerGameChangeHandler(new AvailableObjectTypeNameHandler(textureStorage))
                 .registerGameChangeHandler(new BattleActionWrapperHandler(
                         new StartPositionActionHandler(),
                         new ObjectTypeActionHandler(),
-                        new ModelHpActionHandler()
+                        new ModelHpActionHandler(),
+                        new DealingDamageNotificationHandler()
                 ));
 
         gameHandler.onStart();
@@ -79,12 +88,14 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
         stage = new Stage(new ScreenViewport());
 
         UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler, presentingGameState, textureStorage)
-//                .registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
+                .registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
                 .registerComponent(new LeftTopInformationFactory(300, 300))
                 .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
                 .registerComponent(new PhaseAndTurnPanelFactory(new PhaseOrTurnClickedHandler(scriptMachine)));
 
         UIElements uiElements = componentRegistrar.createInterface();
+
+        scriptMachine.dispatch(new UpdateMapAction(), action -> {});
 
         Gdx.input.setInputProcessor(stage);
 

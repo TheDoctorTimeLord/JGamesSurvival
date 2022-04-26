@@ -18,6 +18,6 @@ public class TextureFactory implements CellActorFactory {
 
     @Override
     public Actor create(DrawingContext drawingContext) {
-        return new Image(textureRegion.getTexture());
+        return new Image(textureRegion);
     }
 }

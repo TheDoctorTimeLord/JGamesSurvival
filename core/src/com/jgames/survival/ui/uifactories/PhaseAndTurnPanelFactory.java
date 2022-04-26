@@ -3,7 +3,6 @@ package com.jgames.survival.ui.uifactories;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,11 +11,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.sctipts.CyclicUIScript;
 import com.jgames.survival.presenter.filling.clickactionhandlers.PhaseOrTurnClickedHandler;
+import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
+import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
+import com.jgames.survival.ui.uiscriptelements.mappanel.UpdateMap;
 import com.jgames.survival.ui.uiscriptelements.phaseturnpanel.ApplyPhaseChanges;
 import com.jgames.survival.ui.uiscriptelements.phaseturnpanel.CallUpdateGame;
 import com.jgames.survival.ui.uiscriptelements.phaseturnpanel.EndHandlePhaseButton;
@@ -48,13 +57,6 @@ public class PhaseAndTurnPanelFactory implements UIFactory {
         buttonsBackground.setMiddleHeight(BUTTON_MIDDLE_HEIGHT);
         buttonsBackground.setMiddleWidth(BUTTON_MIDDLE_WIDTH);
 
-        TextureRegion[] directedPersonTextures = new TextureRegion[]{
-                storage.createSprite(Constants.PERSON_UP),
-                storage.createSprite(Constants.PERSON_RIGHT),
-                storage.createSprite(Constants.PERSON_DOWN),
-                storage.createSprite(Constants.PERSON_LEFT)
-        };
-
         TextButton nextPhaseButton = createButton("Next Phase");
         TextButton nextTurnButton = createButton("Next Turn");
 
@@ -68,9 +70,16 @@ public class PhaseAndTurnPanelFactory implements UIFactory {
 
         GlobalMapWrapper<MapCell> globalMap = uiElements.getWidget(GlobalMapWrapper.GLOBAL_MAP_NAME, GlobalMapWrapper.class);
 
+        PresentingGameState presentingGameState = uiElements.getPresentingGameState();
+        MapFillingPresenter mapFillingPresenter = presentingGameState.getModulePresenter(MapFillingModule.NAME);
+        ModelDataPresenter modelDataPresenter = presentingGameState.getModulePresenter(ModelDataModule.NAME);
+        NameObjectResolvingPresenter nameObjectResolvingPresenter = presentingGameState.getModulePresenter(NameObjectResolvingModule.NAME);
+        DrawingModulePresenter drawingModulePresenter = presentingGameState.getModulePresenter(DrawingModule.NAME);
+
         uiElements.getScriptMachine().registerScript(new CyclicUIScript<>("handlePhaseButton", new EmptyScriptState(),
                 new WaitPhaseOrTurnClicked(nextPhaseButton),
-                new ApplyPhaseChanges(uiElements.getPresentingGameState(), globalMap, directedPersonTextures),
+                new ApplyPhaseChanges(uiElements.getPresentingGameState()),
+                new UpdateMap(globalMap, mapFillingPresenter, modelDataPresenter, nameObjectResolvingPresenter, drawingModulePresenter),
                 new EndHandlePhaseButton(uiElements.getPresentingGameState(), nextTurnButton, nextPhaseButton)
         ));
 

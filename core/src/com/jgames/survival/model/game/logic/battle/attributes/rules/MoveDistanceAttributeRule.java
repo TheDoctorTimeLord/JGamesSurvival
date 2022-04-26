@@ -8,6 +8,7 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.A
 
 import java.util.List;
 
+import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
@@ -26,6 +27,7 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.StateCon
 /**
  * Правило, по которому изменяется атрибут moveDistance некоторой модели на поле боя
  */
+@BattleBeanPrototype
 public class MoveDistanceAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {

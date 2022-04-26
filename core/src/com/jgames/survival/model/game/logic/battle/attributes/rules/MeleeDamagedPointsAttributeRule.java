@@ -6,6 +6,7 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.A
 
 import java.util.List;
 
+import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
@@ -23,6 +24,7 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.StateCon
 /**
  * Правило, по которому изменяется атрибут meleeDamagePoints некоторой модели на поле боя
  */
+@BattleBeanPrototype
 public class MeleeDamagedPointsAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {

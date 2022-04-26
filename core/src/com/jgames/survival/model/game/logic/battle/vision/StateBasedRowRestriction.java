@@ -11,7 +11,7 @@ public class StateBasedRowRestriction implements CustomRowRestriction {
 
     @Override
     public void initialize(HasVision hasVision, BattleState battleState) {
-        this.maxDepth = 5; //TODO должно считаться по персонажу
+        this.maxDepth = 5; //TODO должно считаться по персонажу hasVision.getVisionDistance()
         this.battleState = battleState;
     }
 

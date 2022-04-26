@@ -1,13 +1,13 @@
 package com.jgames.survival.presenter.filling.gamestate.modules;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
@@ -19,74 +19,54 @@ import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPrese
 public class ModelDataModule implements PresentingStateModule<ModelDataPresenter>, ModelDataPresenter {
     public static final String NAME = "modelData";
 
-    private final Map<Integer, Deque<ModelData>> modelsDataStates = new HashMap<>();
-    private final Map<Point, Integer> currentModelsPosition = new HashMap<>();
+    private final Deque<Map<Integer, ModelData>> modelsDataStates = new ArrayDeque<>();
 
     public synchronized void setPositionData(int modelId, Point startedPosition, Direction direction) {
         getOrCreateLastModelState(modelId)
                 .setPosition(startedPosition)
                 .setDirection(direction);
-        currentModelsPosition.put(startedPosition, modelId);
     }
 
     public synchronized ModelData getLastModelState(int modelId) {
-        return modelsDataStates.get(modelId).getLast();
+        return modelsDataStates.getLast().get(modelId);
     }
 
     public synchronized void addState() {
-        modelsDataStates.forEach((id, states) -> states.addLast(new ModelData(states.getLast())));
+        Map<Integer, ModelData> newState = modelsDataStates.getLast()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Entry::getKey, e -> new ModelData(e.getValue())));
+        modelsDataStates.addLast(newState);
     }
 
     @Override
     public synchronized List<ModelData> getDataForAllModels() {
-        return modelsDataStates.values().stream()
-                .map(Deque::getFirst)
-                .collect(Collectors.toList());
+        return new ArrayList<>(modelsDataStates.getFirst().values());
     }
 
     @Override
     public synchronized ModelData getCurrentModelState(int modelId) {
-        return modelsDataStates.get(modelId).getFirst();
+        return modelsDataStates.getFirst().get(modelId);
     }
 
     @Override
     public synchronized void updateToNextPhase() {
-        modelsDataStates.values().stream()
-                .map(Deque::getFirst)
-                .filter(modelData -> !modelData.isKilled())
-                .forEach(modelData -> currentModelsPosition.remove(modelData.getPosition()));
-        modelsDataStates.forEach((id, states) -> {
-            if (states.size() > 1) {
-                states.removeFirst();
-            }
-        });
-        modelsDataStates.values().stream()
-                .map(Deque::getFirst)
-                .filter(ModelData::isKilled)
-                .filter(modelData -> currentModelsPosition.containsKey(modelData.getPosition()))
-                .forEach(modelData -> currentModelsPosition.put(modelData.getPosition(), modelData.getId()));
+        if (modelsDataStates.size() > 1) {
+            modelsDataStates.poll();
+        }
     }
 
     @Override
     public synchronized boolean isLastPhase() {
-        return modelsDataStates.values().stream()
-                .mapToInt(Deque::size)
-                .max()
-                .orElse(0) <= 1;
+        return modelsDataStates.size() <= 1;
     }
 
     public synchronized ModelData getOrCreateLastModelState(int modelId) {
-        return modelsDataStates.computeIfAbsent(modelId, id -> {
-            Deque<ModelData> deque = new ArrayDeque<>();
-            deque.add(new ModelData(id));
-            return deque;
-        }).getLast();
-    }
+        if (modelsDataStates.isEmpty()) {
+            modelsDataStates.addLast(new HashMap<>());
+        }
 
-    @Override
-    @Nullable
-    public synchronized Integer getModelOnPosition(Point position) {
-        return currentModelsPosition.get(position);
+        return modelsDataStates.getLast().computeIfAbsent(modelId, ModelData::new);
     }
 
     @Override

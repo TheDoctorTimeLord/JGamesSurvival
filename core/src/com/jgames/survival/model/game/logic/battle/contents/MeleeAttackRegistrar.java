@@ -1,5 +1,6 @@
 package com.jgames.survival.model.game.logic.battle.contents;
 
+import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.battlepresenter.BattleActionRegistrar;
 import ru.jengine.battlemodule.core.contentregistrars.AbstractContentRegistrar;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
@@ -10,6 +11,7 @@ import com.jgames.survival.model.game.logic.battle.events.BodyPartDamageEventNot
 import com.jgames.survival.model.game.logic.battle.events.DealingDamageEventHandler;
 import com.jgames.survival.model.game.logic.battle.events.DealingDamageEventNotifier;
 
+@BattleBeanPrototype
 public class MeleeAttackRegistrar extends AbstractContentRegistrar {
     @Override
     protected void registerInt() {

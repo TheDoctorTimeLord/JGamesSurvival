@@ -68,7 +68,7 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
     @Override
     public boolean hasOpponentsNearby(BattleContext battleContext) {
         List<BattleModel> enemies = getNearestBattleModels(battleContext.getBattleState());
-        return enemies.isEmpty();
+        return !enemies.isEmpty();
     }
 
     /**
@@ -79,7 +79,7 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
     public List<BattleModel> getNearestBattleModels(BattleState battleState) {
         Point modelPosition = getPosition();
         Direction modelDirection = getDirection();
-        List<Point> pointNeighbour = LocationUtils.getNeighbours( modelPosition, battleState,
+        List<Point> pointNeighbour = LocationUtils.getNeighbours(modelPosition, battleState,
                 LocationUtils.getThreeFrontOffsets(modelDirection));
 
         return pointNeighbour.stream()

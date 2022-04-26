@@ -16,9 +16,10 @@ public class ModelData {
 
     public ModelData(ModelData otherData) {
         this(otherData.id);
-        setPosition(otherData.getPosition());
-        setDirection(otherData.getDirection());
-        setTypeName(otherData.getTypeName());
+        this.typeName = otherData.typeName;
+        this.position = otherData.position;
+        this.direction = otherData.direction;
+        this.hp = otherData.hp;
     }
 
     public int getId() {

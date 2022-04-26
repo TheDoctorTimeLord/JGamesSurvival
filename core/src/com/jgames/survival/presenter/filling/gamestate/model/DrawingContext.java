@@ -13,7 +13,8 @@ public class DrawingContext {
         return modelData;
     }
 
-    public void setModelData(ModelData modelData) {
+    public DrawingContext setModelData(ModelData modelData) {
         this.modelData = modelData;
+        return this;
     }
 }

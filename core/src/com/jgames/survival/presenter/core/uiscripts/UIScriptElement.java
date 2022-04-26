@@ -11,5 +11,5 @@ public interface UIScriptElement<S extends UIScriptState> {
 
     boolean isValid(UIAction action);
     void handle(UIScriptElementContext context, S state);
-    boolean rollback(UIAction action, S state);
+    boolean rollback(UIAction action, S state); //TODO переделать на таблицу соответствий
 }

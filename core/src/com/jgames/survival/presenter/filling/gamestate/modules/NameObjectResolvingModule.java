@@ -26,6 +26,7 @@ public class NameObjectResolvingModule implements PresentingStateModule<NameObje
         return modelDataResolvers
                 .stream()
                 .map(modelDataResolver -> modelDataResolver.resolve(modelDataCollection))
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 

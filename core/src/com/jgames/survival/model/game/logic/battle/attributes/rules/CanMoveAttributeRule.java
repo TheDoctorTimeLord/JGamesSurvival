@@ -6,6 +6,7 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.A
 
 import java.util.List;
 
+import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
@@ -22,8 +23,8 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.StateCon
 /**
  * Правило, по которому изменяется атрибут canMove некоторой модели на поле боя
  */
+@BattleBeanPrototype
 public class CanMoveAttributeRule implements AttributeRule {
-
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
         return List.of(

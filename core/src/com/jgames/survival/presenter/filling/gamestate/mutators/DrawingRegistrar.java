@@ -1,13 +1,12 @@
 package com.jgames.survival.presenter.filling.gamestate.mutators;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
-import com.jgames.survival.utils.assets.TextureStorage;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Регистрация модуля для хранения фабрик для имён объектов.
@@ -19,12 +18,8 @@ public class DrawingRegistrar implements PresentingStateModuleMutator {
     /**
      * Присоединить CellActorFactory к DrawingModule.
      */
-    public void connectCellActorFactory(String name, CellActorFactory cellActorFactory) {
+    public void bindCellActorFactory(String name, CellActorFactory cellActorFactory) {
         drawingModule.registrarCellActorFactory(name, cellActorFactory);
-    }
-
-    public TextureStorage getTextureStorage() {
-        return drawingModule.getTextureStorage();
     }
 
     @Override

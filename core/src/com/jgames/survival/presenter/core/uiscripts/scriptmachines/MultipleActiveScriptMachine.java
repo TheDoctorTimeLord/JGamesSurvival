@@ -41,6 +41,8 @@ public class MultipleActiveScriptMachine implements DispatcherUIScriptMachine {
         if (environment != null) {
             changeListeners(environment, action, true);
         }
+
+        callback.run(action);
     }
 
     private <T extends UIAction> void changeListeners(ScriptEnvironment environment, T action, boolean needRollbackOther) {

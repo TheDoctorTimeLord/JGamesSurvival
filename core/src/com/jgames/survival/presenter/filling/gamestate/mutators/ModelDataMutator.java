@@ -32,6 +32,10 @@ public class ModelDataMutator implements PresentingStateModuleMutator { //TODO Ð
         mapFilling = (MapFillingModule) modules[1];
     }
 
+    public void markCellAsUpdated(Point cellCoordinates) {
+        mapFilling.markCellAsUpdated(cellCoordinates);
+    }
+
     public void setHp(int modelId, int hp) {
         modelData.getOrCreateLastModelState(modelId)
                 .setMaxHp(hp);
