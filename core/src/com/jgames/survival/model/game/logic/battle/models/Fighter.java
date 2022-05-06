@@ -18,8 +18,8 @@ import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 import ru.jengine.utils.AttributeUtils;
 
-import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
 import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
+import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFindingUtils;
 
 /**
  * Класс, описывающий бойца
@@ -32,7 +32,7 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
 
     @Override
     public int getHealth() {
-        IntAttribute healthAttribute = GetAttributeUtils.getHealthAttribute(this);
+        IntAttribute healthAttribute = AttributeFindingUtils.getHealthAttribute(this);
         if (healthAttribute == null)
             return 0;
         return healthAttribute.getValue();
@@ -40,7 +40,7 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
 
     @Override
     public void damage(int damagePoints, @Nullable DispatcherBattleWrapper dispatcher) {
-        IntAttribute healthAttribute = GetAttributeUtils.getHealthAttribute(this);
+        IntAttribute healthAttribute = AttributeFindingUtils.getHealthAttribute(this);
         if (healthAttribute == null)
             return;
         healthAttribute.setValue(getHealth() - damagePoints);
@@ -95,7 +95,7 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
      */
     @Override
     public int getMeleeDamagePoints() {
-        IntAttribute meleeDamageAttribute = GetAttributeUtils.getMeleeDamageAttribute(this);
+        IntAttribute meleeDamageAttribute = AttributeFindingUtils.getMeleeDamageAttribute(this);
         if (meleeDamageAttribute == null)
             return 0;
         return meleeDamageAttribute.getValue();

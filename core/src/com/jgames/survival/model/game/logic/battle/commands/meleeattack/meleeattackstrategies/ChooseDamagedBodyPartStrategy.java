@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.utils.meleeattackutils;
+package com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies;
 
 import ru.jengine.battlemodule.core.models.BattleModel;
 

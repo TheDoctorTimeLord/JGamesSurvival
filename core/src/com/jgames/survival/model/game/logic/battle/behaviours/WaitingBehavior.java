@@ -12,7 +12,7 @@ import ru.jengine.battlemodule.core.commands.executioncontexts.NoneParameters;
 import ru.jengine.battlemodule.core.information.InformationCenter;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
-import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
+import com.jgames.survival.model.game.logic.battle.commands.waiting.WaitingCommand;
 
 /**
  * Определяет поведение ожидания.
@@ -49,12 +49,12 @@ public class WaitingBehavior implements Behavior {
      */
     @Override
     public BattleCommandPerformElement<?> sendAction(int characterId, List<BattleCommand<?>> availableCommands) {
-       WaitCommand waitCommand = (WaitCommand) availableCommands.stream()
-                .filter((battleCommand -> battleCommand instanceof WaitCommand))
+       WaitingCommand waitingCommand = (WaitingCommand) availableCommands.stream()
+                .filter((battleCommand -> battleCommand instanceof WaitingCommand))
                 .findFirst()
                 .orElse(null);
-        NoneParameters noneParameters = waitCommand.createParametersTemplate();
-        return new BattleCommandPerformElement<>(characterId, waitCommand, noneParameters);
+        NoneParameters noneParameters = waitingCommand.createParametersTemplate();
+        return new BattleCommandPerformElement<>(characterId, waitingCommand, noneParameters);
     }
 
     /**

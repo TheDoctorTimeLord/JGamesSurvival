@@ -14,11 +14,11 @@ import ru.jengine.battlemodule.core.information.InformationCenter;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.utils.RandomUtils;
 
-import com.jgames.survival.model.game.logic.battle.commands.MeleeAttackCommand;
-import com.jgames.survival.model.game.logic.battle.commands.MeleeAttackParameters;
-import com.jgames.survival.model.game.logic.battle.commands.RangedAttack;
-import com.jgames.survival.model.game.logic.battle.commands.RangedAttackParameters;
-import com.jgames.survival.model.game.logic.battle.commands.WaitCommand;
+import com.jgames.survival.model.game.logic.battle.commands.meleeattack.MeleeAttackCommand;
+import com.jgames.survival.model.game.logic.battle.commands.meleeattack.MeleeAttackParameters;
+import com.jgames.survival.model.game.logic.battle.commands.rangedattack.RangedAttack;
+import com.jgames.survival.model.game.logic.battle.commands.rangedattack.RangedAttackParameters;
+import com.jgames.survival.model.game.logic.battle.commands.waiting.WaitingCommand;
 
 @BattleBeanPrototype
 public class FighterBehavior implements Behavior {
@@ -36,7 +36,7 @@ public class FighterBehavior implements Behavior {
 
     @Override
     public BattleCommandPerformElement<?> sendAction(int characterId, List<BattleCommand<?>> availableCommands) {
-        WaitCommand waitCommand = null;
+        WaitingCommand waitingCommand = null;
         RangedAttack rangedAttack = null;
         MeleeAttackCommand meleeAttackCommand = null;
 
@@ -47,8 +47,8 @@ public class FighterBehavior implements Behavior {
             if (availableCommand instanceof RangedAttack ranged) {
                 rangedAttack = ranged;
             }
-            if (availableCommand instanceof WaitCommand wait) {
-                waitCommand = wait;
+            if (availableCommand instanceof WaitingCommand wait) {
+                waitingCommand = wait;
             }
         }
 
@@ -68,7 +68,7 @@ public class FighterBehavior implements Behavior {
             return new BattleCommandPerformElement<>(characterId, rangedAttack, parametersTemplate);
         }
 
-        return new BattleCommandPerformElement<>(characterId, waitCommand, NoneParameters.INSTANCE);
+        return new BattleCommandPerformElement<>(characterId, waitingCommand, NoneParameters.INSTANCE);
     }
 
     @Override

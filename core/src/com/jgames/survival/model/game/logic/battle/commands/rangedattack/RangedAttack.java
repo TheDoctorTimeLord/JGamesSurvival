@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands;
+package com.jgames.survival.model.game.logic.battle.commands.rangedattack;
 
 import java.util.Set;
 

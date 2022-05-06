@@ -1,33 +1,33 @@
-package com.jgames.survival.model.game.logic.attributes.utils;
+package com.jgames.survival.model.game.logic.battle.utils.attributes;
+
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
 
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
-import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.utils.AttributeUtils;
 
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts;
 
 /**
- * Вспомогательный класс для получения атрибута, характеризующего часть тела персонажа
+ * Вспомогательный класс для получения атрибутов персонажа
  */
-public class GetAttributeUtils {
-
+public class AttributeFindingUtils {
     /**
      * Возвращает атрибут, характеризующий часть тела персонажа
      * @param model объект, представляющий персонажа в бою
      * @param damagedBodyPart часть тела персонажа
      */
     @Nullable
-    public static StringAttribute getBodyPartStateAttribute(BattleModel model, String damagedBodyPart) {
+    public static IntAttribute getBodyPartStateAttribute(BattleModel model, String damagedBodyPart) {
         return AttributeUtils.extractInnerAttribute(
                 model.getAttributes(),
-                List.of(AttributesConstants.BodyPartsConstants.BODY_PARTS, damagedBodyPart),
-                StateConstants.STATE);
+                List.of(BodyParts.BODY_PARTS, damagedBodyPart),
+                STATE);
     }
 
     /**

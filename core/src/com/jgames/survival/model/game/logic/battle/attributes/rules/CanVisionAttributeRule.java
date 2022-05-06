@@ -1,13 +1,14 @@
 package com.jgames.survival.model.game.logic.battle.attributes.rules;
 
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.BODY_PARTS;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.HEAD;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.BODY_PARTS;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.HEAD;
 
 import java.util.List;
 
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
-import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
+import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
@@ -16,7 +17,7 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.RemovedProcessedAttribute;
 
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue;
 
 /**
  * Правило, по которому изменяется атрибут canVision у некоторой модели на поле боя
@@ -25,14 +26,14 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.StateCon
 public class CanVisionAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
-        return List.of(new CodeWithPathPrefixCondition(StateConstants.STATE, List.of(BODY_PARTS, HEAD)));
+        return List.of(new CodeWithPathPrefixCondition(STATE, List.of(BODY_PARTS, HEAD)));
     }
 
     @Override
     public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof StringAttribute state) {
-            String headState = state.getValue();
-            if (StateConstants.DESTROYED.equals(headState)) {
+        if (battleAttribute instanceof IntAttribute state) {
+            int headState = state.getValue();
+            if (StateValue.DESTROYED.isLessOrEquals(headState)) {
                 BattleAttribute canVision = battleModel.getAttributes().
                         getAsContainer(Features.FEATURES)
                         .remove(Features.CAN_VISION);

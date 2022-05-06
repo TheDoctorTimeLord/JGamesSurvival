@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands;
+package com.jgames.survival.model.game.logic.battle.commands.meleeattack;
 
 import ru.jengine.battlemodule.core.commands.CommandExecutionParameters;
 import ru.jengine.battlemodule.core.models.BattleModel;

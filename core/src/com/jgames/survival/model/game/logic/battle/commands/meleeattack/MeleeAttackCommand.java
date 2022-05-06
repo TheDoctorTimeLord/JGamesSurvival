@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands;
+package com.jgames.survival.model.game.logic.battle.commands.meleeattack;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import ru.jengine.battlemodule.core.models.BattleModel;
 
 import com.jgames.survival.model.game.logic.battle.events.BodyPartDamageEvent;
 import com.jgames.survival.model.game.logic.battle.events.DealingDamageEvent;
-import com.jgames.survival.model.game.logic.battle.utils.meleeattackutils.ChooseDamagedBodyPartStrategy;
+import com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies.ChooseDamagedBodyPartStrategy;
 import com.jgames.survival.model.game.logic.battle.models.CanHit;
 
 /**

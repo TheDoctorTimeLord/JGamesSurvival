@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands;
+package com.jgames.survival.model.game.logic.battle.commands.waiting;
 
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommandFactory;
@@ -12,7 +12,7 @@ import ru.jengine.beancontainer.annotations.Bean;
  * выполнять данную команду в бою и доступна ли эта команда объекту в текущем ходу.
  */
 @Bean
-public class WaitCommandFactory implements BattleCommandFactory<NoneParameters, WaitCommand> {
+public class WaitingCommandFactory implements BattleCommandFactory<NoneParameters, WaitingCommand> {
     @Override
     public boolean canExecute(BattleModel model, BattleContext battleContext) {
         return true;
@@ -24,7 +24,7 @@ public class WaitCommandFactory implements BattleCommandFactory<NoneParameters, 
     }
 
     @Override
-    public WaitCommand createBattleCommand(BattleModel model, BattleContext battleContext) {
-        return new WaitCommand();
+    public WaitingCommand createBattleCommand(BattleModel model, BattleContext battleContext) {
+        return new WaitingCommand();
     }
 }

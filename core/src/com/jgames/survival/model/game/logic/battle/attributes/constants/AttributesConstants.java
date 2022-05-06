@@ -7,7 +7,7 @@ import java.util.List;
  * Содержит строковые константы, формирующие дерево атрибутов
  */
 public interface AttributesConstants {
-    interface BodyPartsConstants {
+    interface BodyParts {
         String BODY_PARTS = "bodyParts";
         String HEAD = "head";
         String BODY = "body";
@@ -17,6 +17,10 @@ public interface AttributesConstants {
         String RIGHT_LEG = "rightLeg";
         List<String> bodyParts = new ArrayList<>(List.of
                 (HEAD, BODY, LEFT_ARM, RIGHT_ARM, LEFT_LEG, RIGHT_LEG));
+
+        interface Attributes {
+            String STATE = "state";
+        }
     }
 
     interface Features {

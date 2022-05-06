@@ -1,15 +1,16 @@
-package com.jgames.survival.model.game.logic.battle.utils.meleeattackutils;
+package com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies;
 
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.utils.RandomUtils;
 
-import com.jgames.survival.model.game.logic.attributes.utils.GetAttributeUtils;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue;
+import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFindingUtils;
 
 /**
  * Описывает стратегию выбора части тела противника, по которой будет наноситься удар
@@ -24,22 +25,15 @@ public class DamagedBodyPartRandomStrategy implements ChooseDamagedBodyPartStrat
      */
     @Nullable
     public String chooseDamagedBodyPart(BattleModel enemy) {
-        List<String> availableEnemyBodyParts = AttributesConstants.BodyPartsConstants.bodyParts
-                .stream()
-                .filter(bodyPart -> !StateConstants.DESTROYED.equals(
-                        GetAttributeUtils.getBodyPartStateAttribute(enemy, bodyPart).getValue()))
+        List<String> availableEnemyBodyParts = BodyParts.bodyParts.stream()
+                .filter(bodyPart -> {
+                    IntAttribute bodyPartAttr = AttributeFindingUtils.getBodyPartStateAttribute(enemy, bodyPart);
+                    return bodyPartAttr != null && !StateValue.DESTROYED.isLessOrEquals(bodyPartAttr.getValue());
+                })
                 .toList();
-        if (availableEnemyBodyParts.size() > 0) {
-            return chooseRandomBodyPart(availableEnemyBodyParts);
-        }
-        return null;
-    }
 
-    /**
-     * Возвращает произвольную часть тела
-     * @param bodyParts коллекция, описывающая части тела
-     */
-    private static String chooseRandomBodyPart(List<String> bodyParts) {
-        return RandomUtils.chooseInCollection(bodyParts);
+        return !availableEnemyBodyParts.isEmpty()
+                ? RandomUtils.chooseInCollection(availableEnemyBodyParts)
+                : null;
     }
 }

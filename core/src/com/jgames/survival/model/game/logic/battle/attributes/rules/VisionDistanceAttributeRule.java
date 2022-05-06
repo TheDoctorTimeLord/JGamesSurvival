@@ -2,8 +2,9 @@ package com.jgames.survival.model.game.logic.battle.attributes.rules;
 
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes.ATTRIBUTES;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes.VISION_DISTANCE;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.BODY_PARTS;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.HEAD;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.BODY_PARTS;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.HEAD;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features.CAN_VISION;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features.FEATURES;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker;
-import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
+import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
@@ -22,7 +23,8 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.RemovedProcessedAttribute;
 
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.VisionDistance;
 
 /**
  * Правило, по которому изменяется атрибут visionDistance некоторой модели на поле боя
@@ -32,27 +34,21 @@ public class VisionDistanceAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
         return List.of(new CodeWithPathPrefixCondition(CAN_VISION, List.of(FEATURES)),
-                new CodeWithPathPrefixCondition(StateConstants.STATE, List.of(BODY_PARTS, HEAD)));
+                new CodeWithPathPrefixCondition(STATE, List.of(BODY_PARTS, HEAD)));
     }
 
     @Override
     public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof StringAttribute state) {
-            String headState = state.getValue();
-            StringAttribute visionDistance = battleModel.getAttributes()
+        if (battleAttribute instanceof IntAttribute state) {
+            StateValue headState = StateValue.resolveByOrdinal(state.getValue());
+            IntAttribute visionDistance = battleModel.getAttributes()
                     .getAsContainer(ATTRIBUTES)
                     .get(Attributes.VISION_DISTANCE);
 
-            switch (headState) {
-                case StateConstants.GOOD -> visionDistance.setValue(StateConstants.FAR);
-                case StateConstants.DAMAGED -> visionDistance.setValue(StateConstants.NEAR);
-                case StateConstants.DESTROYED -> visionDistance.setValue(StateConstants.NONE);
-                default -> {
-                    return List.of();
-                }
+            if (headState != null) {
+                visionDistance.setValue(mapToVisionDistance(headState));
+                return List.of(new PuttedProcessedAttribute(visionDistance));
             }
-
-            return List.of(new PuttedProcessedAttribute(visionDistance));
         }
 
         return List.of();
@@ -61,14 +57,22 @@ public class VisionDistanceAttributeRule implements AttributeRule {
     @Override
     public List<AbstractProcessedAttribute> processRemovedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
         if (battleAttribute instanceof AttributeMarker) {
-            StringAttribute visionDistance = battleModel.getAttributes()
+            IntAttribute visionDistance = battleModel.getAttributes()
                     .getAsContainer(ATTRIBUTES)
-                    .getAsString(VISION_DISTANCE)
-                    .setValue(StateConstants.NONE);
+                    .getAsInt(VISION_DISTANCE)
+                    .setValue(VisionDistance.NONE.ordinal());
 
             return List.of(new RemovedProcessedAttribute(visionDistance));
         }
 
         return List.of();
+    }
+
+    private static int mapToVisionDistance(StateValue state) {
+        return switch (state) {
+            case GOOD -> VisionDistance.FAR.ordinal();
+            case DAMAGED -> VisionDistance.NEAR.ordinal();
+            default -> VisionDistance.NONE.ordinal();
+        };
     }
 }

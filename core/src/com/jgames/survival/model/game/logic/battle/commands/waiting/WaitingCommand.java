@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.commands;
+package com.jgames.survival.model.game.logic.battle.commands.waiting;
 
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
@@ -8,7 +8,7 @@ import ru.jengine.battlemodule.core.models.BattleModel;
 /**
  * Описывает команду ожидания, которую будет исполнять динамический объект.
  */
-public class WaitCommand implements BattleCommand<NoneParameters> {
+public class WaitingCommand implements BattleCommand<NoneParameters> {
 
     /**
      * Создаёт шаблон параметров команды, который нужно заполнить поведению, исполняющему эту команду.

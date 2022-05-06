@@ -1,10 +1,10 @@
-package com.jgames.survival.model.game.logic.battle.commands;
+package com.jgames.survival.model.game.logic.battle.commands.rangedattack;
 
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.BODY_PARTS;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.LEFT_ARM;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyPartsConstants.RIGHT_ARM;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants.DAMAGED;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.StateConstants.STATE;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.BODY_PARTS;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.LEFT_ARM;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.RIGHT_ARM;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue.DAMAGED;
 import static com.jgames.survival.model.game.logic.battle.vision.VisionScopeConstants.VISIBLE;
 import static ru.jengine.utils.AttributeUtils.extractInnerAttribute;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommandFactory;
 import ru.jengine.battlemodule.core.modelattributes.AttributesContainer;
-import ru.jengine.battlemodule.core.modelattributes.baseattributes.StringAttribute;
+import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;
@@ -57,10 +57,10 @@ public class RangedAttackFactory implements BattleCommandFactory<RangedAttackPar
 
     public static boolean canRangedAttack(BattleModel model) {
         AttributesContainer attributes = model.getAttributes();
-        StringAttribute leftArmState = extractInnerAttribute(attributes, List.of(BODY_PARTS, LEFT_ARM), STATE);
-        StringAttribute rightArmStata = extractInnerAttribute(attributes, List.of(BODY_PARTS, RIGHT_ARM), STATE);
+        IntAttribute leftArmState = extractInnerAttribute(attributes, List.of(BODY_PARTS, LEFT_ARM), STATE);
+        IntAttribute rightArmStata = extractInnerAttribute(attributes, List.of(BODY_PARTS, RIGHT_ARM), STATE);
 
         return leftArmState != null && rightArmStata != null &&
-                !(DAMAGED.equals(leftArmState.getValue()) && DAMAGED.equals(rightArmStata.getValue()));
+                DAMAGED.isGreater(leftArmState.getValue()) && DAMAGED.isGreater(rightArmStata.getValue());
     }
 }
