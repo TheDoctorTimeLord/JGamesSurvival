@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
-import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.resolvers.ModelDataResolver;
@@ -22,10 +22,10 @@ public class NameObjectResolvingModule implements PresentingStateModule<NameObje
     }
 
     @Override
-    public List<ResolvingContext> resolveModelData(List<ModelData> modelDataCollection) {
+    public List<ResolvingContext> resolveModelData(List<GameObject> gameObjectCollection) {
         return modelDataResolvers
                 .stream()
-                .map(modelDataResolver -> modelDataResolver.resolve(modelDataCollection))
+                .map(modelDataResolver -> modelDataResolver.resolve(gameObjectCollection))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }

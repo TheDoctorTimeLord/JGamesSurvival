@@ -11,12 +11,12 @@ import com.jgames.survival.presenter.core.uiscripts.UIScriptMachine;
 import com.jgames.survival.presenter.core.uiscripts.sctipts.CyclicUIScript;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
-import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
+import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
-import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
@@ -27,6 +27,8 @@ import com.jgames.survival.ui.widgets.MapCell;
 import com.jgames.survival.ui.widgets.MapCell.ClickOnMapCell;
 
 public class MapTableFactory implements UIFactory {
+    private static final String GLOBAL_MAP_UPDATE_SCRIPT_NAME = "globalMapUpdate";
+
     private final int width;
     private final int height;
     private final ClickOnMapCell cellCallback;
@@ -44,21 +46,23 @@ public class MapTableFactory implements UIFactory {
     public void prepareComponents(UIElements uiElements) {
         PresentingGameState gameState = uiElements.getPresentingGameState();
         MapFillingPresenter mapFillingPresenter = gameState.getModulePresenter(MapFillingModule.NAME);
-        ModelDataPresenter modelDataPresenter = gameState.getModulePresenter(ModelDataModule.NAME);
+        GameObjectsPresenter gameObjectsPresenter = gameState.getModulePresenter(GameObjectsModule.NAME);
         NameObjectResolvingPresenter nameObjectResolvingPresenter = gameState.getModulePresenter(NameObjectResolvingModule.NAME);
         DrawingModulePresenter drawingModulePresenter = gameState.getModulePresenter(DrawingModule.NAME);
 
-        ModelDataMutator modelDataMutator = gameState.getModuleMutator(ModelDataMutator.class);
+        GameObjectsMutator gameObjectsMutator = gameState.getModuleMutator(GameObjectsMutator.class);
 
-        globalMap = createGlobalMap(modelDataMutator);
+        globalMap = createGlobalMap(gameObjectsMutator);
 
         UIScriptMachine scriptMachine = uiElements.getScriptMachine();
-        scriptMachine.registerScript(new CyclicUIScript<>("globalMapUpdater", new EmptyScriptState(),
+        scriptMachine.registerScript(new CyclicUIScript<>(GLOBAL_MAP_UPDATE_SCRIPT_NAME, new EmptyScriptState(),
                 new WaitUpdateMapAction(),
-                new UpdateMap(globalMap, mapFillingPresenter, modelDataPresenter, nameObjectResolvingPresenter, drawingModulePresenter)
+                new UpdateMap(globalMap, mapFillingPresenter, gameObjectsPresenter, nameObjectResolvingPresenter, drawingModulePresenter)
         ));
 
         createGlobalMapScrollableWrapper(globalMap);
+
+        scriptMachine.deleteScript(GLOBAL_MAP_UPDATE_SCRIPT_NAME);
     }
 
     private void createGlobalMapScrollableWrapper(GlobalMapWrapper<MapCell> mapTable) {
@@ -66,13 +70,13 @@ public class MapTableFactory implements UIFactory {
         mapTableScrollableWrapper.setFillParent(true);
     }
 
-    private GlobalMapWrapper<MapCell> createGlobalMap(ModelDataMutator modelDataMutator) {
+    private GlobalMapWrapper<MapCell> createGlobalMap(GameObjectsMutator gameObjectsMutator) {
         Table mapTable = new Table();
 
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 mapTable.add(new MapCell(x, y, cellCallback));
-                modelDataMutator.markCellAsUpdated(PointPool.obtain(x, y));
+                gameObjectsMutator.markCellAsUpdated(PointPool.obtain(x, y));
             }
             mapTable.row();
         }

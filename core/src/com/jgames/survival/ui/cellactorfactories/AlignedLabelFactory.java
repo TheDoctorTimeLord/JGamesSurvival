@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.ui.UIException;
 
 public class AlignedLabelFactory implements CellActorFactory {
     private final String labelText;
@@ -24,7 +25,7 @@ public class AlignedLabelFactory implements CellActorFactory {
     }
 
     @Override
-    public Actor create(DrawingContext drawingContext) {
+    public Actor create(DrawingContext drawingContext) throws UIException {
         Label label = new Label(labelText, createLabelStyle());
         label.setAlignment(align);
         return label;

@@ -6,15 +6,15 @@ import javax.annotation.Nullable;
  * Метаданные отрисуемого объекта.
  */
 public class DrawingContext {
-    private ModelData modelData;
+    private GameObject gameObject;
 
     @Nullable
-    public ModelData getModelData() {
-        return modelData;
+    public GameObject getGameObject() {
+        return gameObject;
     }
 
-    public DrawingContext setModelData(ModelData modelData) {
-        this.modelData = modelData;
+    public DrawingContext setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
         return this;
     }
 }

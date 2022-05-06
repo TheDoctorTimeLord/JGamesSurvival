@@ -17,11 +17,11 @@ import com.jgames.survival.presenter.core.uiscripts.sctipts.CyclicUIScript;
 import com.jgames.survival.presenter.filling.clickactions.PhaseOrTurnClickedHandler;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
-import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
@@ -72,14 +72,14 @@ public class PhaseAndTurnPanelFactory implements UIFactory {
 
         PresentingGameState presentingGameState = uiElements.getPresentingGameState();
         MapFillingPresenter mapFillingPresenter = presentingGameState.getModulePresenter(MapFillingModule.NAME);
-        ModelDataPresenter modelDataPresenter = presentingGameState.getModulePresenter(ModelDataModule.NAME);
+        GameObjectsPresenter gameObjectsPresenter = presentingGameState.getModulePresenter(GameObjectsModule.NAME);
         NameObjectResolvingPresenter nameObjectResolvingPresenter = presentingGameState.getModulePresenter(NameObjectResolvingModule.NAME);
         DrawingModulePresenter drawingModulePresenter = presentingGameState.getModulePresenter(DrawingModule.NAME);
 
         uiElements.getScriptMachine().registerScript(new CyclicUIScript<>("handlePhaseButton", new EmptyScriptState(),
                 new WaitPhaseOrTurnClicked(nextPhaseButton),
                 new ApplyPhaseChanges(uiElements.getPresentingGameState()),
-                new UpdateMap(globalMap, mapFillingPresenter, modelDataPresenter, nameObjectResolvingPresenter, drawingModulePresenter),
+                new UpdateMap(globalMap, mapFillingPresenter, gameObjectsPresenter, nameObjectResolvingPresenter, drawingModulePresenter),
                 new EndHandlePhaseButton(uiElements.getPresentingGameState(), nextTurnButton, nextPhaseButton)
         ));
 

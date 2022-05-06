@@ -1,31 +1,22 @@
 package com.jgames.survival.presenter.filling.gamestate.resolvers;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
-import com.jgames.survival.presenter.filling.gamestate.model.ModelData;
+import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
-import com.jgames.survival.ui.constants.HardcodeObjectNames;
+import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.HealthComponent;
 import com.jgames.survival.ui.constants.SpecialObjectsNames;
 
 public class TintResolver implements ModelDataResolver {
     @Override
-    public List<ResolvingContext> resolve(List<ModelData> cellModelData) {
-        Optional<ModelData> modelData = cellModelData.stream()
-                .filter(model -> HardcodeObjectNames.PERSON.equals(model.getTypeName()))
-                .findFirst();
+    public List<ResolvingContext> resolve(List<GameObject> cellGameObjects) {
+        boolean hasKilled = cellGameObjects.stream()
+                .map(gameObject -> gameObject.getComponent(HealthComponent.class))
+                .filter(Objects::nonNull)
+                .anyMatch(HealthComponent::isKilled);
 
-        if (modelData.isPresent()) {
-            ModelData modelDataInt = modelData.get();
-            if (modelDataInt.isKilled()) {
-                return List.of(new ResolvingContext(
-                        SpecialObjectsNames.TINT,
-                        new DrawingContext().setModelData(modelData.get())
-                ));
-            }
-        }
-
-        return List.of();
+        return hasKilled ? List.of(new ResolvingContext(SpecialObjectsNames.TINT, new DrawingContext())) : List.of();
     }
 }

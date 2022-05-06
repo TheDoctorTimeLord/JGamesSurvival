@@ -5,14 +5,14 @@ import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import com.jgames.survival.model.game.logic.battle.initialization.StartPositionAction;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionHandler;
-import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
+import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
 
 public class StartPositionActionHandler implements BattleActionHandler {
-    private ModelDataMutator modelDataMutator;
+    private GameObjectsMutator gameObjectsMutator;
 
     @Override
     public void setGameState(PresentingGameState presentingGameState) {
-        modelDataMutator = presentingGameState.getModuleMutator(ModelDataMutator.class);
+        gameObjectsMutator = presentingGameState.getModuleMutator(GameObjectsMutator.class);
     }
 
     @Override
@@ -23,6 +23,6 @@ public class StartPositionActionHandler implements BattleActionHandler {
     @Override
     public void handle(BattleAction battleAction) {
         StartPositionAction startPosition = (StartPositionAction)battleAction;
-        modelDataMutator.setPositionData(startPosition.getModelId(), startPosition.getModelPosition(), startPosition.getModelDirection());
+        gameObjectsMutator.setPositionData(startPosition.getModelId(), startPosition.getModelPosition(), startPosition.getModelDirection());
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.ui.UIException;
 
 /**
  * Фабрика по производству картинок.
@@ -17,7 +18,7 @@ public class TextureFactory implements CellActorFactory {
     }
 
     @Override
-    public Actor create(DrawingContext drawingContext) {
+    public Actor create(DrawingContext drawingContext) throws UIException {
         return new Image(textureRegion);
     }
 }

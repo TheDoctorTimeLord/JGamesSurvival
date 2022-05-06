@@ -13,6 +13,8 @@ import java.util.function.Function;
 import com.badlogic.gdx.utils.Align;
 import com.google.common.collect.ImmutableMap;
 import com.jgames.survival.presenter.core.CellActorFactory;
+import com.jgames.survival.ui.cellactorfactories.texturesfactory.PersonTextureSelector;
+import com.jgames.survival.ui.cellactorfactories.texturesfactory.TexturesFactory;
 import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
 import com.jgames.survival.utils.assets.TextureStorage;
 
@@ -20,6 +22,13 @@ import com.jgames.survival.utils.assets.TextureStorage;
  * Простой конфиг для имен объектов и привязанным к ним фабрик актёров.
  */
 public class ActorFactoryConfig {
+    public static final Map<String, Function<TextureStorage, CellActorFactory>> SPECIAL_ACTOR_FACTORIES_MAP = new
+            ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()
+            .put(BACKGROUND, textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.COMMON)))
+            .put(TINT, textureStorage -> new DeadObjectTint(textureStorage.createSprite(Constants.COMMON)))
+            .put(PERSON_HP, textureStorage -> new HpLabelFactory())
+            .build();
+
     public static final Map<String, Function<TextureStorage, CellActorFactory>> ACTOR_FACTORIES_MAP = new
             ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()
             .put(PERSON, textureStorage -> new TexturesFactory(
@@ -29,15 +38,8 @@ public class ActorFactoryConfig {
                             textureStorage.createSprite(Constants.PERSON_DOWN),
                             textureStorage.createSprite(Constants.PERSON_LEFT)
                     ),
-                    (textures, context) -> textures.get(context.getModelData().getDirection().ordinal())
+                    new PersonTextureSelector()
             ))
             .put(WALL, textureStorage -> new AlignedLabelFactory("W", Align.center))
-            .build();
-
-    public static final Map<String, Function<TextureStorage, CellActorFactory>> SPECIAL_ACTOR_FACTORIES_MAP = new
-            ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()
-            .put(BACKGROUND, textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.COMMON)))
-            .put(TINT, textureStorage -> new DeadObjectTint(textureStorage.createSprite(Constants.COMMON)))
-            .put(PERSON_HP, textureStorage -> new HpLabelFactory())
             .build();
 }

@@ -5,14 +5,14 @@ import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import com.jgames.survival.model.game.logic.battle.events.RangedAttackEvent;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionHandler;
-import com.jgames.survival.presenter.filling.gamestate.mutators.ModelDataMutator;
+import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
 
 public class RangedAttackActionHandler implements BattleActionHandler {
-    private ModelDataMutator moduleMutator;
+    private GameObjectsMutator moduleMutator;
 
     @Override
     public void setGameState(PresentingGameState presentingGameState) {
-         moduleMutator = presentingGameState.getModuleMutator(ModelDataMutator.class);
+         moduleMutator = presentingGameState.getModuleMutator(GameObjectsMutator.class);
     }
 
     @Override

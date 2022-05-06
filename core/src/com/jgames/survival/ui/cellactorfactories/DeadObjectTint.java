@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.ui.UIException;
 
 public class DeadObjectTint implements CellActorFactory {
     private final Drawable tint;
@@ -17,7 +18,7 @@ public class DeadObjectTint implements CellActorFactory {
     }
 
     @Override
-    public Actor create(DrawingContext drawingContext) {
+    public Actor create(DrawingContext drawingContext) throws UIException {
         return new Image(tint);
     }
 }

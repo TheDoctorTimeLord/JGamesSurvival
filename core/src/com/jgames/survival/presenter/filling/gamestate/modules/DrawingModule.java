@@ -3,6 +3,7 @@ package com.jgames.survival.presenter.filling.gamestate.modules;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
@@ -43,6 +44,12 @@ public class DrawingModule implements PresentingStateModule<DrawingModulePresent
 
     @Override
     public Actor getActor(String objectTypeName, DrawingContext drawingContext) {
-        return cellActorFactoryMap.getOrDefault(objectTypeName, defaultFactory).create(drawingContext);
+        CellActorFactory cellActorFactory = cellActorFactoryMap.getOrDefault(objectTypeName, defaultFactory);
+        try {
+            return cellActorFactory.create(drawingContext);
+        } catch (Exception e) {
+            Gdx.app.error("TEXTURE_DRAWING", "Error for type [%s] in factory [%s]".formatted(drawingContext, cellActorFactory), e);
+            return defaultFactory.create(drawingContext);
+        }
     }
 }

@@ -5,25 +5,25 @@ import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.UIRunnableScript;
 import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementContext;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.ModelDataModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
-import com.jgames.survival.presenter.filling.gamestate.presenters.ModelDataPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
 
 /**
  * Исполняемый шаг скрипта, применяющий все изменения в игре, которые были произведены в рамках одной фазы
  */
 public class ApplyPhaseChanges implements UIRunnableScript<EmptyScriptState> {
-    private final ModelDataPresenter modelDataPresenter;
+    private final GameObjectsPresenter gameObjectsPresenter;
     private final MapFillingPresenter mapFillingPresenter;
 
     public ApplyPhaseChanges(PresentingGameState gameState) {
-        this.modelDataPresenter = gameState.getModulePresenter(ModelDataModule.NAME);
+        this.gameObjectsPresenter = gameState.getModulePresenter(GameObjectsModule.NAME);
         this.mapFillingPresenter = gameState.getModulePresenter(MapFillingModule.NAME);
     }
 
     @Override
     public void handle(UIScriptElementContext context, EmptyScriptState state) {
-        modelDataPresenter.updateToNextPhase();
+        gameObjectsPresenter.updateToNextPhase();
         mapFillingPresenter.updateToNextPhase();
     }
 }

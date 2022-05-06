@@ -26,6 +26,7 @@ public class SimpleTextureStorage implements TextureStorage {
                 new Texture("personLeft.png")
         };
 
+        createdSprites.put(Constants.DEFAULT, new Sprite(boardingTexture));
         createdSprites.put(Constants.COMMON, new Sprite(boardingTexture));
         createdSprites.put(Constants.PERSON_UP, new Sprite(personDirections[0]));
         createdSprites.put(Constants.PERSON_RIGHT, new Sprite(personDirections[1]));
@@ -65,5 +66,6 @@ public class SimpleTextureStorage implements TextureStorage {
         String PERSON_RIGHT = "personRight";
         String PERSON_DOWN = "personDown";
         String PERSON_LEFT = "personLeft";
+        String DEFAULT = "default";
     }
 }
