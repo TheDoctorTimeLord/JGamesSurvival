@@ -25,7 +25,7 @@ public class MeleeAttackCommandFactory implements BattleCommandFactory<MeleeAtta
 
     @Override
     public boolean isAvailableCommand(BattleModel model, BattleContext battleContext) {
-        return model instanceof CanHit canHit && canHit.hasOpponentsNearby(battleContext);
+        return model instanceof CanHit canHit && canHit.hasOpponentsNearby(battleContext.getBattleState());
     }
 
     @Override

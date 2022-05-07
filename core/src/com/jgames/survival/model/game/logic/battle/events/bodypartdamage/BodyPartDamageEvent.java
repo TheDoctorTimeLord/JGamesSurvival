@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.events;
+package com.jgames.survival.model.game.logic.battle.events.bodypartdamage;
 
 import ru.jengine.battlemodule.core.events.BattleEvent;
 

@@ -7,9 +7,10 @@ import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
-import com.jgames.survival.model.game.logic.battle.events.BodyPartDamageEvent;
-import com.jgames.survival.model.game.logic.battle.events.DealingDamageEvent;
+import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEvent;
+import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEvent;
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies.ChooseDamagedBodyPartStrategy;
+import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageType;
 import com.jgames.survival.model.game.logic.battle.models.CanHit;
 
 /**
@@ -40,7 +41,8 @@ public class MeleeAttackCommand implements BattleCommand<MeleeAttackParameters> 
                 if (bodyPart == null || enemy == null)
                     return;
                 dispatcher.handle(new BodyPartDamageEvent(model.getId(), enemy.getId(), bodyPart));
-                dispatcher.handle(new DealingDamageEvent(model.getId(), enemy.getId(), canHit.getMeleeDamagePoints()));
+                dispatcher.handle(new DamageEvent(model.getId(), enemy.getId(), canHit.getMeleeDamagePoints(),
+                        DamageType.MELEE.name()));
             }
         }
     }

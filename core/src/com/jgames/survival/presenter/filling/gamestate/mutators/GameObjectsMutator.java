@@ -13,11 +13,10 @@ import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator
 import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.DirectionComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.HealthComponent;
-import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.TypeNameComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.PositionComponent;
+import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.TypeNameComponent;
 import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
-import com.jgames.survival.utils.MoveUtils;
 
 public class GameObjectsMutator implements PresentingStateModuleMutator {
     private static final List<String> USED_MODULE_NAMES = Arrays.asList(GameObjectsModule.NAME, MapFillingModule.NAME);
@@ -66,8 +65,6 @@ public class GameObjectsMutator implements PresentingStateModuleMutator {
             Point lastPosition = positionComponent.getPosition();
 
             positionComponent.setPosition(newPosition);
-            gameObject.computeIfContains(DirectionComponent.class, directionComponent ->
-                    directionComponent.setDirection(MoveUtils.getRotate(lastPosition, newPosition)));
 
             mapFilling.updateObjectsOnCell(objectId, lastPosition, newPosition);
             mapFilling.markCellAsUpdated(lastPosition);

@@ -2,11 +2,13 @@ package com.jgames.survival.model.game.logic.battle.models;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.modelattributes.AttributesContainer;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
@@ -24,7 +26,7 @@ import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFin
 /**
  * Класс, описывающий бойца
  */
-public class Fighter extends DynamicModel implements HasHealth, CanHit {
+public class Fighter extends DynamicModel implements HasHealth, CanHit, CanMoveExtension {
     public Fighter(int id, BattleModelType type, AttributesContainer attributes) {
         super(id, type, attributes);
         setVision(true);
@@ -51,6 +53,43 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
     }
 
     @Override
+    public boolean hasAvailablePosition(BattleState battleState) {
+        return !getAvailablePosition(battleState).isEmpty();
+    }
+
+    @Override
+    public Set<Point> getAvailablePosition(BattleState battleState) {
+        Point modelPosition = getPosition();
+        Direction modelDirection = getDirection();
+
+        Point topOffset = modelDirection.getOffset();
+        Point topPosition = checkPosition(modelPosition.add(topOffset), battleState);
+
+        Point leftOffset = modelDirection.rotateLeft().getOffset();
+        Point leftPosition = checkPosition(modelPosition.add(leftOffset), battleState);
+
+        Point rightOffset = modelDirection.rotateRight().getOffset();
+        Point rightPosition = checkPosition(modelPosition.add(rightOffset), battleState);
+
+        Point topLeftPosition = topPosition != null && leftPosition != null
+                ? checkPosition(modelPosition.add(leftOffset).add(topOffset), battleState)
+                : null;
+
+        Point topRightPosition = topPosition != null && rightPosition != null
+                ? checkPosition(modelPosition.add(rightOffset).add(topOffset), battleState)
+                : null;
+
+        return Stream.of(topPosition, leftPosition, rightPosition, topLeftPosition, topRightPosition)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    @Nullable
+    private static Point checkPosition(Point position, BattleState state) {
+        return state.inBattlefieldBound(position) && state.getOnPosition(position).isEmpty() ? position : null;
+    }
+
+    @Override
     public boolean isDead() {
         return getHealth() <= 0;
     }
@@ -60,21 +99,20 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
         return getMeleeDamagePoints() > 0;
     }
 
-    /**
-     * Проверяет наличие противников рядом с бойцом
-     * @param battleContext контекст битвы
-     * @return true, если рядом есть противники, иначе false
-     */
     @Override
-    public boolean hasOpponentsNearby(BattleContext battleContext) {
-        List<BattleModel> enemies = getNearestBattleModels(battleContext.getBattleState());
+    public int getMeleeDamagePoints() {
+        IntAttribute meleeDamageAttribute = AttributeFindingUtils.getMeleeDamageAttribute(this);
+        if (meleeDamageAttribute == null)
+            return 0;
+        return meleeDamageAttribute.getValue();
+    }
+
+    @Override
+    public boolean hasOpponentsNearby(BattleState battleState) {
+        List<BattleModel> enemies = getNearestBattleModels(battleState);
         return !enemies.isEmpty();
     }
 
-    /**
-     * Возвращает персонажей, которые находятся рядом с бойцом
-     * @param battleState состояние битвы
-     */
     @Override
     public List<BattleModel> getNearestBattleModels(BattleState battleState) {
         Point modelPosition = getPosition();
@@ -87,17 +125,5 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit {
                 .flatMap(Collection::stream)
                 .filter(model -> model instanceof DynamicModel)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Возвращает значение, характеризующее силу удара,
-     * с которой персонаж может нанести вред противнику
-     */
-    @Override
-    public int getMeleeDamagePoints() {
-        IntAttribute meleeDamageAttribute = AttributeFindingUtils.getMeleeDamageAttribute(this);
-        if (meleeDamageAttribute == null)
-            return 0;
-        return meleeDamageAttribute.getValue();
     }
 }

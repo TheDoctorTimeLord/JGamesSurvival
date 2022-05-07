@@ -2,27 +2,27 @@ package com.jgames.survival.presenter.filling.changeshandling.battleactionhandle
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 
-import com.jgames.survival.model.game.logic.battle.events.RangedAttackEvent;
+import com.jgames.survival.model.game.logic.battle.events.move.MoveBattleAction;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionHandler;
 import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
 
-public class RangedAttackActionHandler implements BattleActionHandler {
-    private GameObjectsMutator moduleMutator;
+public class MoveBattleActionHandler implements BattleActionHandler {
+    private GameObjectsMutator gameObjectsMutator;
 
     @Override
     public void setGameState(PresentingGameState presentingGameState) {
-         moduleMutator = presentingGameState.getModuleMutator(GameObjectsMutator.class);
+        gameObjectsMutator = presentingGameState.getModuleMutator(GameObjectsMutator.class);
     }
 
     @Override
     public boolean canHandle(BattleAction battleAction) {
-        return battleAction instanceof RangedAttackEvent;
+        return battleAction instanceof MoveBattleAction;
     }
 
     @Override
     public void handle(BattleAction battleAction) {
-        RangedAttackEvent event = (RangedAttackEvent)battleAction;
-        moduleMutator.damageModel(event.getTargetId(), event.getDamagePoints());
+        MoveBattleAction action = (MoveBattleAction)battleAction;
+        gameObjectsMutator.moveModel(action.getModelId(), action.getNewPosition());
     }
 }

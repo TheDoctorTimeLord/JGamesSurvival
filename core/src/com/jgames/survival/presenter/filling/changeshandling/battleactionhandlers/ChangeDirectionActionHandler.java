@@ -2,12 +2,12 @@ package com.jgames.survival.presenter.filling.changeshandling.battleactionhandle
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 
-import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageNotification;
+import com.jgames.survival.model.game.logic.battle.events.changedirection.ChangeDirectionNotification;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionHandler;
 import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
 
-public class DealingDamageNotificationHandler implements BattleActionHandler {
+public class ChangeDirectionActionHandler implements BattleActionHandler {
     private GameObjectsMutator gameObjectsMutator;
 
     @Override
@@ -17,12 +17,12 @@ public class DealingDamageNotificationHandler implements BattleActionHandler {
 
     @Override
     public boolean canHandle(BattleAction battleAction) {
-        return battleAction instanceof DamageNotification;
+        return battleAction instanceof ChangeDirectionNotification;
     }
 
     @Override
     public void handle(BattleAction battleAction) {
-        DamageNotification notification = (DamageNotification)battleAction;
-        gameObjectsMutator.damageModel(notification.getTargetId(), notification.getDamagePoints());
+        ChangeDirectionNotification action = (ChangeDirectionNotification)battleAction;
+        gameObjectsMutator.rotateObject(action.getModelId(), action.getNewDirection());
     }
 }

@@ -1,25 +1,25 @@
-package com.jgames.survival.model.game.logic.battle.events;
+package com.jgames.survival.model.game.logic.battle.events.dealingdamage;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 
 /**
  * Хранит данные: атакующий персонаж, получающий урон персонаж, наносимый урон
  */
-public class DealingDamageNotification implements BattleAction {
+public class DamageNotification implements BattleAction {
     private final int attackerId;
     private final int targetId;
     private final int damagePoints;
+    private final String damageType;
 
-    public DealingDamageNotification(int attackerId, int targetId, int damagePoints) {
+    public DamageNotification(int attackerId, int targetId, int damagePoints, String damageType) {
         this.attackerId = attackerId;
         this.targetId = targetId;
         this.damagePoints = damagePoints;
+        this.damageType = damageType;
     }
 
-    public DealingDamageNotification(DealingDamageEvent event) {
-        this.attackerId = event.getAttackerId();
-        this.targetId = event.getTargetId();
-        this.damagePoints = event.getDamagePoints();
+    public DamageNotification(DamageEvent event) {
+        this(event.getAttackerId(), event.getTargetId(), event.getDamagePoints(), event.getDamageType());
     }
 
     /**
@@ -37,6 +37,13 @@ public class DealingDamageNotification implements BattleAction {
     }
 
     /**
+     * Возвращает тип наносимого урона
+     */
+    public String getDamageType() {
+        return damageType;
+    }
+
+    /**
      * Возвращает идентификатор персонажа, получающего урон
      */
     public int getTargetId() {
@@ -48,6 +55,7 @@ public class DealingDamageNotification implements BattleAction {
         return "DealingDamage {" +
                 "attackerId=" + attackerId +
                 ", targetId=" + targetId +
+                ", damageType=" + damageType +
                 ", damagePoints=" + damagePoints +
                 '}';
     }

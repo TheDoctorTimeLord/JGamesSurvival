@@ -1,5 +1,9 @@
 package com.jgames.survival.model.game.logic.battle.commands.move;
 
+import static com.jgames.survival.model.game.logic.battle.commands.move.MoveCommandFactory.checkCanMove;
+
+import java.util.Set;
+
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
@@ -9,13 +13,9 @@ import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.movement.CanMoved;
 import ru.jengine.battlemodule.standardfilling.movement.MoveEvent;
-import ru.test.annotation.battle.events.ChangeDirectionEvent;
-import ru.test.annotation.battle.events.TestChangeDirectionEvent;
 
-import java.util.Set;
-
-import static com.jgames.survival.model.game.logic.battle.commands.move.MoveCommandFactory.isAvailablePoint;
-import static com.jgames.survival.model.game.logic.battle.commands.move.MoveCommandFactory.checkCanMove;
+import com.jgames.survival.model.game.logic.battle.events.changedirection.ChangeDirectionEvent;
+import com.jgames.survival.utils.MoveUtils;
 
 /**
  * Описывает команду перемещения, которую будет исполнять динамический объект.
@@ -36,14 +36,19 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
     }
 
     /**
-     * Выполняет команду перемещения для переданного динамического объекта, используя при этом переданные параметры команды
+     * Выполняет команду перемещения для переданного динамического объекта, используя при этом переданные параметры
+     * команды
      *
      * Проверяется:
-     * По прежнему ли персонажу доступна выбранная позиция для перемещения
-     * По прежнему ли персонаж способен перемещаться
+     * <ol>
+     * <li>По прежнему ли персонажу доступна выбранная позиция для перемещения</li>
+     * <li>По прежнему ли персонаж способен перемещаться</li>
+     * </ol>
      *
      * Выполняется:
-     * Кидается событие MoveEvent
+     * <ol>
+     * <li>Кидается событие MoveEvent</li>
+     * </ol>
      *
      * @param model динамический объект, над которым выполняется команда
      * @param battleContext контекст текущего боя
@@ -55,19 +60,17 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
         if (isExecutionParametersCorrect(moveParameters, battleState) && checkCanMove(model))
         {
             CanMoved canMoved = (CanMoved)model;
-            Direction direction = canMoved.getDirection();
+            Direction oldDirection = canMoved.getDirection();
             Point oldPosition = canMoved.getPosition();
             Point newPosition = moveParameters.getSelectedPosition();
-            Direction newDirection = getChangedDirection(oldPosition, newPosition, direction);
+            Direction newDirection = getChangedDirection(oldPosition, newPosition, oldDirection);
 
             DispatcherBattleWrapper dispatcher = battleContext.getDispatcher();
 
             if (isAvailablePoint(newPosition, battleState)) {
                 dispatcher.handle(new MoveEvent(model.getId(), oldPosition, newPosition));
-                dispatcher.handle(new ChangeDirectionEvent(model.getId(), newDirection));
-            } else {
-                dispatcher.handle(new TestChangeDirectionEvent(model.getId(), newDirection));
             }
+            dispatcher.handle(new ChangeDirectionEvent(model.getId(), newDirection));
         }
     }
 
@@ -90,19 +93,24 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
      *
      * @param oldPosition текущая позиция персонажа
      * @param newPosition новая выбранная позиция персонажа
-     * @param currentDirection текущее направление взгляда персонажа
      */
-    private static Direction getChangedDirection(Point oldPosition, Point newPosition, Direction currentDirection) {
-        Point offset = newPosition.sub(oldPosition);
-        Direction[] directions = Direction.values();
-        for (Direction direction : directions) {
-            if (direction.getOffset().equals(offset)) {
-                return direction;
-            }
+    private static Direction getChangedDirection(Point oldPosition, Point newPosition, Direction oldDirection) {
+        if (MoveUtils.getDistance(newPosition, oldPosition) > 1) {
+            return oldDirection;
         }
-        if (offset.getX() < 2 && offset.getY() < 2)
-            return currentDirection;
-        throw new IllegalArgumentException("Offset [" + offset + "] doesn't match any Direction");
+
+        Point offset = newPosition.sub(oldPosition);
+        return Direction.getByOffset(offset);
+    }
+
+    /**
+     * Проверяет, свободна ли клетка на поле боя
+     * @param point проверяемая клетка
+     * @param battleState хранит всю необходимую информацию о текущем состоянии боя
+     * @return true - свободна, false - не свободна
+     */
+    private static boolean isAvailablePoint(Point point, BattleState battleState) {
+        return battleState.getOnPosition(point).isEmpty();
     }
 
     @Override

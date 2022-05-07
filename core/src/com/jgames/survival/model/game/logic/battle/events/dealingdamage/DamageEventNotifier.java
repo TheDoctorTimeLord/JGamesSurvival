@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.events;
+package com.jgames.survival.model.game.logic.battle.events.dealingdamage;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleActionRegistrar;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
@@ -7,10 +7,10 @@ import ru.jengine.eventqueue.event.PostHandler;
 /**
  * Отправляет на регистрацию событие DealingDamageEvent
  */
-public class DealingDamageEventNotifier implements PostHandler<DealingDamageEvent> {
+public class DamageEventNotifier implements PostHandler<DamageEvent> {
     private final BattleActionRegistrar actionRegistrar;
 
-    public DealingDamageEventNotifier(BattleActionRegistrar actionRegistrar) {
+    public DamageEventNotifier(BattleActionRegistrar actionRegistrar) {
         this.actionRegistrar = actionRegistrar;
     }
 
@@ -20,13 +20,13 @@ public class DealingDamageEventNotifier implements PostHandler<DealingDamageEven
     }
 
     @Override
-    public Class<DealingDamageEvent> getHandlingEventType() {
-        return DealingDamageEvent.class;
+    public Class<DamageEvent> getHandlingEventType() {
+        return DamageEvent.class;
     }
 
     @Override
-    public void handle(DealingDamageEvent event) {
-        DealingDamageNotification notification = new DealingDamageNotification(event);
+    public void handle(DamageEvent event) {
+        DamageNotification notification = new DamageNotification(event);
         actionRegistrar.registerAction(notification);
     }
 }

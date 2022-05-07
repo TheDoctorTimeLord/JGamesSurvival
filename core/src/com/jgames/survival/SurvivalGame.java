@@ -19,10 +19,11 @@ import com.jgames.survival.presenter.core.uiscripts.scriptmachines.MultipleActiv
 import com.jgames.survival.presenter.filling.changeshandling.AvailableObjectTypeNameHandler;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
 import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ChangeDirectionActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.DealingDamageNotificationHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ModelHpActionHandler;
+import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.MoveBattleActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ObjectTypeActionHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.RangedAttackActionHandler;
 import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
 import com.jgames.survival.presenter.filling.clickactions.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactions.MapCellClickHandler;
@@ -82,8 +83,9 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
                         new StartPositionActionHandler(),
                         new ObjectTypeActionHandler(),
                         new ModelHpActionHandler(),
-                        new DealingDamageNotificationHandler(),
-                        new RangedAttackActionHandler()
+                        new MoveBattleActionHandler(),
+                        new ChangeDirectionActionHandler(),
+                        new DealingDamageNotificationHandler()
                 ));
 
         gameHandler.onStart();

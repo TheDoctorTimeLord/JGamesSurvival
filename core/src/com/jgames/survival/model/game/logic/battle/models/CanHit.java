@@ -2,7 +2,6 @@ package com.jgames.survival.model.game.logic.battle.models;
 
 import java.util.List;
 
-import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.movement.CanMoved;
@@ -18,10 +17,10 @@ public interface CanHit extends CanMoved {
 
     /**
      * Проверяет наличие противников рядом с бойцом
-     * @param battleContext контекст битвы
+     * @param battleState контекст битвы
      * @return true, если рядом есть противники, иначе false
      */
-    boolean hasOpponentsNearby(BattleContext battleContext);
+    boolean hasOpponentsNearby(BattleState battleState);
 
     /**
      * Возвращает персонажей, которые находятся рядом с бойцом

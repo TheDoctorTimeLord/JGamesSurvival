@@ -12,10 +12,13 @@ import ru.jengine.battlemodule.core.commands.BattleCommandPerformElement;
 import ru.jengine.battlemodule.core.commands.executioncontexts.NoneParameters;
 import ru.jengine.battlemodule.core.information.InformationCenter;
 import ru.jengine.battlemodule.core.models.BattleModel;
+import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.utils.RandomUtils;
 
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.MeleeAttackCommand;
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.MeleeAttackParameters;
+import com.jgames.survival.model.game.logic.battle.commands.move.MoveCommand;
+import com.jgames.survival.model.game.logic.battle.commands.move.MoveParameters;
 import com.jgames.survival.model.game.logic.battle.commands.rangedattack.RangedAttack;
 import com.jgames.survival.model.game.logic.battle.commands.rangedattack.RangedAttackParameters;
 import com.jgames.survival.model.game.logic.battle.commands.waiting.WaitingCommand;
@@ -37,6 +40,7 @@ public class FighterBehavior implements Behavior {
     @Override
     public BattleCommandPerformElement<?> sendAction(int characterId, List<BattleCommand<?>> availableCommands) {
         WaitingCommand waitingCommand = null;
+        MoveCommand moveCommand = null;
         RangedAttack rangedAttack = null;
         MeleeAttackCommand meleeAttackCommand = null;
 
@@ -46,6 +50,9 @@ public class FighterBehavior implements Behavior {
             }
             if (availableCommand instanceof RangedAttack ranged) {
                 rangedAttack = ranged;
+            }
+            if (availableCommand instanceof MoveCommand move) {
+                moveCommand = move;
             }
             if (availableCommand instanceof WaitingCommand wait) {
                 waitingCommand = wait;
@@ -66,6 +73,14 @@ public class FighterBehavior implements Behavior {
             parametersTemplate.selectEnemy(selected);
 
             return new BattleCommandPerformElement<>(characterId, rangedAttack, parametersTemplate);
+        }
+
+        if (moveCommand != null) {
+            MoveParameters parametersTemplate = moveCommand.createParametersTemplate();
+            Point selected = RandomUtils.chooseInCollection(parametersTemplate.getAvailablePositions());
+            parametersTemplate.setSelectedPosition(selected);
+
+            return new BattleCommandPerformElement<>(characterId, moveCommand, parametersTemplate);
         }
 
         return new BattleCommandPerformElement<>(characterId, waitingCommand, NoneParameters.INSTANCE);

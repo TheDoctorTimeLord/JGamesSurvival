@@ -34,4 +34,13 @@ public class LocationUtils {
 
         return new Point[] { topPoint, leftTopPoint, rightTopPoint };
     }
+
+    public static Point[] getFiveAroundOffsets(Direction direction) {
+        Point[] frontOffsets = getThreeFrontOffsets(direction);
+        Point[] offsets = Arrays.copyOf(frontOffsets, frontOffsets.length + 2);
+        offsets[frontOffsets.length] = direction.rotateLeft().getOffset();
+        offsets[frontOffsets.length + 1] = direction.rotateRight().getOffset();
+
+        return offsets;
+    }
 }

@@ -1,4 +1,4 @@
-package com.jgames.survival.model.game.logic.battle.events;
+package com.jgames.survival.model.game.logic.battle.events.dealingdamage;
 
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.models.BattleModel;
@@ -13,13 +13,13 @@ import com.jgames.survival.model.game.logic.battle.models.HasHealth;
 /**
  * Обрабатывает событие DealingDamageEvent
  */
-public class DealingDamageEventHandler implements PostHandler<DealingDamageEvent> {
+public class DamageEventHandler implements PostHandler<DamageEvent> {
     private final BattleState battleState;
     private final SchedulerTaskRegistrar taskRegistrar;
     private final BattleDynamicObjectsManager dynamicObjectsManager;
     private final DispatcherBattleWrapper dispatcher;
 
-    public DealingDamageEventHandler(BattleState battleState, SchedulerTaskRegistrar taskRegistrar,
+    public DamageEventHandler(BattleState battleState, SchedulerTaskRegistrar taskRegistrar,
             BattleDynamicObjectsManager dynamicObjectsManager, DispatcherBattleWrapper dispatcher)
     {
         this.battleState = battleState;
@@ -34,12 +34,12 @@ public class DealingDamageEventHandler implements PostHandler<DealingDamageEvent
     }
 
     @Override
-    public Class<DealingDamageEvent> getHandlingEventType() {
-        return DealingDamageEvent.class;
+    public Class<DamageEvent> getHandlingEventType() {
+        return DamageEvent.class;
     }
 
     @Override
-    public void handle(DealingDamageEvent event) {
+    public void handle(DamageEvent event) {
         BattleModel targetModel = battleState.resolveId(event.getTargetId());
         if (targetModel instanceof HasHealth hasHealth) {
             hasHealth.damage(event.getDamagePoints(), dispatcher);
