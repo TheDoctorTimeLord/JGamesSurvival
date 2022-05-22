@@ -61,6 +61,6 @@ public class RangedAttackFactory implements BattleCommandFactory<RangedAttackPar
         IntAttribute rightArmStata = extractInnerAttribute(attributes, List.of(BODY_PARTS, RIGHT_ARM), STATE);
 
         return leftArmState != null && rightArmStata != null &&
-                DAMAGED.isGreater(leftArmState.getValue()) && DAMAGED.isGreater(rightArmStata.getValue());
+                (DAMAGED.isGreater(leftArmState.getValue()) || DAMAGED.isGreater(rightArmStata.getValue()));
     }
 }

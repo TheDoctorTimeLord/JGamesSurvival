@@ -26,6 +26,10 @@ public class HealthComponent extends GameObjectComponent {
         }
     }
 
+    public synchronized void kill() {
+        hp = 0;
+    }
+
     public synchronized boolean isKilled() {
         return hp == 0;
     }

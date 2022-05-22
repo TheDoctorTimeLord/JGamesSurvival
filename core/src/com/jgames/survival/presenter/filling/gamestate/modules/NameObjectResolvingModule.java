@@ -1,8 +1,10 @@
 package com.jgames.survival.presenter.filling.gamestate.modules;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
@@ -10,9 +12,16 @@ import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.resolvers.ModelDataResolver;
 
+@Bean
 public class NameObjectResolvingModule implements PresentingStateModule<NameObjectResolvingPresenter>, NameObjectResolvingPresenter {
     public static final String NAME = "nameObjectResolving";
-    private final List<ModelDataResolver> modelDataResolvers = new ArrayList<>();
+    private final List<ModelDataResolver> modelDataResolvers;
+
+    public NameObjectResolvingModule(List<ModelDataResolver> modelDataResolvers) {
+        this.modelDataResolvers = modelDataResolvers.stream()
+                .sorted(Comparator.comparingInt(ModelDataResolver::getPriority))
+                .collect(Collectors.toList());
+    }
 
     /**
      * Зарегистрировать резолвера метаданных.

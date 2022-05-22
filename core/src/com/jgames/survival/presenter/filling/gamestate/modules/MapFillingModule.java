@@ -3,11 +3,13 @@ package com.jgames.survival.presenter.filling.gamestate.modules;
 import java.util.*;
 
 import ru.jengine.battlemodule.core.serviceclasses.Point;
+import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.utils.CollectionUtils;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
 
+@Bean
 public class MapFillingModule implements PresentingStateModule<MapFillingModule>, MapFillingPresenter {
     public static final String NAME = "mapFilling";
     private final PhasedField<Set<Point>> updatedCells = new PhasedField<>(HashSet::new, s -> new HashSet<>(), true);

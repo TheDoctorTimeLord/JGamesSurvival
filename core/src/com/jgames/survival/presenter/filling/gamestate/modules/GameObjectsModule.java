@@ -2,10 +2,13 @@ package com.jgames.survival.presenter.filling.gamestate.modules;
 
 import java.util.List;
 
+import ru.jengine.beancontainer.annotations.Bean;
+
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
 
+@Bean
 public class GameObjectsModule implements PresentingStateModule<GameObjectsPresenter>, GameObjectsPresenter {
     public static final String NAME = "modelData";
 

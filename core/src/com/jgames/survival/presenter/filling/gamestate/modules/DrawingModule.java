@@ -3,6 +3,8 @@ package com.jgames.survival.presenter.filling.gamestate.modules;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.jengine.beancontainer.annotations.Bean;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.jgames.survival.presenter.core.CellActorFactory;
@@ -10,12 +12,13 @@ import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.ui.cellactorfactories.TextureFactory;
-import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
-import com.jgames.survival.utils.assets.TextureStorage;
+import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;
+import com.jgames.survival.ui.assets.TextureStorage;
 
 /**
  * Модуль для хранения фабрик для имён объектов.
  */
+@Bean
 public class DrawingModule implements PresentingStateModule<DrawingModulePresenter>, DrawingModulePresenter {
     public static final String NAME = "drawing";
     private final Map<String, CellActorFactory> cellActorFactoryMap = new HashMap<>();

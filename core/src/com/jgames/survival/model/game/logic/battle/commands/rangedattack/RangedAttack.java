@@ -6,6 +6,7 @@ import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
+import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEvent;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageType;
 
@@ -37,6 +38,6 @@ public class RangedAttack implements BattleCommand<RangedAttackParameters> {
 
     @Override
     public int getPriority() {
-        return 10;
+        return BattleCommandPriority.ATTACK.getPriority();
     }
 }

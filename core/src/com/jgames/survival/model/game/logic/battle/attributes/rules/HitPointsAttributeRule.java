@@ -9,10 +9,10 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.S
 import java.util.List;
 
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
-import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
+import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.ChangedAttributesContext;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.HandlingCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.AbstractProcessedAttribute;
@@ -33,8 +33,9 @@ public class HitPointsAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof IntAttribute state) {
+    public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
+        if (context.getChangedAttribute() instanceof IntAttribute state) {
+            BattleModel battleModel = context.getModel();
             int bodyPartState = state.getValue();
             int anotherBodyPartState = getAnotherBodyPartDamageStrength(battleModel, bodyPartState);
 
@@ -51,7 +52,7 @@ public class HitPointsAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processRemovedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
+    public List<AbstractProcessedAttribute> processRemovedAttribute(ChangedAttributesContext context) {
         return List.of();
     }
 

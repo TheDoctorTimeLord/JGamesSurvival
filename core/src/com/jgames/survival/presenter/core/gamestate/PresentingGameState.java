@@ -1,12 +1,23 @@
 package com.jgames.survival.presenter.core.gamestate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import ru.jengine.beancontainer.annotations.Bean;
+
+@Bean
 public class PresentingGameState {
     private final Map<String, PresentingStateModule<?>> modules = new HashMap<>();
     private final Map<Class<? extends PresentingStateModuleMutator>, PresentingStateModuleMutator> moduleMutators =
             new HashMap<>();
+
+    public PresentingGameState(List<PresentingStateModule<?>> modules, List<PresentingStateModuleMutator> mutators) {
+        modules.forEach(this::addStateModule);
+        mutators.forEach(this::addModuleMutator);
+
+        connectMutatorsWithModules();
+    }
 
     public PresentingGameState addStateModule(PresentingStateModule<?> module) {
         modules.put(module.getModuleName(), module);

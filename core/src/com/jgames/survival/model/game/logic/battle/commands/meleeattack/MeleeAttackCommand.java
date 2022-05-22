@@ -7,6 +7,7 @@ import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
+import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
 import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEvent;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEvent;
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies.ChooseDamagedBodyPartStrategy;
@@ -49,6 +50,6 @@ public class MeleeAttackCommand implements BattleCommand<MeleeAttackParameters> 
 
     @Override
     public int getPriority() {
-        return 10;
+        return BattleCommandPriority.ATTACK.getPriority();
     }
 }

@@ -1,12 +1,14 @@
 package com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
+import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.model.game.logic.battle.events.move.MoveBattleAction;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.filling.changeshandling.BattleActionHandler;
 import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
 
+@Bean
 public class MoveBattleActionHandler implements BattleActionHandler {
     private GameObjectsMutator gameObjectsMutator;
 
@@ -23,6 +25,6 @@ public class MoveBattleActionHandler implements BattleActionHandler {
     @Override
     public void handle(BattleAction battleAction) {
         MoveBattleAction action = (MoveBattleAction)battleAction;
-        gameObjectsMutator.moveModel(action.getModelId(), action.getNewPosition());
+        gameObjectsMutator.moveObject(action.getModelId(), action.getNewPosition());
     }
 }

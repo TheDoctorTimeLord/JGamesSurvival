@@ -26,7 +26,6 @@ public class DamageEventNotifier implements PostHandler<DamageEvent> {
 
     @Override
     public void handle(DamageEvent event) {
-        DamageNotification notification = new DamageNotification(event);
-        actionRegistrar.registerAction(notification);
+        actionRegistrar.registerAction(event);
     }
 }

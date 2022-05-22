@@ -10,11 +10,11 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.A
 import java.util.List;
 
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
-import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
+import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.ChangedAttributesContext;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.HandlingCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.AbstractProcessedAttribute;
@@ -36,12 +36,13 @@ public class MoveDistanceAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        IntAttribute moveDistance =  battleModel.getAttributes()
-                .getAsContainer(Attributes.ATTRIBUTES)
-                .getAsInt(Attributes.MOVE_DISTANCE);
+    public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
+        if (context.getChangedAttribute() instanceof IntAttribute state) {
+            BattleModel battleModel = context.getModel();
+            IntAttribute moveDistance =  battleModel.getAttributes()
+                    .getAsContainer(Attributes.ATTRIBUTES)
+                    .getAsInt(Attributes.MOVE_DISTANCE);
 
-        if (battleAttribute instanceof IntAttribute state) {
             int legState = state.getValue();
             int anotherLegState = getAnotherLegState(battleModel, state);
 
@@ -70,12 +71,12 @@ public class MoveDistanceAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processRemovedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        IntAttribute moveDistance =  battleModel.getAttributes()
-                .getAsContainer(Attributes.ATTRIBUTES)
-                .getAsInt(Attributes.MOVE_DISTANCE);
+    public List<AbstractProcessedAttribute> processRemovedAttribute(ChangedAttributesContext context) {
+        if (context.getChangedAttribute() instanceof AttributeMarker canMove && CAN_MOVE.equals(canMove.getCode())) {
+            IntAttribute moveDistance =  context.getModel().getAttributes()
+                    .getAsContainer(Attributes.ATTRIBUTES)
+                    .getAsInt(Attributes.MOVE_DISTANCE);
 
-        if (battleAttribute instanceof AttributeMarker canMove && CAN_MOVE.equals(canMove.getCode())) {
             return List.of(new PuttedProcessedAttribute(moveDistance.setValue(0)));
         }
 

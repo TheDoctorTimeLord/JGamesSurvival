@@ -14,6 +14,7 @@ import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.movement.CanMoved;
 import ru.jengine.battlemodule.standardfilling.movement.MoveEvent;
 
+import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
 import com.jgames.survival.model.game.logic.battle.events.changedirection.ChangeDirectionEvent;
 import com.jgames.survival.utils.MoveUtils;
 
@@ -115,6 +116,6 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
 
     @Override
     public int getPriority() {
-        return 10;
+        return BattleCommandPriority.MOVE.getPriority();
     }
 }

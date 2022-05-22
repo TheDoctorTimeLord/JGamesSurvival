@@ -18,18 +18,19 @@ import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
+import ru.jengine.battlemodule.standardfilling.visible.HasVision;
 import ru.jengine.utils.AttributeUtils;
 
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
 import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
 import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFindingUtils;
 
 /**
  * Класс, описывающий бойца
  */
-public class Fighter extends DynamicModel implements HasHealth, CanHit, CanMoveExtension {
+public class Fighter extends DynamicModel implements HasHealth, CanHit, CanMoveExtension, HasVision {
     public Fighter(int id, BattleModelType type, AttributesContainer attributes) {
         super(id, type, attributes);
-        setVision(true);
     }
 
     @Override
@@ -49,6 +50,31 @@ public class Fighter extends DynamicModel implements HasHealth, CanHit, CanMoveE
 
         if (dispatcher != null) {
             AttributeUtils.notifyAboutChange(getId(), dispatcher, healthAttribute);
+        }
+    }
+
+    @Override
+    public int getVisionDistance() {
+        IntAttribute attribute = AttributeUtils.extractInnerAttribute(
+                getAttributes(),
+                List.of(Attributes.ATTRIBUTES),
+                Attributes.VISION_DISTANCE);
+        return attribute != null ? attribute.getValue() : 0;
+    }
+
+    @Override
+    public boolean hasVision() {
+        return getVisionDistance() > 0;
+    }
+
+    @Override
+    public void setVisionDistance(int visionDistance) {
+        IntAttribute attribute = AttributeUtils.extractInnerAttribute(
+                getAttributes(),
+                List.of(Attributes.ATTRIBUTES),
+                Attributes.VISION_DISTANCE);
+        if (attribute != null) {
+            attribute.setValue(visionDistance);
         }
     }
 

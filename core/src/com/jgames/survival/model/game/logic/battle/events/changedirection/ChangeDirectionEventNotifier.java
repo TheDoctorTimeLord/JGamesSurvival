@@ -18,7 +18,7 @@ public class ChangeDirectionEventNotifier implements PostHandler<ChangeDirection
 
     @Override
     public void handle(ChangeDirectionEvent event) {
-        battleActionRegistrar.registerAction(new ChangeDirectionNotification(event));
+        battleActionRegistrar.registerAction(event);
     }
 
     @Override

@@ -1,11 +1,12 @@
 package com.jgames.survival.model.game.logic.battle.events.bodypartdamage;
 
+import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.events.BattleEvent;
 
 /**
  * Событие, описывающее повреждение части тела
  */
-public class BodyPartDamageEvent extends BattleEvent {
+public class BodyPartDamageEvent extends BattleEvent implements BattleAction {
     private final int attackerId;
     private final int targetId;
     private final String damagedBodyPart;
@@ -35,5 +36,14 @@ public class BodyPartDamageEvent extends BattleEvent {
      */
     public String getDamagedBodyPart() {
         return damagedBodyPart;
+    }
+
+    @Override
+    public String toString() {
+        return "BodyPartDamageEvent{" +
+                "attackerId=" + attackerId +
+                ", targetId=" + targetId +
+                ", damagedBodyPart='" + damagedBodyPart + '\'' +
+                '}';
     }
 }

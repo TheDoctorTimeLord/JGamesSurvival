@@ -1,41 +1,27 @@
 package com.jgames.survival;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+
+import ru.jengine.beancontainer.dataclasses.ContainerConfiguration;
+import ru.jengine.beancontainer.implementation.JEngineContainer;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jgames.survival.model.AbstractGameHandler;
 import com.jgames.survival.model.GameConfiguration;
 import com.jgames.survival.model.MainGameHandler;
-import com.jgames.survival.presenter.core.changeshangling.GameChangeHandlersRegistrar;
-import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
-import com.jgames.survival.presenter.core.uiscripts.scriptmachines.MultipleActiveScriptMachine;
-import com.jgames.survival.presenter.filling.changeshandling.AvailableObjectTypeNameHandler;
-import com.jgames.survival.presenter.filling.changeshandling.BattleActionWrapperHandler;
-import com.jgames.survival.presenter.filling.changeshandling.StartPhaseChangesHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ChangeDirectionActionHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.DealingDamageNotificationHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ModelHpActionHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.MoveBattleActionHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.ObjectTypeActionHandler;
-import com.jgames.survival.presenter.filling.changeshandling.battleactionhandlers.StartPositionActionHandler;
 import com.jgames.survival.presenter.filling.clickactions.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactions.MapCellClickHandler;
 import com.jgames.survival.presenter.filling.clickactions.PhaseOrTurnClickedHandler;
-import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
-import com.jgames.survival.presenter.filling.gamestate.mutators.DrawingRegistrar;
-import com.jgames.survival.presenter.filling.gamestate.mutators.NameObjectResolvingModuleFakeMutator;
-import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
-import com.jgames.survival.ui.JavaClassUIComponentRegistrar;
+import com.jgames.survival.presenter.modules.PresenterAndUIMainModule;
 import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.uifactories.CommandPanelFactory;
@@ -44,63 +30,45 @@ import com.jgames.survival.ui.uifactories.MapTableFactory;
 import com.jgames.survival.ui.uifactories.PhaseAndTurnPanelFactory;
 import com.jgames.survival.ui.uiscriptelements.mappanel.UpdateMapAction;
 import com.jgames.survival.utils.GameProperties;
-import com.jgames.survival.utils.assets.SimpleTextureStorage;
-import com.jgames.survival.utils.assets.TextureStorage;
-import com.jgames.survival.utils.assets.TextureStorageConfiguration;
 
 public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
     private boolean isDebugMode;
 
     private AbstractGameHandler gameHandler;
     private Stage stage;
-    private TextureStorage textureStorage;
+    private JEngineContainer container;
 
     @Override
     public void create() {
         initGlobalParameters();
 
-        textureStorage = new SimpleTextureStorage().load(new TextureStorageConfiguration());
+        stage = new Stage(new ScreenViewport());
 
         gameHandler = new MainGameHandler(new GameConfiguration()
                 .setDebug(isDebugMode)
         );
         gameHandler.start();
 
-        PresentingGameState presentingGameState = new PresentingGameState()
-                .addStateModule(new GameObjectsModule())
-                .addStateModule(new MapFillingModule())
-                .addStateModule(new DrawingModule(textureStorage))
-                .addStateModule(new NameObjectResolvingModule())
-                .addModuleMutator(new GameObjectsMutator())
-                .addModuleMutator(new DrawingRegistrar())
-                .addModuleMutator(new NameObjectResolvingModuleFakeMutator())
-                .connectMutatorsWithModules();
-
-        GameChangeHandlersRegistrar gameChangeHandlersRegistrar = new GameChangeHandlersRegistrar(gameHandler, presentingGameState)
-                .registerGameChangeHandler(new StartPhaseChangesHandler())
-                .registerGameChangeHandler(new AvailableObjectTypeNameHandler(textureStorage))
-                .registerGameChangeHandler(new BattleActionWrapperHandler(
-                        new StartPositionActionHandler(),
-                        new ObjectTypeActionHandler(),
-                        new ModelHpActionHandler(),
-                        new MoveBattleActionHandler(),
-                        new ChangeDirectionActionHandler(),
-                        new DealingDamageNotificationHandler()
-                ));
+        container = new JEngineContainer();
+        container.initializeCommonContexts(ContainerConfiguration
+                .build(PresenterAndUIMainModule.class)
+                .addAdditionalBean(stage)
+                .addAdditionalBean(gameHandler)
+                .addAdditionalBean(gameHandler.getLogger())
+        );
 
         gameHandler.onStart();
 
-        DispatcherUIScriptMachine scriptMachine = new MultipleActiveScriptMachine();
-        stage = new Stage(new ScreenViewport());
+        DispatcherUIScriptMachine scriptMachine = container.getBean(DispatcherUIScriptMachine.class);
 
-        UIComponentRegistrar componentRegistrar = new JavaClassUIComponentRegistrar(scriptMachine, stage, gameHandler, presentingGameState, textureStorage)
+        UIComponentRegistrar componentRegistrar = container.getBean(UIComponentRegistrar.class);
+        componentRegistrar
                 .registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
                 .registerComponent(new LeftTopInformationFactory(300, 300))
                 .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
                 .registerComponent(new PhaseAndTurnPanelFactory(new PhaseOrTurnClickedHandler(scriptMachine)));
 
         UIElements uiElements = componentRegistrar.createInterface();
-
         scriptMachine.dispatch(new UpdateMapAction(), action -> {});
 
         Gdx.input.setInputProcessor(stage);
@@ -132,8 +100,8 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
             Gdx.app.error("INTERRUPTED", "Game was interrupted and not joining", e);
         }
 
-        stage.dispose();
-        textureStorage.dispose();
+        List<Disposable> disposables = container.getBean(Disposable.class);
+        disposables.forEach(Disposable::dispose);
     }
 
     private void initGlobalParameters() {

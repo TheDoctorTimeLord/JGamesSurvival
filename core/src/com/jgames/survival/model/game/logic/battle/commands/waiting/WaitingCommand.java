@@ -5,6 +5,8 @@ import ru.jengine.battlemodule.core.commands.BattleCommand;
 import ru.jengine.battlemodule.core.commands.executioncontexts.NoneParameters;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
+import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
+
 /**
  * Описывает команду ожидания, которую будет исполнять динамический объект.
  */
@@ -30,6 +32,6 @@ public class WaitingCommand implements BattleCommand<NoneParameters> {
 
     @Override
     public int getPriority() {
-        return 0;
+        return BattleCommandPriority.WAIT.getPriority();
     }
 }

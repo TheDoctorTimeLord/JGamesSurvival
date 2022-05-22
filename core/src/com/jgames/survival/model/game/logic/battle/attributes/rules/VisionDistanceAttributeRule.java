@@ -11,11 +11,10 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.A
 import java.util.List;
 
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
-import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
-import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
+import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.ChangedAttributesContext;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.HandlingCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.AbstractProcessedAttribute;
@@ -38,10 +37,10 @@ public class VisionDistanceAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof IntAttribute state) {
+    public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
+        if (context.getChangedAttribute() instanceof IntAttribute state) {
             StateValue headState = StateValue.resolveByOrdinal(state.getValue());
-            IntAttribute visionDistance = battleModel.getAttributes()
+            IntAttribute visionDistance = context.getModel().getAttributes()
                     .getAsContainer(ATTRIBUTES)
                     .get(Attributes.VISION_DISTANCE);
 
@@ -55,9 +54,9 @@ public class VisionDistanceAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processRemovedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof AttributeMarker) {
-            IntAttribute visionDistance = battleModel.getAttributes()
+    public List<AbstractProcessedAttribute> processRemovedAttribute(ChangedAttributesContext context) {
+        if (context.getChangedAttribute() instanceof AttributeMarker) {
+            IntAttribute visionDistance = context.getModel().getAttributes()
                     .getAsContainer(ATTRIBUTES)
                     .getAsInt(VISION_DISTANCE)
                     .setValue(VisionDistance.NONE.ordinal());

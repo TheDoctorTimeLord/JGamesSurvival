@@ -33,8 +33,8 @@ import com.jgames.survival.ui.uiscriptelements.phaseturnpanel.EndHandleTurnButto
 import com.jgames.survival.ui.uiscriptelements.phaseturnpanel.WaitPhaseOrTurnClicked;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
-import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
-import com.jgames.survival.utils.assets.TextureStorage;
+import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;
+import com.jgames.survival.ui.assets.TextureStorage;
 
 public class PhaseAndTurnPanelFactory implements UIFactory {
     private static final int BUTTON_MIDDLE_HEIGHT = 50;

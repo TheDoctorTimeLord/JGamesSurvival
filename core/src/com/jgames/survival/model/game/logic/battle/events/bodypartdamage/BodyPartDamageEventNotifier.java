@@ -26,7 +26,6 @@ public class BodyPartDamageEventNotifier implements PostHandler<BodyPartDamageEv
 
     @Override
     public void handle(BodyPartDamageEvent event) {
-        BodyPartDamageNotification notification = new BodyPartDamageNotification(event);
-        actionRegistrar.registerAction(notification);
+        actionRegistrar.registerAction(event);
     }
 }

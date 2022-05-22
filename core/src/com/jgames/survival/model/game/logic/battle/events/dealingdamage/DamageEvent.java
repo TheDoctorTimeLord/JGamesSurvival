@@ -1,11 +1,12 @@
 package com.jgames.survival.model.game.logic.battle.events.dealingdamage;
 
+import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.battlemodule.core.events.BattleEvent;
 
 /**
  * Событие, описывающее нанесение урона
  */
-public class DamageEvent extends BattleEvent {
+public class DamageEvent extends BattleEvent implements BattleAction {
     private final int attackerId;
     private final int targetId;
     private final int damagePoints;
@@ -44,5 +45,15 @@ public class DamageEvent extends BattleEvent {
      */
     public int getTargetId() {
         return targetId;
+    }
+
+    @Override
+    public String toString() {
+        return "DamageEvent{" +
+                "attackerId=" + attackerId +
+                ", targetId=" + targetId +
+                ", damagePoints=" + damagePoints +
+                ", damageType='" + damageType + '\'' +
+                '}';
     }
 }

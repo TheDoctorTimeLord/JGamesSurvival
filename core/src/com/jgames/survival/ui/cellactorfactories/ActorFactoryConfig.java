@@ -1,5 +1,6 @@
 package com.jgames.survival.ui.cellactorfactories;
 
+import static com.jgames.survival.ui.assets.SimpleTextureStorage.Constants.DEAD_BODY;
 import static com.jgames.survival.ui.constants.HardcodeObjectNames.PERSON;
 import static com.jgames.survival.ui.constants.HardcodeObjectNames.PERSON_HP;
 import static com.jgames.survival.ui.constants.HardcodeObjectNames.WALL;
@@ -10,13 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.badlogic.gdx.utils.Align;
 import com.google.common.collect.ImmutableMap;
 import com.jgames.survival.presenter.core.CellActorFactory;
+import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;
+import com.jgames.survival.ui.assets.TextureStorage;
 import com.jgames.survival.ui.cellactorfactories.texturesfactory.PersonTextureSelector;
 import com.jgames.survival.ui.cellactorfactories.texturesfactory.TexturesFactory;
-import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
-import com.jgames.survival.utils.assets.TextureStorage;
 
 /**
  * Простой конфиг для имен объектов и привязанным к ним фабрик актёров.
@@ -24,9 +24,10 @@ import com.jgames.survival.utils.assets.TextureStorage;
 public class ActorFactoryConfig {
     public static final Map<String, Function<TextureStorage, CellActorFactory>> SPECIAL_ACTOR_FACTORIES_MAP = new
             ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()
-            .put(BACKGROUND, textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.COMMON)))
+            .put(BACKGROUND, textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.CELL_BACKGROUND)))
             .put(TINT, textureStorage -> new DeadObjectTint(textureStorage.createSprite(Constants.COMMON)))
             .put(PERSON_HP, textureStorage -> new HpLabelFactory())
+            .put(DEAD_BODY, textureStorage -> new TextureFactory(textureStorage.createSprite(DEAD_BODY)))
             .build();
 
     public static final Map<String, Function<TextureStorage, CellActorFactory>> ACTOR_FACTORIES_MAP = new
@@ -40,6 +41,6 @@ public class ActorFactoryConfig {
                     ),
                     new PersonTextureSelector()
             ))
-            .put(WALL, textureStorage -> new AlignedLabelFactory("W", Align.center))
+            .put(WALL, textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.WALL)))
             .build();
 }

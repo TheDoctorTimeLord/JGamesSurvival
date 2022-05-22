@@ -2,6 +2,7 @@ package com.jgames.survival.model;
 
 import ru.jengine.beancontainer.dataclasses.ContainerConfiguration;
 import ru.jengine.beancontainer.implementation.JEngineContainer;
+import ru.jengine.utils.Logger;
 
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.api.GameAction;
@@ -11,6 +12,7 @@ import com.jgames.survival.model.api.GameActionHandlersManager;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
 import com.jgames.survival.model.game.modules.MainModule;
 import com.jgames.survival.model.game.presentation.ToGameChangeMappersManager;
+import com.jgames.survival.utils.GdxLogger;
 
 public class MainGameHandler extends AbstractGameHandler implements GameChangeSender {
     private final GameActionHandlersManager actionHandlersManager;
@@ -25,7 +27,9 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
         gameConfiguration = configuration;
 
         gameContainer = new JEngineContainer();
-        gameContainer.initializeCommonContexts(ContainerConfiguration.build(MainModule.class).addAdditionalBean(this));
+        gameContainer.initializeCommonContexts(ContainerConfiguration.build(MainModule.class)
+                .addAdditionalBean(this)
+                .addAdditionalBean(new GdxLogger()));
 
         battleHandler = new GameBattleHandler(gameContainer);
 
@@ -65,6 +69,11 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
         }
 
         gameContainer.stop();
+    }
+
+    @Override
+    public Logger getLogger() {
+        return gameContainer.getBean(Logger.class);
     }
 
     @Override

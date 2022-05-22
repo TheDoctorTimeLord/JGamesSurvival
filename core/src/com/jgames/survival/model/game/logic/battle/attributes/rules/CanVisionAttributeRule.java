@@ -9,8 +9,8 @@ import java.util.List;
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
-import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
+import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.ChangedAttributesContext;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.HandlingCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.AbstractProcessedAttribute;
@@ -30,11 +30,11 @@ public class CanVisionAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof IntAttribute state) {
+    public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
+        if (context.getChangedAttribute() instanceof IntAttribute state) {
             int headState = state.getValue();
             if (StateValue.DESTROYED.isLessOrEquals(headState)) {
-                BattleAttribute canVision = battleModel.getAttributes().
+                BattleAttribute canVision = context.getModel().getAttributes().
                         getAsContainer(Features.FEATURES)
                         .remove(Features.CAN_VISION);
                 return List.of(new RemovedProcessedAttribute(canVision));
@@ -44,7 +44,7 @@ public class CanVisionAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processRemovedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
+    public List<AbstractProcessedAttribute> processRemovedAttribute(ChangedAttributesContext context) {
         return List.of();
     }
 }

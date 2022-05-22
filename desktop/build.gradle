@@ -1,6 +1,6 @@
 sourceCompatibility = 1.17
 sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["../core/assets"]
+sourceSets.main.resources.srcDirs = ["../core/assets", "../core/properties"]
 
 project.ext.mainClassName = "com.jgames.survival.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")

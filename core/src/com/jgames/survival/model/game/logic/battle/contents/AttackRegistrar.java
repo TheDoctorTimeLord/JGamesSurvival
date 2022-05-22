@@ -8,11 +8,13 @@ import ru.jengine.battlemodule.core.state.BattleState;
 
 import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEventHandler;
 import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEventNotifier;
+import com.jgames.survival.model.game.logic.battle.events.deadmodel.DeadDynamicModelHandler;
+import com.jgames.survival.model.game.logic.battle.events.deadmodel.DeadDynamicModelNotifier;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEventHandler;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEventNotifier;
 
 @BattleBeanPrototype
-public class MeleeAttackRegistrar extends AbstractContentRegistrar {
+public class AttackRegistrar extends AbstractContentRegistrar {
     @Override
     protected void registerInt() {
         BattleActionRegistrar actionRegistrar = battleContext.getBattleActionRegistrar();
@@ -22,8 +24,11 @@ public class MeleeAttackRegistrar extends AbstractContentRegistrar {
         registerPostHandler(new BodyPartDamageEventHandler(battleState, dispatcher));
         registerPostHandler(new BodyPartDamageEventNotifier(actionRegistrar));
 
-        registerPostHandler(new DamageEventHandler(battleState, battleContext.getTaskRegistrar(),
-                battleContext.getBattleDynamicObjectsManager(), dispatcher));
+        registerPostHandler(new DamageEventHandler(battleState, dispatcher));
         registerPostHandler(new DamageEventNotifier(actionRegistrar));
+
+        registerPostHandler(new DeadDynamicModelHandler(battleContext.getTaskRegistrar(),
+                battleContext.getBattleDynamicObjectsManager()));
+        registerPostHandler(new DeadDynamicModelNotifier(actionRegistrar));
     }
 }

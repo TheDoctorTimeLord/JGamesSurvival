@@ -1,9 +1,9 @@
 package com.jgames.survival.presenter.filling.changeshandling;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
+import ru.jengine.beancontainer.annotations.Bean;
 
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.api.GameChange;
@@ -13,11 +13,12 @@ import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.utils.pubsub.Publisher;
 import com.jgames.survival.utils.pubsub.Subscriber;
 
+@Bean
 public class BattleActionWrapperHandler implements GameChangeHandler {
     private final List<BattleActionHandler> battleActionHandlers;
 
-    public BattleActionWrapperHandler(BattleActionHandler... battleActionHandlers) {
-        this.battleActionHandlers = Arrays.asList(battleActionHandlers);
+    public BattleActionWrapperHandler(List<BattleActionHandler> battleActionHandlers) {
+        this.battleActionHandlers = battleActionHandlers;
     }
 
     @Override

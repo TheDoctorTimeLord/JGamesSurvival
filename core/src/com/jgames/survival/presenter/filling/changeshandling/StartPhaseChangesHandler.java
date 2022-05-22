@@ -1,5 +1,7 @@
 package com.jgames.survival.presenter.filling.changeshandling;
 
+import ru.jengine.beancontainer.annotations.Bean;
+
 import com.jgames.survival.model.api.GameChange;
 import com.jgames.survival.model.api.changes.phase.NewPhase;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandler;
@@ -8,6 +10,7 @@ import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutat
 import com.jgames.survival.utils.pubsub.Publisher;
 import com.jgames.survival.utils.pubsub.Subscriber;
 
+@Bean
 public class StartPhaseChangesHandler implements GameChangeHandler {
     private GameObjectsMutator personData;
 

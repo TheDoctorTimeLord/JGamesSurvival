@@ -20,8 +20,7 @@ public class GameProperties {
             return value;
         }
 
-        if (value instanceof String) {
-            String v = (String)value;
+        if (value instanceof String v) {
             if (v.equals("true")) {
                 return true;
             } else if (v.equals("false")) {

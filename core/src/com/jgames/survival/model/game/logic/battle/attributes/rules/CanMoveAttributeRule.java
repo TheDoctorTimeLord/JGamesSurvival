@@ -13,6 +13,7 @@ import ru.jengine.battlemodule.core.modelattributes.BattleAttribute;
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.AttributeRule;
+import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.ChangedAttributesContext;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.CodeWithPathPrefixCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.HandlingCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.AbstractProcessedAttribute;
@@ -35,8 +36,10 @@ public class CanMoveAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processPuttedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
-        if (battleAttribute instanceof IntAttribute state) {
+    public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
+        BattleModel battleModel = context.getModel();
+
+        if (context.getChangedAttribute() instanceof IntAttribute state) {
             int legState = state.getValue();
             int anotherLegState = getAnotherLegState(battleModel, legState);
             if (DESTROYED.isLessOrEquals(legState) && DESTROYED.isLessOrEquals(anotherLegState))
@@ -68,7 +71,7 @@ public class CanMoveAttributeRule implements AttributeRule {
     }
 
     @Override
-    public List<AbstractProcessedAttribute> processRemovedAttribute(BattleModel battleModel, BattleAttribute battleAttribute) {
+    public List<AbstractProcessedAttribute> processRemovedAttribute(ChangedAttributesContext context) {
         return List.of();
     }
 }

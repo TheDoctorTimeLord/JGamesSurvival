@@ -2,6 +2,8 @@ package com.jgames.survival.ui.uifactories;
 
 import java.util.List;
 
+import ru.jengine.utils.CollectionUtils;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,7 +20,7 @@ import com.jgames.survival.ui.uiscriptelements.commandpanel.WithPatternPrinter;
 import com.jgames.survival.ui.widgets.CommandButton;
 import com.jgames.survival.ui.widgets.CommandButton.ClickOnCommandButton;
 import com.jgames.survival.ui.widgets.TextListWidget;
-import com.jgames.survival.utils.assets.SimpleTextureStorage.Constants;
+import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;
 
 /**
  * Фабрика, собирающая панель с кнопками команд в пользовательском интерфейсе
@@ -52,7 +54,7 @@ public class CommandPanelFactory implements UIFactory { //TODO добавить 
                         new WaitMapCell(),
                         new WithPatternPrinter(PATTERN, textInformation, state -> {
                             List<Integer> idsOnCell = mapFillingPresenter.getIdsOnCell(state.getMapCell().getCoordinateAsPoint());
-                            return idsOnCell.isEmpty() ? "None" : idsOnCell.get(0).toString();
+                            return idsOnCell.isEmpty() ? "None" : CollectionUtils.getLast(idsOnCell).toString();
                         })
                 ));
 

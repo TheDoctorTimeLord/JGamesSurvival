@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import ru.jengine.beancontainer.annotations.Bean;
+
 import com.badlogic.gdx.utils.Pools;
 import com.jgames.survival.presenter.core.UIAction;
 import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
@@ -15,6 +17,7 @@ import com.jgames.survival.presenter.core.uiscripts.sctipts.UIScript;
 import com.jgames.survival.utils.PoolableDeque;
 import com.jgames.survival.utils.PoolableLinkedDeque;
 
+@Bean
 public class MultipleActiveScriptMachine implements DispatcherUIScriptMachine {
     private final Map<Class<? extends UIAction>, PoolableDeque<ScriptEnvironment>> listeners =
             new ConcurrentHashMap<>();

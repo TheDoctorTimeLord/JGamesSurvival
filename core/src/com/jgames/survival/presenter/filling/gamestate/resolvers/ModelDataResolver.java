@@ -7,4 +7,5 @@ import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 
 public interface ModelDataResolver {
     List<ResolvingContext> resolve(List<GameObject> cellGameObjects);
+    int getPriority();
 }

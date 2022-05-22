@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
+import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator;
@@ -18,6 +19,7 @@ import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.Ty
 import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 
+@Bean
 public class GameObjectsMutator implements PresentingStateModuleMutator {
     private static final List<String> USED_MODULE_NAMES = Arrays.asList(GameObjectsModule.NAME, MapFillingModule.NAME);
 
@@ -59,7 +61,7 @@ public class GameObjectsMutator implements PresentingStateModuleMutator {
         gameObjectsModule.getOrCreateLastObjectState(objectId).addComponent(new HealthComponent(hp));
     }
 
-    public void moveModel(int objectId, Point newPosition) {
+    public void moveObject(int objectId, Point newPosition) {
         GameObject gameObject = gameObjectsModule.getLastObjectState(objectId);
         gameObject.computeIfContains(PositionComponent.class, positionComponent -> {
             Point lastPosition = positionComponent.getPosition();
@@ -81,12 +83,22 @@ public class GameObjectsMutator implements PresentingStateModuleMutator {
         });
     }
 
-    public void damageModel(int modelId, int damagePoints) {
+    public void damageObject(int modelId, int damagePoints) {
         GameObject gameObject = gameObjectsModule.getLastObjectState(modelId);
         gameObject.computeIfContains(HealthComponent.class, healthComponent -> {
             healthComponent.damage(damagePoints);
             gameObject.computeIfContains(PositionComponent.class, positionComponent ->
                     mapFilling.markCellAsUpdated(positionComponent.getPosition()));
+        });
+    }
+
+    public void killObject(int modelId) {
+        GameObject gameObject = gameObjectsModule.getLastObjectState(modelId);
+        gameObject.computeIfContains(HealthComponent.class, healthComponent -> {
+            healthComponent.kill();
+            gameObject.computeIfContains(PositionComponent.class, positionComponent -> {
+                mapFilling.markCellAsUpdated(positionComponent.getPosition());
+            });
         });
     }
 
