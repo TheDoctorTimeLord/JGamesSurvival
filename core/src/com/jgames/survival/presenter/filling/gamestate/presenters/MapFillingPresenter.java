@@ -2,6 +2,7 @@ package com.jgames.survival.presenter.filling.gamestate.presenters;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
@@ -16,4 +17,6 @@ public interface MapFillingPresenter extends ModulePresenter {
     List<Integer> getIdsOnCell(Point point);
 
     void updateToNextPhase();
+
+    Set<Point> getAllMap();
 }

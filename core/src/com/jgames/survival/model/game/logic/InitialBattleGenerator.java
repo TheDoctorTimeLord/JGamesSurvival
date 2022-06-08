@@ -13,10 +13,12 @@ import ru.jengine.battlemodule.core.serviceclasses.Direction;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.serviceclasses.PointPool;
 import ru.jengine.battlemodule.core.state.BattleState;
+import ru.jengine.battlemodule.core.state.BattleStateBuilder;
 import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
 import ru.jengine.utils.RandomUtils;
 
 import com.jgames.survival.model.game.logic.battle.attributes.AttributeGenerator;
+import com.jgames.survival.model.game.logic.battle.limirers.SquareBattleFieldLimiter;
 import com.jgames.survival.model.game.logic.battle.models.Fighter;
 import com.jgames.survival.model.game.logic.battle.models.FighterType;
 import com.jgames.survival.model.game.logic.battle.models.StaticModel;
@@ -62,6 +64,9 @@ public class InitialBattleGenerator extends BattleGenerator {
             staticModels.add(model);
         }
 
-        return new BattleState(staticModels, dynamicModels, battleFieldLimiter);
+        return BattleStateBuilder
+                .createByModels(staticModels, dynamicModels)
+                .battlefieldLimiters(battleFieldLimiter)
+                .build();
     }
 }

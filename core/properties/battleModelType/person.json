@@ -1,0 +1,141 @@
+{
+  "classPath": "com.jgames.survival.model.game.logic.battle.models.FighterType",
+  "objectTypeName":"person",
+  "attributesContainer": {
+    "attributes": {
+      "features": {
+        "code": "features",
+        "path": [],
+        "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+        "attributes": {
+          "canMove": {
+            "code": "canMove",
+            "path": ["features"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker"
+          },
+          "canVision": {
+            "code": "canVision",
+            "path": ["features"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributeMarker"
+          }
+        }
+      },
+      "attributes": {
+        "code": "attributes",
+        "path": [],
+        "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+        "attributes": {
+          "visionDistance": {
+            "code": "visionDistance",
+            "path": ["attributes"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+            "value":2
+          },
+          "moveDistance": {
+            "code": "moveDistance",
+            "path": ["attributes"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+            "value": 3
+          },
+          "hitPoints": {
+            "code": "hitPoints",
+            "path": ["attributes"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+            "value": 16
+          },
+          "meleeDamagePoints": {
+            "code": "meleeDamagePoints",
+            "path": ["attributes"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+            "value": 4
+          }
+        }
+      },
+      "bodyParts": {
+        "code": "bodyParts",
+        "path": [],
+        "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+        "attributes": {
+          "head": {
+            "code": "head",
+            "path": ["bodyParts"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+            "attributes": {
+              "state": {
+                "code": "state",
+                "path": ["bodyParts", "head"],
+                "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+                "value":2
+              }
+            }
+          },
+          "rightLeg": {
+            "code": "rightLeg",
+            "path": ["bodyParts"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+            "attributes": {
+              "state": {
+                "code": "state",
+                "path": ["bodyParts", "rightLeg"],
+                "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+                "value":2
+              }
+            }
+          },
+          "rightArm": {
+            "code": "rightArm",
+            "path": ["bodyParts"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+            "attributes": {
+              "state": {
+                "code": "state",
+                "path": ["bodyParts", "rightArm"],
+                "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+                "value":2
+              }
+            }
+          },
+          "leftArm": {
+            "code": "leftArm",
+            "path": ["bodyParts"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+            "attributes": {
+              "state": {
+                "code": "state",
+                "path": ["bodyParts", "leftArm"],
+                "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+                "value": 2
+              }
+            }
+          },
+          "leftLeg": {
+            "code": "leftLeg",
+            "path": ["bodyParts"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+            "attributes": {
+              "state": {
+                "code": "state",
+                "path": ["bodyParts", "leftLeg"],
+                "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+                "value":2
+              }
+            }
+          },
+          "body": {
+            "code": "body",
+            "path": ["bodyParts"],
+            "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.AttributesBasedAttribute",
+            "attributes": {
+              "state": {
+                "code": "state",
+                "path": ["bodyParts", "body"],
+                "classPath": "ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute",
+                "value": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

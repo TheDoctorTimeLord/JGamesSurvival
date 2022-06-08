@@ -4,18 +4,14 @@ import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.HasDirection;
-import ru.jengine.eventqueue.event.PostHandler;
 
-public class ChangeDirectionEventHandler implements PostHandler<ChangeDirectionEvent> {
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
+
+public class ChangeDirectionEventHandler extends BaseBattlePostHandler<ChangeDirectionEvent> {
     private final BattleState battleState;
 
     public ChangeDirectionEventHandler(BattleState battleState) {
         this.battleState = battleState;
-    }
-
-    @Override
-    public Class<ChangeDirectionEvent> getHandlingEventType() {
-        return ChangeDirectionEvent.class;
     }
 
     @Override

@@ -3,18 +3,14 @@ package com.jgames.survival.model.game.logic.battle.events.move;
 import ru.jengine.battlemodule.core.battlepresenter.BattleActionRegistrar;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
 import ru.jengine.battlemodule.standardfilling.movement.MoveEvent;
-import ru.jengine.eventqueue.event.PostHandler;
 
-public class MoveEventNotifier implements PostHandler<MoveEvent> {
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
+
+public class MoveEventNotifier extends BaseBattlePostHandler<MoveEvent> {
     private final BattleActionRegistrar battleActionRegistrar;
 
     public MoveEventNotifier(BattleActionRegistrar battleActionRegistrar) {
         this.battleActionRegistrar = battleActionRegistrar;
-    }
-
-    @Override
-    public Class<MoveEvent> getHandlingEventType() {
-        return MoveEvent.class;
     }
 
     @Override

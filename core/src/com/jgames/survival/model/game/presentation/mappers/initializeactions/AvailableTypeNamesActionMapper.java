@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.beancontainer.annotations.Bean;
 
-import com.jgames.survival.model.api.GameChange;
-import com.jgames.survival.model.api.changes.initialize.AvailableObjectTypeNames;
+import com.jgames.survival.model.api.interaction.GameChange;
+import com.jgames.survival.model.api.interaction.changes.initialize.AvailableObjectTypeNames;
 import com.jgames.survival.model.game.logic.battle.initialization.AvailableTypeNamesAction;
 import com.jgames.survival.model.game.presentation.mappers.InitializeActionMapper;
 

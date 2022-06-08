@@ -6,8 +6,8 @@ import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 import ru.jengine.beancontainer.annotations.Bean;
 
 import com.badlogic.gdx.Gdx;
-import com.jgames.survival.model.api.GameChange;
-import com.jgames.survival.model.api.changes.BattleActionWrapper;
+import com.jgames.survival.model.api.interaction.GameChange;
+import com.jgames.survival.model.api.interaction.changes.BattleActionWrapper;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandler;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.utils.pubsub.Publisher;

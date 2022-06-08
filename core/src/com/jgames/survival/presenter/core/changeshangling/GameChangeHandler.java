@@ -1,6 +1,6 @@
 package com.jgames.survival.presenter.core.changeshangling;
 
-import com.jgames.survival.model.api.GameChangeListener;
+import com.jgames.survival.model.api.interaction.GameChangeListener;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 
 /**

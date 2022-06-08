@@ -9,7 +9,7 @@ import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
 
 @Bean
-public class GameObjectsModule implements PresentingStateModule<GameObjectsPresenter>, GameObjectsPresenter {
+public class GameObjectsModule implements PresentingStateModule<GameObjectsPresenter>, GameObjectsPresenter, ResettableModule {
     public static final String NAME = "modelData";
 
     private final PhasedFieldWithMap<Integer, GameObject> states =
@@ -35,6 +35,11 @@ public class GameObjectsModule implements PresentingStateModule<GameObjectsPrese
     @Override
     public GameObject getCurrentObjectState(int objectId) {
         return states.getCurrentState(objectId);
+    }
+
+    @Override
+    public void reset() {
+        states.reset();
     }
 
     @Override

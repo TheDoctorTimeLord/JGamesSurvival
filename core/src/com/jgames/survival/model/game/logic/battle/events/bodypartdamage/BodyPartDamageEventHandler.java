@@ -5,15 +5,15 @@ import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
-import ru.jengine.eventqueue.event.PostHandler;
 import ru.jengine.utils.AttributeUtils;
 
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
 import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFindingUtils;
 
 /**
  * Обрабатывает событие BodyPartDamageEvent
  */
-public class BodyPartDamageEventHandler implements PostHandler<BodyPartDamageEvent> {
+public class BodyPartDamageEventHandler extends BaseBattlePostHandler<BodyPartDamageEvent> {
     private final BattleState battleState;
     private final DispatcherBattleWrapper dispatcher;
 
@@ -26,11 +26,6 @@ public class BodyPartDamageEventHandler implements PostHandler<BodyPartDamageEve
     @Override
     public int getPriority() {
         return BattleEventHandlerPriority.HANDLE.getPriority();
-    }
-
-    @Override
-    public Class<BodyPartDamageEvent> getHandlingEventType() {
-        return BodyPartDamageEvent.class;
     }
 
     @Override

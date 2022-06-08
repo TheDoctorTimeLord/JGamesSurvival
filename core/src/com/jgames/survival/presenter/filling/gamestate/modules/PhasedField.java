@@ -55,4 +55,12 @@ public class PhasedField<D> {
     public boolean isLastPhase() {
         return states.size() <= minSize;
     }
+
+    public void reset() {
+        states.clear();
+
+        if (minSize == 1) {
+            duplicateLastState();
+        }
+    }
 }

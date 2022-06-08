@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 
-import com.jgames.survival.model.api.GameChange;
+import com.jgames.survival.model.api.interaction.GameChange;
 
 public interface ActionMapper {
     int getMapperPriority();

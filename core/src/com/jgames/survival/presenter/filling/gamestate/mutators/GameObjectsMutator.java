@@ -1,6 +1,5 @@
 package com.jgames.survival.presenter.filling.gamestate.mutators;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -21,7 +20,7 @@ import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 
 @Bean
 public class GameObjectsMutator implements PresentingStateModuleMutator {
-    private static final List<String> USED_MODULE_NAMES = Arrays.asList(GameObjectsModule.NAME, MapFillingModule.NAME);
+    private static final List<String> USED_MODULE_NAMES = List.of(GameObjectsModule.NAME, MapFillingModule.NAME);
 
     private GameObjectsModule gameObjectsModule;
     private MapFillingModule mapFilling;
@@ -35,10 +34,6 @@ public class GameObjectsMutator implements PresentingStateModuleMutator {
     public void connectWithModule(PresentingStateModule<?>... modules) {
         gameObjectsModule = (GameObjectsModule) modules[0];
         mapFilling = (MapFillingModule) modules[1];
-    }
-
-    public void markCellAsUpdated(Point cellCoordinates) {
-        mapFilling.markCellAsUpdated(cellCoordinates);
     }
 
     public void setPositionData(int objectId, Point startPosition, @Nullable Direction direction) {

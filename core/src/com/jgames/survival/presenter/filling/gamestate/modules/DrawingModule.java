@@ -19,7 +19,7 @@ import com.jgames.survival.ui.assets.TextureStorage;
  * Модуль для хранения фабрик для имён объектов.
  */
 @Bean
-public class DrawingModule implements PresentingStateModule<DrawingModulePresenter>, DrawingModulePresenter {
+public class DrawingModule implements PresentingStateModule<DrawingModulePresenter>, DrawingModulePresenter, ResettableModule {
     public static final String NAME = "drawing";
     private final Map<String, CellActorFactory> cellActorFactoryMap = new HashMap<>();
     private final CellActorFactory defaultFactory;
@@ -54,5 +54,10 @@ public class DrawingModule implements PresentingStateModule<DrawingModulePresent
             Gdx.app.error("TEXTURE_DRAWING", "Error for type [%s] in factory [%s]".formatted(drawingContext, cellActorFactory), e);
             return defaultFactory.create(drawingContext);
         }
+    }
+
+    @Override
+    public void reset() {
+        cellActorFactoryMap.clear();
     }
 }

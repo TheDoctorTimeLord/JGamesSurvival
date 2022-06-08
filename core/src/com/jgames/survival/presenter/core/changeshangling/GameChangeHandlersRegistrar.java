@@ -4,7 +4,7 @@ import java.util.List;
 
 import ru.jengine.beancontainer.annotations.Bean;
 
-import com.jgames.survival.model.api.GameChangeListenerRegistrar;
+import com.jgames.survival.model.api.interaction.GameChangeListenerRegistrar;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 
 @Bean

@@ -3,9 +3,10 @@ package com.jgames.survival.model.game.logic.battle.events.deadmodel;
 import ru.jengine.battlemodule.core.scheduler.SchedulerTaskRegistrar;
 import ru.jengine.battlemodule.core.state.BattleDynamicObjectsManager;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
-import ru.jengine.eventqueue.event.PostHandler;
 
-public class DeadDynamicModelHandler implements PostHandler<DeadDynamicModelEvent> {
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
+
+public class DeadDynamicModelHandler extends BaseBattlePostHandler<DeadDynamicModelEvent> {
     private final SchedulerTaskRegistrar taskRegistrar;
     private final BattleDynamicObjectsManager dynamicObjectsManager;
 
@@ -13,11 +14,6 @@ public class DeadDynamicModelHandler implements PostHandler<DeadDynamicModelEven
             BattleDynamicObjectsManager dynamicObjectsManager) {
         this.taskRegistrar = taskRegistrar;
         this.dynamicObjectsManager = dynamicObjectsManager;
-    }
-
-    @Override
-    public Class<DeadDynamicModelEvent> getHandlingEventType() {
-        return DeadDynamicModelEvent.class;
     }
 
     @Override

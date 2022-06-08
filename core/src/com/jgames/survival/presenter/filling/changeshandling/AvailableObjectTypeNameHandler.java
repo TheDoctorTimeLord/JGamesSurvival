@@ -4,8 +4,8 @@ import java.util.function.Function;
 
 import ru.jengine.beancontainer.annotations.Bean;
 
-import com.jgames.survival.model.api.GameChange;
-import com.jgames.survival.model.api.changes.initialize.AvailableObjectTypeNames;
+import com.jgames.survival.model.api.interaction.GameChange;
+import com.jgames.survival.model.api.interaction.changes.initialize.AvailableObjectTypeNames;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandler;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;

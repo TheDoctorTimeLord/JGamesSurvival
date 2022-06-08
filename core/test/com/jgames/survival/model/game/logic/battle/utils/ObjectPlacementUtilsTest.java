@@ -14,7 +14,7 @@ import ru.jengine.battlemodule.core.serviceclasses.PointPool;
 import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
 import ru.jengine.utils.RandomUtils;
 
-import com.jgames.survival.model.game.logic.SquareBattleFieldLimiter;
+import com.jgames.survival.model.game.logic.battle.limirers.SquareBattleFieldLimiter;
 
 /**
  * Тестирование функционала нахождения координат свободной клетки, находящейся в пределах поля боя,

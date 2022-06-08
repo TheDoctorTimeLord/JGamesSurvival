@@ -2,12 +2,13 @@ package com.jgames.survival.model.game.logic.battle.events.dealingdamage;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleActionRegistrar;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
-import ru.jengine.eventqueue.event.PostHandler;
+
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
 
 /**
  * Отправляет на регистрацию событие DealingDamageEvent
  */
-public class DamageEventNotifier implements PostHandler<DamageEvent> {
+public class DamageEventNotifier extends BaseBattlePostHandler<DamageEvent> {
     private final BattleActionRegistrar actionRegistrar;
 
     public DamageEventNotifier(BattleActionRegistrar actionRegistrar) {
@@ -17,11 +18,6 @@ public class DamageEventNotifier implements PostHandler<DamageEvent> {
     @Override
     public int getPriority() {
         return BattleEventHandlerPriority.RESULT_INFORMATION.getPriority();
-    }
-
-    @Override
-    public Class<DamageEvent> getHandlingEventType() {
-        return DamageEvent.class;
     }
 
     @Override

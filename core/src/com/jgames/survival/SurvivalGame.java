@@ -20,7 +20,7 @@ import com.jgames.survival.model.MainGameHandler;
 import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.presenter.filling.clickactions.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactions.MapCellClickHandler;
-import com.jgames.survival.presenter.filling.clickactions.PhaseOrTurnClickedHandler;
+import com.jgames.survival.presenter.filling.clickactions.ButtonClickedHandler;
 import com.jgames.survival.presenter.modules.PresenterAndUIMainModule;
 import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
@@ -28,6 +28,7 @@ import com.jgames.survival.ui.uifactories.CommandPanelFactory;
 import com.jgames.survival.ui.uifactories.LeftTopInformationFactory;
 import com.jgames.survival.ui.uifactories.MapTableFactory;
 import com.jgames.survival.ui.uifactories.PhaseAndTurnPanelFactory;
+import com.jgames.survival.ui.uifactories.SaveAndLoadPanelFactory;
 import com.jgames.survival.ui.uiscriptelements.mappanel.UpdateMapAction;
 import com.jgames.survival.utils.GameProperties;
 
@@ -60,13 +61,15 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
         gameHandler.onStart();
 
         DispatcherUIScriptMachine scriptMachine = container.getBean(DispatcherUIScriptMachine.class);
+        ButtonClickedHandler buttonClickedHandler = new ButtonClickedHandler(scriptMachine);
 
         UIComponentRegistrar componentRegistrar = container.getBean(UIComponentRegistrar.class);
         componentRegistrar
                 .registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
                 .registerComponent(new LeftTopInformationFactory(300, 300))
                 .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
-                .registerComponent(new PhaseAndTurnPanelFactory(new PhaseOrTurnClickedHandler(scriptMachine)));
+                .registerComponent(new PhaseAndTurnPanelFactory(buttonClickedHandler))
+                .registerComponent(new SaveAndLoadPanelFactory(buttonClickedHandler));
 
         UIElements uiElements = componentRegistrar.createInterface();
         scriptMachine.dispatch(new UpdateMapAction(), action -> {});

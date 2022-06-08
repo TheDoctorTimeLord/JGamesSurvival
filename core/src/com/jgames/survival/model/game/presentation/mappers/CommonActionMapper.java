@@ -4,8 +4,8 @@ import java.util.stream.Stream;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleAction;
 
-import com.jgames.survival.model.api.GameChange;
-import com.jgames.survival.model.api.changes.BattleActionWrapper;
+import com.jgames.survival.model.api.interaction.GameChange;
+import com.jgames.survival.model.api.interaction.changes.BattleActionWrapper;
 
 public abstract class CommonActionMapper implements ActionMapper {
     @Override

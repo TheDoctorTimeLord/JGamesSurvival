@@ -14,7 +14,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.GameChangeSender;
-import com.jgames.survival.model.api.GameChange;
+import com.jgames.survival.model.api.interaction.GameChange;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
 import com.jgames.survival.model.game.presentation.ToGameChangeMapper;
 

@@ -5,10 +5,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import ru.jengine.utils.Logger;
 
-import com.jgames.survival.model.api.GameAction;
-import com.jgames.survival.model.api.GameChange;
-import com.jgames.survival.model.api.GameChangeListener;
-import com.jgames.survival.model.api.GameChangeListenerRegistrar;
+import com.jgames.survival.model.api.interaction.GameAction;
+import com.jgames.survival.model.api.interaction.GameChange;
+import com.jgames.survival.model.api.interaction.GameChangeListener;
+import com.jgames.survival.model.api.interaction.GameChangeListenerRegistrar;
 import com.jgames.survival.utils.pubsub.Publisher;
 
 public abstract class AbstractGameHandler extends Thread implements GameActionSender, GameChangeListenerRegistrar {

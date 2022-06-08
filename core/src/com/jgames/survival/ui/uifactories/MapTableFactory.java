@@ -1,7 +1,5 @@
 package com.jgames.survival.ui.uifactories;
 
-import ru.jengine.battlemodule.core.serviceclasses.PointPool;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,13 +8,13 @@ import com.jgames.survival.presenter.core.uiscripts.EmptyScriptState;
 import com.jgames.survival.presenter.core.uiscripts.UIScriptMachine;
 import com.jgames.survival.presenter.core.uiscripts.sctipts.CyclicUIScript;
 import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
-import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
+import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
-import com.jgames.survival.presenter.filling.gamestate.mutators.GameObjectsMutator;
+import com.jgames.survival.presenter.filling.gamestate.mutators.MapFillingMutator;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
-import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
@@ -50,9 +48,9 @@ public class MapTableFactory implements UIFactory {
         NameObjectResolvingPresenter nameObjectResolvingPresenter = gameState.getModulePresenter(NameObjectResolvingModule.NAME);
         DrawingModulePresenter drawingModulePresenter = gameState.getModulePresenter(DrawingModule.NAME);
 
-        GameObjectsMutator gameObjectsMutator = gameState.getModuleMutator(GameObjectsMutator.class);
+        MapFillingMutator mapFillingMutator = gameState.getModuleMutator(MapFillingMutator.class);
 
-        globalMap = createGlobalMap(gameObjectsMutator);
+        globalMap = createGlobalMap(mapFillingMutator);
 
         UIScriptMachine scriptMachine = uiElements.getScriptMachine();
         scriptMachine.registerScript(new CyclicUIScript<>(GLOBAL_MAP_UPDATE_SCRIPT_NAME, new EmptyScriptState(),
@@ -70,13 +68,14 @@ public class MapTableFactory implements UIFactory {
         mapTableScrollableWrapper.setFillParent(true);
     }
 
-    private GlobalMapWrapper<MapCell> createGlobalMap(GameObjectsMutator gameObjectsMutator) {
+    private GlobalMapWrapper<MapCell> createGlobalMap(MapFillingMutator mapFillingMutator) {
         Table mapTable = new Table();
 
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
-                mapTable.add(new MapCell(x, y, cellCallback));
-                gameObjectsMutator.markCellAsUpdated(PointPool.obtain(x, y));
+                MapCell mapCell = new MapCell(x, y, cellCallback);
+                mapTable.add(mapCell);
+                mapFillingMutator.addMapCellItem(mapCell.getCoordinateAsPoint());
             }
             mapTable.row();
         }

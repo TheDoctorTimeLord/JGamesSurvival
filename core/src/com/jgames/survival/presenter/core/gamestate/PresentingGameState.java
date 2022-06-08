@@ -8,6 +8,8 @@ import ru.jengine.beancontainer.annotations.Bean;
 
 @Bean
 public class PresentingGameState {
+    public static final String ALL_MODULES_CODE = "ALL MODULES";
+
     private final Map<String, PresentingStateModule<?>> modules = new HashMap<>();
     private final Map<Class<? extends PresentingStateModuleMutator>, PresentingStateModuleMutator> moduleMutators =
             new HashMap<>();
@@ -35,13 +37,16 @@ public class PresentingGameState {
     }
 
     public PresentingGameState connectMutatorsWithModules() {
-        moduleMutators.values().forEach(mutator ->
-                mutator.connectWithModule(
-                        mutator.getUsedModuleNames().stream()
-                                .map(modules::get)
-                                .toArray(PresentingStateModule[]::new)
-                )
-        );
+        moduleMutators.values().forEach(mutator -> {
+            List<String> usedModuleNames = mutator.getUsedModuleNames();
+            PresentingStateModule<?>[] usedModules = usedModuleNames.contains(ALL_MODULES_CODE)
+                    ? modules.values().toArray(new PresentingStateModule[0])
+                    : usedModuleNames.stream()
+                        .map(modules::get)
+                        .toArray(PresentingStateModule[]::new);
+
+            mutator.connectWithModule(usedModules);
+        });
 
         return this;
     }

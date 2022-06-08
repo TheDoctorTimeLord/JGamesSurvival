@@ -2,18 +2,14 @@ package com.jgames.survival.model.game.logic.battle.events.changedirection;
 
 import ru.jengine.battlemodule.core.battlepresenter.BattleActionRegistrar;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
-import ru.jengine.eventqueue.event.PostHandler;
 
-public class ChangeDirectionEventNotifier implements PostHandler<ChangeDirectionEvent> {
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
+
+public class ChangeDirectionEventNotifier extends BaseBattlePostHandler<ChangeDirectionEvent> {
     private final BattleActionRegistrar battleActionRegistrar;
 
     public ChangeDirectionEventNotifier(BattleActionRegistrar battleActionRegistrar) {
         this.battleActionRegistrar = battleActionRegistrar;
-    }
-
-    @Override
-    public Class<ChangeDirectionEvent> getHandlingEventType() {
-        return ChangeDirectionEvent.class;
     }
 
     @Override

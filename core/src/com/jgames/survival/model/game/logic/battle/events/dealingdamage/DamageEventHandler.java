@@ -4,15 +4,15 @@ import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.BattleEventHandlerPriority;
-import ru.jengine.eventqueue.event.PostHandler;
 
+import com.jgames.survival.model.game.logic.battle.events.BaseBattlePostHandler;
 import com.jgames.survival.model.game.logic.battle.events.deadmodel.DeadDynamicModelEvent;
 import com.jgames.survival.model.game.logic.battle.models.HasHealth;
 
 /**
  * Обрабатывает событие DealingDamageEvent
  */
-public class DamageEventHandler implements PostHandler<DamageEvent> {
+public class DamageEventHandler extends BaseBattlePostHandler<DamageEvent> {
     private final BattleState battleState;
     private final DispatcherBattleWrapper dispatcher;
 
@@ -25,11 +25,6 @@ public class DamageEventHandler implements PostHandler<DamageEvent> {
     @Override
     public int getPriority() {
         return BattleEventHandlerPriority.HANDLE.getPriority();
-    }
-
-    @Override
-    public Class<DamageEvent> getHandlingEventType() {
-        return DamageEvent.class;
     }
 
     @Override

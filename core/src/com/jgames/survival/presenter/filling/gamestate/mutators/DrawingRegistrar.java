@@ -18,6 +18,11 @@ public class DrawingRegistrar implements PresentingStateModuleMutator {
     private static final List<String> USED_MODULE_NAMES = Collections.singletonList(DrawingModule.NAME);
     private DrawingModule drawingModule;
 
+    @Override
+    public void connectWithModule(PresentingStateModule<?>... modules) {
+        drawingModule = (DrawingModule) modules[0];
+    }
+
     /**
      * Присоединить CellActorFactory к DrawingModule.
      */
@@ -28,10 +33,5 @@ public class DrawingRegistrar implements PresentingStateModuleMutator {
     @Override
     public List<String> getUsedModuleNames() {
         return USED_MODULE_NAMES;
-    }
-
-    @Override
-    public void connectWithModule(PresentingStateModule<?>... modules) {
-        drawingModule = (DrawingModule) modules[0];
     }
 }
