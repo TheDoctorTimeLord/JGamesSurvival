@@ -40,7 +40,7 @@ public class SaveAndLoadPanelFactory implements UIFactory {
     public void prepareComponents(UIElements uiElements) {
         TextureStorage storage = uiElements.getTextureStorage();
 
-        NinePatch buttonsBackground = storage.createNinePatch(Constants.COMMON);
+        NinePatch buttonsBackground = storage.createNinePatch(Constants.BUTTON_BACKGROUND);
         buttonsBackground.setMiddleHeight(BUTTON_MIDDLE_HEIGHT);
         buttonsBackground.setMiddleWidth(BUTTON_MIDDLE_WIDTH);
 

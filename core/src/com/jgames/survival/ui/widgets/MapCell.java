@@ -12,14 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MapCell extends Stack {
-    private final int row;
-    private final int column;
+    private final Point tableCoordinate;
+    private final Point logicCoordinate;
 
-    public MapCell(int row, int column, ClickOnMapCell callback) {
+    public MapCell(Point logicOffset, int row, int column, ClickOnMapCell callback) {
         super();
         setTouchable(Touchable.enabled);
-        this.row = row;
-        this.column = column;
+
+        this.tableCoordinate = PointPool.obtain(row, column);
+        this.logicCoordinate = tableCoordinate.add(logicOffset);
 
         addListener(new ClickListener() {
             @Override
@@ -35,15 +36,15 @@ public class MapCell extends Stack {
     }
 
     public int getColumn() {
-        return column;
+        return tableCoordinate.getY();
     }
 
     public int getRow() {
-        return row;
+        return tableCoordinate.getX();
     }
 
     public Point getCoordinateAsPoint() {
-        return PointPool.obtain(row, column);
+        return logicCoordinate;
     }
 
     public MapCell clearCell() {

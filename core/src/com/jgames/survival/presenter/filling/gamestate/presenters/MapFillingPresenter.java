@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import ru.jengine.battlemodule.core.serviceclasses.Point;
+import ru.jengine.utils.Pair;
 
 import com.jgames.survival.presenter.core.gamestate.ModulePresenter;
 
 public interface MapFillingPresenter extends ModulePresenter {
+    Pair<Point, Point> getBattlefieldRectangleCoordinate();
+
     Collection<Point> getUpdatedCells();
 
     /**
@@ -18,5 +21,5 @@ public interface MapFillingPresenter extends ModulePresenter {
 
     void updateToNextPhase();
 
-    Set<Point> getAllMap();
+    Set<Point> getBattlefieldCells();
 }

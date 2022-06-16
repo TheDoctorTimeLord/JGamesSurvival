@@ -48,7 +48,7 @@ public class PhaseAndTurnPanelFactory implements UIFactory {
     public void prepareComponents(UIElements uiElements) {
         TextureStorage storage = uiElements.getTextureStorage();
 
-        buttonsBackground = storage.createNinePatch(Constants.COMMON);
+        buttonsBackground = storage.createNinePatch(Constants.BUTTON_BACKGROUND);
         buttonsBackground.setMiddleHeight(BUTTON_MIDDLE_HEIGHT);
         buttonsBackground.setMiddleWidth(BUTTON_MIDDLE_WIDTH);
 

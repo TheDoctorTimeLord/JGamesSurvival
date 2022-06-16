@@ -31,7 +31,7 @@ public class MapFillingMutator implements PresentingStateModuleMutator {
     }
 
     public void markAllMapAsUpdated() {
-        for (Point point : mapFillingModule.getAllMap()) {
+        for (Point point : mapFillingModule.getBattlefieldCells()) {
             mapFillingModule.markCellAsUpdated(point);
         }
     }

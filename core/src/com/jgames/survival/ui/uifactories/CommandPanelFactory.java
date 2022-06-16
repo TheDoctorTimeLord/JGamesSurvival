@@ -39,7 +39,7 @@ public class CommandPanelFactory implements UIFactory { //TODO добавить 
 
     @Override
     public void prepareComponents(UIElements uiElements) {
-        TextureRegion region = uiElements.getTextureStorage().createSprite(Constants.COMMON);
+        TextureRegion region = uiElements.getTextureStorage().createSprite(Constants.BUTTON_BACKGROUND);
         commandPanel = new Table();
 
         MapFillingPresenter mapFillingPresenter = uiElements.getPresentingGameState().getModulePresenter(MapFillingModule.NAME);

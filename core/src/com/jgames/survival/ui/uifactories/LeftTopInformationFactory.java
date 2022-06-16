@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.jgames.survival.ui.UIElements;
 import com.jgames.survival.ui.UIFactory;
+import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;
 import com.jgames.survival.ui.widgets.TextListWidget;
 
 public class LeftTopInformationFactory implements UIFactory {
@@ -36,7 +37,7 @@ public class LeftTopInformationFactory implements UIFactory {
 
     @Override
     public void prepareComponents(UIElements uiElements) {
-        NinePatch backgroundNinePatch = uiElements.getTextureStorage().createNinePatch("common");
+        NinePatch backgroundNinePatch = uiElements.getTextureStorage().createNinePatch(Constants.BUTTON_BACKGROUND);
 
         NinePatch buttonBackground = new NinePatch(backgroundNinePatch);
         buttonBackground.setMiddleHeight(5);

@@ -65,7 +65,7 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
         UIComponentRegistrar componentRegistrar = container.getBean(UIComponentRegistrar.class);
         componentRegistrar
-                .registerComponent(new MapTableFactory(5, 5, new MapCellClickHandler(scriptMachine)))
+                .registerComponent(new MapTableFactory(new MapCellClickHandler(scriptMachine)))
                 .registerComponent(new LeftTopInformationFactory(300, 300))
                 .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
                 .registerComponent(new PhaseAndTurnPanelFactory(buttonClickedHandler))

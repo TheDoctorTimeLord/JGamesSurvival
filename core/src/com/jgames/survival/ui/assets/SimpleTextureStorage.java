@@ -11,8 +11,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 @Bean
 public class SimpleTextureStorage implements TextureStorage {
-    private static final int BOARD_SIZE = 4;
+    private static final int BOARD_SIZE = 8;
 
+    private final Texture buttonBackground;
     private final Texture boardingTexture;
     private final Texture cellBackground;
     private final Texture deadBody;
@@ -22,6 +23,7 @@ public class SimpleTextureStorage implements TextureStorage {
 
     public SimpleTextureStorage() {
         boardingTexture = new Texture("cell.png");
+        buttonBackground = new Texture("backgroundButton.png");
 
         cellBackground = new Texture("celldr.png");
         deadBody = new Texture("deadbody.png");
@@ -33,8 +35,8 @@ public class SimpleTextureStorage implements TextureStorage {
                 new Texture("personDowndr.png")
         };
 
-        createdSprites.put(Constants.DEFAULT, new Sprite(boardingTexture));
         createdSprites.put(Constants.COMMON, new Sprite(boardingTexture));
+        createdSprites.put(Constants.BUTTON_BACKGROUND, new Sprite(buttonBackground));
         createdSprites.put(Constants.CELL_BACKGROUND, new Sprite(cellBackground));
         createdSprites.put(Constants.WALL, new Sprite(wall));
         createdSprites.put(Constants.DEAD_BODY, new Sprite(deadBody));
@@ -64,6 +66,7 @@ public class SimpleTextureStorage implements TextureStorage {
     @Override
     public void dispose() {
         boardingTexture.dispose();
+        buttonBackground.dispose();
         cellBackground.dispose();
         deadBody.dispose();
         wall.dispose();
@@ -75,6 +78,7 @@ public class SimpleTextureStorage implements TextureStorage {
 
     public interface Constants {
         String COMMON = "common";
+        String BUTTON_BACKGROUND = "buttonBackground";
         String CELL_BACKGROUND = "cellBackground";
         String WALL = "wall";
         String DEAD_BODY = "deadBody";
@@ -82,6 +86,5 @@ public class SimpleTextureStorage implements TextureStorage {
         String PERSON_RIGHT = "personRight";
         String PERSON_DOWN = "personDown";
         String PERSON_LEFT = "personLeft";
-        String DEFAULT = "default";
     }
 }

@@ -65,7 +65,7 @@ public class MultipleActiveScriptMachine implements DispatcherUIScriptMachine {
                     .filter(env -> !handledScript.equals(env))
                     .filter(env -> env.script.isActive())
                     .forEach(env -> {
-                        env.needDeleteListeners = env.script.getWaitedActions();
+                        env.fillNeedDeleteListeners();
                         if (env.script.rollback(action)) {
                             changeListeners(env, action, false);
                         }
@@ -97,6 +97,10 @@ public class MultipleActiveScriptMachine implements DispatcherUIScriptMachine {
                     .findFirst()
                     .orElse(null);
             availableScripts.remove(scriptEnvironment);
+            if (scriptEnvironment != null) {
+                scriptEnvironment.fillNeedDeleteListeners();
+                removeAllOldListeners(scriptEnvironment);
+            }
         }
     }
 
@@ -132,6 +136,10 @@ public class MultipleActiveScriptMachine implements DispatcherUIScriptMachine {
 
         private ScriptEnvironment(UIScript script) {
             this.script = script;
+        }
+
+        public void fillNeedDeleteListeners() {
+            needDeleteListeners = script.getWaitedActions();
         }
     }
 

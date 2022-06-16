@@ -1,5 +1,8 @@
 package com.jgames.survival.ui.uifactories;
 
+import ru.jengine.battlemodule.core.serviceclasses.Point;
+import ru.jengine.utils.Pair;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -11,7 +14,6 @@ import com.jgames.survival.presenter.filling.gamestate.modules.DrawingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.NameObjectResolvingModule;
-import com.jgames.survival.presenter.filling.gamestate.mutators.MapFillingMutator;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
@@ -27,16 +29,12 @@ import com.jgames.survival.ui.widgets.MapCell.ClickOnMapCell;
 public class MapTableFactory implements UIFactory {
     private static final String GLOBAL_MAP_UPDATE_SCRIPT_NAME = "globalMapUpdate";
 
-    private final int width;
-    private final int height;
     private final ClickOnMapCell cellCallback;
     private GlobalMapWrapper<MapCell> globalMap;
 
     private ScrollPane mapTableScrollableWrapper;
 
-    public MapTableFactory(int width, int height, ClickOnMapCell cellCallback) {
-        this.width = width;
-        this.height = height;
+    public MapTableFactory(ClickOnMapCell cellCallback) {
         this.cellCallback = cellCallback;
     }
 
@@ -48,9 +46,7 @@ public class MapTableFactory implements UIFactory {
         NameObjectResolvingPresenter nameObjectResolvingPresenter = gameState.getModulePresenter(NameObjectResolvingModule.NAME);
         DrawingModulePresenter drawingModulePresenter = gameState.getModulePresenter(DrawingModule.NAME);
 
-        MapFillingMutator mapFillingMutator = gameState.getModuleMutator(MapFillingMutator.class);
-
-        globalMap = createGlobalMap(mapFillingMutator);
+        globalMap = createGlobalMap(mapFillingPresenter);
 
         UIScriptMachine scriptMachine = uiElements.getScriptMachine();
         scriptMachine.registerScript(new CyclicUIScript<>(GLOBAL_MAP_UPDATE_SCRIPT_NAME, new EmptyScriptState(),
@@ -59,8 +55,6 @@ public class MapTableFactory implements UIFactory {
         ));
 
         createGlobalMapScrollableWrapper(globalMap);
-
-        scriptMachine.deleteScript(GLOBAL_MAP_UPDATE_SCRIPT_NAME);
     }
 
     private void createGlobalMapScrollableWrapper(GlobalMapWrapper<MapCell> mapTable) {
@@ -68,14 +62,18 @@ public class MapTableFactory implements UIFactory {
         mapTableScrollableWrapper.setFillParent(true);
     }
 
-    private GlobalMapWrapper<MapCell> createGlobalMap(MapFillingMutator mapFillingMutator) {
+    private GlobalMapWrapper<MapCell> createGlobalMap(MapFillingPresenter mapFillingPresenter) {
+        Pair<Point, Point> rectangle = mapFillingPresenter.getBattlefieldRectangleCoordinate();
+        Point offset = rectangle.getKey();
+        int width = rectangle.getValue().getX() - offset.getX() + 1;
+        int height = rectangle.getValue().getY() - offset.getY() + 1;
+
         Table mapTable = new Table();
 
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
-                MapCell mapCell = new MapCell(x, y, cellCallback);
+                MapCell mapCell = new MapCell(offset, x, y, cellCallback);
                 mapTable.add(mapCell);
-                mapFillingMutator.addMapCellItem(mapCell.getCoordinateAsPoint());
             }
             mapTable.row();
         }
