@@ -15,12 +15,10 @@ import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.utils.RandomUtils;
 
+import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.MeleeAttackCommand;
-import com.jgames.survival.model.game.logic.battle.commands.meleeattack.MeleeAttackParameters;
 import com.jgames.survival.model.game.logic.battle.commands.move.MoveCommand;
-import com.jgames.survival.model.game.logic.battle.commands.move.MoveParameters;
 import com.jgames.survival.model.game.logic.battle.commands.rangedattack.RangedAttack;
-import com.jgames.survival.model.game.logic.battle.commands.rangedattack.RangedAttackParameters;
 import com.jgames.survival.model.game.logic.battle.commands.waiting.WaitingCommand;
 
 @BattleBeanPrototype
@@ -60,25 +58,25 @@ public class FighterBehavior implements Behavior {
         }
 
         if (meleeAttackCommand != null) {
-            MeleeAttackParameters parametersTemplate = meleeAttackCommand.createParametersTemplate();
-            BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getEnemies());
-            parametersTemplate.selectEnemy(selected);
+            SelectionFromSetParameters<BattleModel> parametersTemplate = meleeAttackCommand.createParametersTemplate();
+            BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getElements());
+            parametersTemplate.selectModel(selected);
 
             return new BattleCommandPerformElement<>(characterId, meleeAttackCommand, parametersTemplate);
         }
 
         if (rangedAttack != null) {
-            RangedAttackParameters parametersTemplate = rangedAttack.createParametersTemplate();
-            BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getVisibleModels());
-            parametersTemplate.selectEnemy(selected);
+            SelectionFromSetParameters<BattleModel> parametersTemplate = rangedAttack.createParametersTemplate();
+            BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getElements());
+            parametersTemplate.selectModel(selected);
 
             return new BattleCommandPerformElement<>(characterId, rangedAttack, parametersTemplate);
         }
 
         if (moveCommand != null) {
-            MoveParameters parametersTemplate = moveCommand.createParametersTemplate();
-            Point selected = RandomUtils.chooseInCollection(parametersTemplate.getAvailablePositions());
-            parametersTemplate.setSelectedPosition(selected);
+            SelectionFromSetParameters<Point> parametersTemplate = moveCommand.createParametersTemplate();
+            Point selected = RandomUtils.chooseInCollection(parametersTemplate.getElements());
+            parametersTemplate.selectModel(selected);
 
             return new BattleCommandPerformElement<>(characterId, moveCommand, parametersTemplate);
         }

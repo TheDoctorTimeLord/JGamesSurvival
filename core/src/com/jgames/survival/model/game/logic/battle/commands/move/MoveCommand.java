@@ -15,13 +15,14 @@ import ru.jengine.battlemodule.standardfilling.movement.CanMoved;
 import ru.jengine.battlemodule.standardfilling.movement.MoveEvent;
 
 import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
+import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 import com.jgames.survival.model.game.logic.battle.events.changedirection.ChangeDirectionEvent;
 import com.jgames.survival.utils.MoveUtils;
 
 /**
  * Описывает команду перемещения, которую будет исполнять динамический объект.
  */
-public class MoveCommand implements BattleCommand<MoveParameters> {
+public class MoveCommand implements BattleCommand<SelectionFromSetParameters<Point>> {
     private final Set<Point> availablePositions;
 
     public MoveCommand(Set<Point> availablePositions) {
@@ -32,8 +33,8 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
      * Создаёт шаблон параметров команды, который нужно заполнить поведению, исполняющему эту команду.
      */
     @Override
-    public MoveParameters createParametersTemplate() {
-        return new MoveParameters(availablePositions);
+    public SelectionFromSetParameters<Point> createParametersTemplate() {
+        return new SelectionFromSetParameters<>(availablePositions);
     }
 
     /**
@@ -56,14 +57,14 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
      * @param moveParameters параметры команды перемещения
      */
     @Override
-    public void perform(BattleModel model, BattleContext battleContext, MoveParameters moveParameters) {
+    public void perform(BattleModel model, BattleContext battleContext, SelectionFromSetParameters<Point> moveParameters) {
         BattleState battleState = battleContext.getBattleState();
         if (isExecutionParametersCorrect(moveParameters, battleState) && checkCanMove(model))
         {
             CanMoved canMoved = (CanMoved)model;
             Direction oldDirection = canMoved.getDirection();
             Point oldPosition = canMoved.getPosition();
-            Point newPosition = moveParameters.getSelectedPosition();
+            Point newPosition = moveParameters.getSelectedElement();
             Direction newDirection = getChangedDirection(oldPosition, newPosition, oldDirection);
 
             DispatcherBattleWrapper dispatcher = battleContext.getDispatcher();
@@ -83,9 +84,9 @@ public class MoveCommand implements BattleCommand<MoveParameters> {
      * @param moveParameters параметры команды перемещения
      * @param battleState хранит всю необходимую информацию о текущем состоянии боя
      */
-    private static boolean isExecutionParametersCorrect(MoveParameters moveParameters, BattleState battleState) {
-        Point selectedPoint = moveParameters.getSelectedPosition();
-        return moveParameters.getAvailablePositions().contains(selectedPoint) &&
+    private static boolean isExecutionParametersCorrect(SelectionFromSetParameters<Point> moveParameters, BattleState battleState) {
+        Point selectedPoint = moveParameters.getSelectedElement();
+        return moveParameters.getElements().contains(selectedPoint) &&
                 isAvailablePoint(selectedPoint, battleState);
     }
 

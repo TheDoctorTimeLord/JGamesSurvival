@@ -1,9 +1,6 @@
 package com.jgames.survival.model.game.logic.battle.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
@@ -26,14 +23,14 @@ public class ObjectPlacementUtilsTest {
             new SquareBattleFieldLimiter(PointPool.obtain(0, 0), MAP_SIZE);
     @Test
     public void allCellsOccupiedTest() {
-        Map<Point, List<Integer>> mapPosition = generateAllPositions();
+        Set<Point> mapPosition = battleFieldLimiter.getPointsInBound();;
         Point resultPoint = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
         Assertions.assertNull(resultPoint);
     }
 
     @Test
     public void onlyOneCellFreeTest() {
-        Map<Point, List<Integer>> mapPosition = generateAllPositions();
+        Set<Point> mapPosition = battleFieldLimiter.getPointsInBound();
         Point[] freePoint = gerFreeRandomPoints(mapPosition, 1);
         Point resultPoint = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
         Assertions.assertEquals(freePoint[0], resultPoint);
@@ -41,7 +38,7 @@ public class ObjectPlacementUtilsTest {
 
     @Test
     public void allCellsFreeTest() {
-        Map<Point, List<Integer>> mapPosition = new HashMap<>();
+        Set<Point> mapPosition = new HashSet<>();
         Point resultPoint = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
         assert resultPoint != null;
         Assertions.assertTrue(battleFieldLimiter.inBound(resultPoint));
@@ -49,7 +46,7 @@ public class ObjectPlacementUtilsTest {
 
     @Test
     public void twoCellsAreFreeTest() {
-        Map<Point, List<Integer>> mapPosition = generateAllPositions();
+        Set<Point> mapPosition = battleFieldLimiter.getPointsInBound();
         Point[] freePoints = gerFreeRandomPoints(mapPosition, 2);
         Point resultPoint = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
         Assertions.assertTrue(freePoints[0].equals(resultPoint)
@@ -58,31 +55,17 @@ public class ObjectPlacementUtilsTest {
 
     @Test
     public void isFreeCellTest() {
-        Map<Point, List<Integer>> mapPosition = generateSeveralPositions(10);
+        Set<Point> mapPosition = generateSeveralPositions(10);
         Point resultPoint = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
-        Assertions.assertFalse(mapPosition.containsKey(resultPoint));
-    }
-
-    /**
-     * Возвращает карту, на всех точках которой расположены объекты битвы.
-     */
-    private static Map<Point, List<Integer>> generateAllPositions() {
-        Map<Point, List<Integer>> mapPosition = new HashMap<>();
-        Set<Point> points = battleFieldLimiter.getPointsInBound();
-        int modelId = 1;
-        for (Point point : points) {
-            mapPosition.computeIfAbsent(point, p -> new ArrayList<>()).add(modelId);
-            modelId++;
-        }
-        return mapPosition;
+        Assertions.assertFalse(mapPosition.contains(resultPoint));
     }
 
     /**
      * Возвращает карту, на некоторых точках которой отсутсвуют объекты битвы.
      * @param count количество точек, на которых должны отсутсвовать объекты битвы
      */
-    private static Map<Point, List<Integer>> generateSeveralPositions(int count) {
-        Map<Point, List<Integer>> mapPosition = generateAllPositions();
+    private static Set<Point> generateSeveralPositions(int count) {
+        Set<Point> mapPosition = battleFieldLimiter.getPointsInBound();;
         gerFreeRandomPoints(mapPosition, count);
         return mapPosition;
     }
@@ -92,13 +75,13 @@ public class ObjectPlacementUtilsTest {
      * @param mapPosition карта, которая описывает расположение объектов на поле боя
      * @param count количество точкек, на которых должны отсутсвовать объекты битвы
      */
-    private static Point[] gerFreeRandomPoints(Map<Point, List<Integer>> mapPosition, int count) {
+    private static Point[] gerFreeRandomPoints(Set<Point> mapPosition, int count) {
         Point[] freePoints = new Point[count];
         int rightBound = count % (MAP_SIZE * MAP_SIZE);
         if (rightBound == 0)
             rightBound += 1;
         for (int i = 0; i < rightBound; i++) {
-            freePoints[i] = RandomUtils.chooseInCollection(mapPosition.keySet());
+            freePoints[i] = RandomUtils.chooseInCollection(mapPosition);
             mapPosition.remove(freePoints[i]);
         }
         return freePoints;

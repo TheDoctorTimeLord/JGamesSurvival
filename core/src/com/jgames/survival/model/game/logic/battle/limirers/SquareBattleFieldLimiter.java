@@ -44,7 +44,7 @@ public class SquareBattleFieldLimiter implements BattlefieldLimiter {
 
         for (int x = 0; x < side; x++) {
             for (int y = 0; y < side; y++) {
-                inBound.add(PointPool.obtain(x, y));
+                inBound.add(PointPool.obtain(x + leftBottomVertex.getX(), y + leftBottomVertex.getY()));
             }
         }
 

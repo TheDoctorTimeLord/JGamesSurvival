@@ -25,10 +25,10 @@ import ru.jengine.battlemodule.standardfilling.visible.VisionInformationService;
 import ru.jengine.beancontainer.annotations.Bean;
 
 @Bean
-public class RangedAttackFactory implements BattleCommandFactory<RangedAttackParameters, RangedAttack> {
+public class RangedAttackFactory implements BattleCommandFactory<SelectionFromSetParameters<BattleModel>, RangedAttack> {
     @Override
     public boolean canExecute(BattleModel model, BattleContext battleContext) {
-        return true;
+        return model instanceof HasVision;
     }
 
     @Override

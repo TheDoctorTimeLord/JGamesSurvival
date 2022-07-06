@@ -8,7 +8,7 @@ import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
 import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
-import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEvent;
+import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEvent;
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies.ChooseDamagedBodyPartStrategy;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageType;
@@ -17,25 +17,25 @@ import com.jgames.survival.model.game.logic.battle.models.CanHit;
 /**
  * Описывает команду ближнего боя, которую будет исполнять динамический объект.
  */
-public class MeleeAttackCommand implements BattleCommand<MeleeAttackParameters> {
-    private final List<BattleModel> enemies;
-    private final ChooseDamagedBodyPartStrategy chooseDamagedBodyPartStrategy;
+public class MeleeAttackCommand implements BattleCommand<SelectionFromSetParameters<BattleModel>> {
+    private final Set<BattleModel> enemies;
 
-    public MeleeAttackCommand(List<BattleModel> enemies, ChooseDamagedBodyPartStrategy strategy) {
+    public MeleeAttackCommand(Set<BattleModel> enemies) {
         this.enemies = enemies;
         this.chooseDamagedBodyPartStrategy = strategy;
     }
 
     @Override
-    public MeleeAttackParameters createParametersTemplate() {
-        return new MeleeAttackParameters(enemies);
+    public SelectionFromSetParameters<BattleModel> createParametersTemplate() {
+        return new SelectionFromSetParameters<>(enemies);
     }
 
     @Override
-    public void perform(BattleModel model, BattleContext battleContext, MeleeAttackParameters executionParameters) {
+    public void perform(BattleModel model, BattleContext battleContext, SelectionFromSetParameters<BattleModel> executionParameters) {
         if (model instanceof CanHit canHit) {
-            BattleModel enemy = executionParameters.getEnemy();
-            List<BattleModel> nearEnemies = canHit.getNearestBattleModels(battleContext.getBattleState());
+            BattleModel enemy = executionParameters.getSelectedElement();
+            Set<BattleModel> nearEnemies = MeleeAttackCommandFactory
+                    .getNearestBattleModels(canHit, battleContext.getBattleState());
             if (nearEnemies.contains(enemy)) {
                 DispatcherBattleWrapper dispatcher = battleContext.getDispatcher();
                 String bodyPart = chooseDamagedBodyPartStrategy.chooseDamagedBodyPart(enemy);

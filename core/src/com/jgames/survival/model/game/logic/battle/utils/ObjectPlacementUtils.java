@@ -1,12 +1,18 @@
 package com.jgames.survival.model.game.logic.battle.utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.serviceclasses.PointPool;
 import ru.jengine.battlemodule.core.state.BattlefieldLimiter;
 import ru.jengine.utils.RandomUtils;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * Описывает получение координат клетки поля боя, находящейся в пределах поля боя, на которой отсутствуют объекты битвы.
@@ -21,14 +27,14 @@ public class ObjectPlacementUtils {
     /**
      * Возвращает координаты точки, находящейся в пределах поля боя,
      * заданного текущим ограничителем, на которой отсутствуют объекты битвы. Null, если такой точки нет.
-     * @param mapPosition карта, которая описывает расположение объектов на поле боя.
+     * @param filledCells карта, которая описывает расположение объектов на поле боя.
      * @param battleFieldLimiter ограничитель поля боя
      */
     @Nullable
-    public static Point getFreeCell(Map<Point, List<Integer>> mapPosition, BattlefieldLimiter battleFieldLimiter) {
+    public static Point getFreeCell(Set<Point> filledCells, BattlefieldLimiter battleFieldLimiter) {
         Point point = getRandomPoint(battleFieldLimiter);
-        if (mapPosition.containsKey(point)) {
-            Point freePoint = getFreeCellWithBFS(mapPosition, point, battleFieldLimiter);
+        if (filledCells.contains(point)) {
+            Point freePoint = getFreeCellWithBFS(filledCells, point, battleFieldLimiter);
             if (freePoint == null) {
                 //TODO логировать:
                 System.out.print("На поле закончились свободные клетки!");
@@ -59,13 +65,13 @@ public class ObjectPlacementUtils {
      * @param battleFieldLimiter текущий ограничитель поля боя
      */
     @Nullable
-    private static Point getFreeCellWithBFS(Map<Point, List<Integer>> mapPosition, Point point,
+    private static Point getFreeCellWithBFS(Set<Point> mapPosition, Point point,
                                             BattlefieldLimiter battleFieldLimiter) {
         Queue<Point> queue = new LinkedList<>();
         Set<Point> visited = new HashSet<>();
         queue.add(point);
         visited.add(point);
-        while (queue.size() != 0)
+        while (!queue.isEmpty())
         {
             point = queue.poll();
             List<Point> pointNeighbors = getPointNeighbors(point, battleFieldLimiter);
@@ -73,7 +79,7 @@ public class ObjectPlacementUtils {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
                     queue.add(neighbor);
-                    if (!mapPosition.containsKey(neighbor)) {
+                    if (!mapPosition.contains(neighbor)) {
                         return neighbor;
                     }
                 }
