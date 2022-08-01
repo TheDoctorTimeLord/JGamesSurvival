@@ -43,7 +43,7 @@ public class Entity extends DynamicModel implements HasHealth, CanHit, HasVision
 
     @Override
     public int getVisionDistance() {
-        IntAttribute attribute = getAttributes().getAttributeByPath(Attributes.VISION_DISTANCE);
+        IntAttribute attribute = AttributeFindingUtils.getVisionDistance(this);
         return attribute != null ? attribute.getValue() : 0;
     }
 
@@ -54,7 +54,7 @@ public class Entity extends DynamicModel implements HasHealth, CanHit, HasVision
 
     @Override
     public void setVisionDistance(int visionDistance) {
-        IntAttribute attribute = getAttributes().getAttributeByPath(Attributes.VISION_DISTANCE);
+        IntAttribute attribute = AttributeFindingUtils.getVisionDistance(this);
         if (attribute != null) {
             attribute.setValue(visionDistance);
         }

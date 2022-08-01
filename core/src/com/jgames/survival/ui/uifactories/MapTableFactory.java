@@ -77,6 +77,12 @@ public class MapTableFactory implements UIFactory {
             }
             mapTable.row();
         }
+
+        mapTable.padTop(100)
+                .padBottom(100)
+                .padLeft(100)
+                .padRight(150);
+
         return new GlobalMapWrapper<>(mapTable);
     }
 

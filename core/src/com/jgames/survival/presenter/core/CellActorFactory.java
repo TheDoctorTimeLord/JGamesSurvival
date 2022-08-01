@@ -1,7 +1,9 @@
 package com.jgames.survival.presenter.core;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.ui.UIException;
 
 /**
@@ -11,5 +13,5 @@ public interface CellActorFactory {
     /**
      * Создать по метаданным объекта актёра.
      */
-    Actor create(DrawingContext drawingContext) throws UIException;
+    Actor create(@Nullable GameObject gameObject) throws UIException;
 }

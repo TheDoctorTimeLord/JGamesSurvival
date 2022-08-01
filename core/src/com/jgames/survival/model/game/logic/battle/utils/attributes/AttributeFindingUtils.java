@@ -2,15 +2,12 @@ package com.jgames.survival.model.game.logic.battle.utils.attributes;
 
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
-import ru.jengine.utils.AttributeUtils;
 
-import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants;
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts;
 
 /**
@@ -24,10 +21,7 @@ public class AttributeFindingUtils {
      */
     @Nullable
     public static IntAttribute getBodyPartStateAttribute(BattleModel model, String damagedBodyPart) {
-        return AttributeUtils.extractInnerAttribute(
-                model.getAttributes(),
-                List.of(BodyParts.BODY_PARTS, damagedBodyPart),
-                STATE);
+        return model.getAttributes().getAttributeByPath(BodyParts.BODY_PARTS, damagedBodyPart,STATE);
     }
 
     /**
@@ -35,9 +29,7 @@ public class AttributeFindingUtils {
      */
     @Nullable
     public static IntAttribute getHealthAttribute(BattleModel model) {
-        return AttributeUtils.extractInnerAttribute(model.getAttributes(),
-                List.of(AttributesConstants.Attributes.ATTRIBUTES),
-                AttributesConstants.Attributes.HIT_POINTS);
+        return model.getAttributes().getAttributeByPath(Attributes.ATTRIBUTES, Attributes.HIT_POINTS);
     }
 
     /**
@@ -46,9 +38,10 @@ public class AttributeFindingUtils {
      */
     @Nullable
     public static IntAttribute getMeleeDamageAttribute(BattleModel model) {
-        return AttributeUtils.extractInnerAttribute(model.getAttributes(),
-                List.of(AttributesConstants.Attributes.ATTRIBUTES),
-                AttributesConstants.Attributes.MELEE_DAMAGE_POINTS);
+        return model.getAttributes().getAttributeByPath(Attributes.ATTRIBUTES, Attributes.MELEE_DAMAGE_POINTS);
+    }
 
+    public static IntAttribute getVisionDistance(BattleModel model) {
+        return model.getAttributes().getAttributeByPath(Attributes.ATTRIBUTES, Attributes.VISION_DISTANCE);
     }
 }

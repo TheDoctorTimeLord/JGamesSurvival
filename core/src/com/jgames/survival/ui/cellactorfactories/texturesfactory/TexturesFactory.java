@@ -2,11 +2,13 @@ package com.jgames.survival.ui.cellactorfactories.texturesfactory;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.jgames.survival.presenter.core.CellActorFactory;
-import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.ui.UIException;
 
 public class TexturesFactory implements CellActorFactory {
@@ -20,12 +22,12 @@ public class TexturesFactory implements CellActorFactory {
     }
 
     @Override
-    public Actor create(DrawingContext drawingContext) throws UIException {
-        return new Image(selector.select(regions, drawingContext));
+    public Actor create(@Nullable GameObject gameObject) throws UIException {
+        return new Image(selector.select(regions, gameObject));
     }
 
     @FunctionalInterface
     public interface TextureSelector {
-        TextureRegion select(List<TextureRegion> textures, DrawingContext context);
+        TextureRegion select(List<TextureRegion> textures, @Nullable GameObject gameObject);
     }
 }

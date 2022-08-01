@@ -1,10 +1,11 @@
 package com.jgames.survival.model.game.logic.battle.commands.move;
 
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes.ATTRIBUTES;
+import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes.MOVE_DISTANCE;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.BattleBeanPrototype;
 import ru.jengine.battlemodule.core.BattleContext;
@@ -16,7 +17,6 @@ import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.movement.CanMoved;
 
-import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
 import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
 
@@ -53,7 +53,7 @@ public class MoveCommandFactory implements BattleCommandFactory<SelectionFromSet
      * @param battleModel персонаж
      */
     public static boolean checkCanMove(BattleModel battleModel) {
-        IntAttribute moveDistance =  battleModel.getAttributes().getAttributeByPath(Attributes.MOVE_DISTANCE);
+        IntAttribute moveDistance =  battleModel.getAttributes().getAttributeByPath(ATTRIBUTES, MOVE_DISTANCE);
         return moveDistance != null && moveDistance.getValue() > 0;
     }
 
@@ -61,22 +61,14 @@ public class MoveCommandFactory implements BattleCommandFactory<SelectionFromSet
         Point modelPosition = canMoved.getPosition();
         Direction modelDirection = canMoved.getDirection();
         List<Point> pointNeighbour = LocationUtils.getNeighbours(modelPosition, battleState,
-                modelDirection.getOffset(),
-                modelDirection.rotateLeft().getOffset(),
-                modelDirection.rotateRight().getOffset()
-        );
+                LocationUtils.getFiveAroundOffsets(modelDirection));
 
         return pointNeighbour.stream()
                 .filter(point -> battleState.getOnPosition(point).isEmpty())
                 .collect(Collectors.toSet());
     }
 
-    public static boolean hasAvailablePosition(CanMoved canMoved, BattleState battleState) {
+    private static boolean hasAvailablePosition(CanMoved canMoved, BattleState battleState) {
         return !getAvailablePosition(canMoved, battleState).isEmpty();
-    }
-
-    @Nullable
-    private static Point checkPosition(Point position, BattleState state) {
-        return state.inBattlefieldBound(position) && state.getOnPosition(position).isEmpty() ? position : null;
     }
 }

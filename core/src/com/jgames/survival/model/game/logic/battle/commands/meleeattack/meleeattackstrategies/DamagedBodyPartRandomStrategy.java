@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
+import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.utils.RandomUtils;
 
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts;
@@ -16,6 +17,7 @@ import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFin
  * Описывает стратегию выбора части тела противника, по которой будет наноситься удар
  * Стратегия: выбор части тела производиться произвольным образом
  */
+@Bean
 public class DamagedBodyPartRandomStrategy implements ChooseDamagedBodyPartStrategy{
     /**
      * Возвращает часть тела противника, по которой будет наноситься удар

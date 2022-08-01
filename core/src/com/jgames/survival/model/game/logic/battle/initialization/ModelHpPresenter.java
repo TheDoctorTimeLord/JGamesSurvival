@@ -10,7 +10,7 @@ import ru.jengine.battlemodule.core.battlepresenter.initializebattle.Initializat
 import ru.jengine.battlemodule.core.modelattributes.baseattributes.IntAttribute;
 import ru.jengine.battlemodule.core.models.BattleModel;
 
-import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
+import com.jgames.survival.model.game.logic.battle.utils.attributes.AttributeFindingUtils;
 
 @BattleBeanPrototype
 public class ModelHpPresenter implements InitializationPresenter {
@@ -19,7 +19,7 @@ public class ModelHpPresenter implements InitializationPresenter {
         List<BattleAction> result = new ArrayList<>();
 
         for (BattleModel battleModel : battleContext.getBattleState().getModelsInBattle()) {
-            IntAttribute hp = battleModel.getAttributes().getAsInt(Attributes.HIT_POINTS);
+            IntAttribute hp = AttributeFindingUtils.getHealthAttribute(battleModel);
             if (hp != null) {
                 result.add(new ModelHpAction(battleModel.getId(), hp.getValue()));
             }

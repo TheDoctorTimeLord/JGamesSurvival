@@ -19,8 +19,8 @@ import ru.jengine.utils.RandomUtils;
 
 import com.jgames.survival.model.game.logic.battle.attributes.AttributeGenerator;
 import com.jgames.survival.model.game.logic.battle.limirers.SquareBattleFieldLimiter;
-import com.jgames.survival.model.game.logic.battle.models.Fighter;
-import com.jgames.survival.model.game.logic.battle.models.FighterType;
+import com.jgames.survival.model.game.logic.battle.models.Entity;
+import com.jgames.survival.model.game.logic.battle.models.EntityType;
 import com.jgames.survival.model.game.logic.battle.models.StaticModel;
 import com.jgames.survival.model.game.logic.battle.models.StaticModelType;
 import com.jgames.survival.model.game.logic.battle.utils.ObjectPlacementUtils;
@@ -29,7 +29,7 @@ import com.jgames.survival.model.game.logic.battle.utils.ObjectPlacementUtils;
  * Базовая генерация состояния боя.
  */
 public class InitialBattleGenerator extends BattleGenerator {
-    private static final int MAP_SIZE = 5;
+    private static final int MAP_SIZE = 8;
 
     /**
      * Генерирует начальное состояние боя с динамическими и статическими объектами.
@@ -42,12 +42,12 @@ public class InitialBattleGenerator extends BattleGenerator {
         List<BattleModel> staticModels = new ArrayList<>();
         BattlefieldLimiter battleFieldLimiter = new SquareBattleFieldLimiter(PointPool.obtain(0, 0), MAP_SIZE);
 
-        FighterType fighterType = new FighterType("person", AttributeGenerator.getInitialAttributesKit());
+        EntityType fighterType = new EntityType("person", AttributeGenerator.getInitialAttributesKit());
         StaticModelType staticModelType = new StaticModelType("wall", new AttributesContainer());
 
         for (int i = 0; i < 5; i++) {
-            Fighter model = fighterType.createBattleModelByType(idGenerator.generateId());
-            Point position = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
+            Entity model = fighterType.createBattleModelByType(idGenerator.generateId());
+            Point position = ObjectPlacementUtils.getFreeCell(mapPosition.keySet(), battleFieldLimiter);
 
             mapPosition.computeIfAbsent(position, p -> new ArrayList<>()).add(model.getId());
             model.setPosition(position);
@@ -57,7 +57,7 @@ public class InitialBattleGenerator extends BattleGenerator {
 
         for (int i = 0; i < 5; i++) {
             StaticModel model = staticModelType.createBattleModelByType(idGenerator.generateId());
-            Point position = ObjectPlacementUtils.getFreeCell(mapPosition, battleFieldLimiter);
+            Point position = ObjectPlacementUtils.getFreeCell(mapPosition.keySet(), battleFieldLimiter);
 
             mapPosition.computeIfAbsent(position, p -> new ArrayList<>()).add(model.getId());
             model.setPosition(position);

@@ -1,6 +1,6 @@
 package com.jgames.survival.model.game.logic.battle.commands.meleeattack;
 
-import java.util.List;
+import java.util.Set;
 
 import ru.jengine.battlemodule.core.BattleContext;
 import ru.jengine.battlemodule.core.commands.BattleCommand;
@@ -9,8 +9,9 @@ import ru.jengine.battlemodule.core.models.BattleModel;
 
 import com.jgames.survival.model.game.logic.battle.commands.BattleCommandPriority;
 import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
-import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEvent;
 import com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies.ChooseDamagedBodyPartStrategy;
+import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEvent;
+import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEvent;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageType;
 import com.jgames.survival.model.game.logic.battle.models.CanHit;
 
@@ -19,8 +20,9 @@ import com.jgames.survival.model.game.logic.battle.models.CanHit;
  */
 public class MeleeAttackCommand implements BattleCommand<SelectionFromSetParameters<BattleModel>> {
     private final Set<BattleModel> enemies;
+    private final ChooseDamagedBodyPartStrategy chooseDamagedBodyPartStrategy;
 
-    public MeleeAttackCommand(Set<BattleModel> enemies) {
+    public MeleeAttackCommand(Set<BattleModel> enemies, ChooseDamagedBodyPartStrategy strategy) {
         this.enemies = enemies;
         this.chooseDamagedBodyPartStrategy = strategy;
     }

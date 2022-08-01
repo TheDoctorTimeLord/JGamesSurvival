@@ -4,19 +4,19 @@ package com.jgames.survival.presenter.filling.gamestate.model;
  * Описание объекта, который резолвится.
  */
 public class ResolvingContext {
-    private final String objectTypeName;
-    private final DrawingContext drawingContext;
+    private final String[] factoryTypeName;
+    private final GameObject gameObject;
 
-    public ResolvingContext(String objectTypeName, DrawingContext drawingContext) {
-        this.objectTypeName = objectTypeName;
-        this.drawingContext = drawingContext;
+    public ResolvingContext(GameObject gameObject, String... factoryTypeName) {
+        this.factoryTypeName = factoryTypeName;
+        this.gameObject = gameObject;
     }
 
-    public DrawingContext getDrawingContext() {
-        return drawingContext;
+    public String[] getFactoryTypeNames() {
+        return factoryTypeName;
     }
 
-    public String getObjectTypeName() {
-        return objectTypeName;
+    public GameObject getGameObject() {
+        return gameObject;
     }
 }

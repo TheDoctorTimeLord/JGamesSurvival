@@ -1,6 +1,6 @@
 package com.jgames.survival.model.api.gameload.battle;
 
-import static com.jgames.survival.utils.GsonUtils.poolClassPath;
+import static com.jgames.survival.utils.deserialization.GsonUtils.deserializeByClassPath;
 
 import java.lang.reflect.Type;
 
@@ -19,7 +19,6 @@ public class BattleAttributeDeserializer implements JsonConverterDeserializer<Ba
     public BattleAttribute deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException
     {
         JsonObject jsonObject = json.getAsJsonObject();
-        Class<?> battleModelTypeClass = poolClassPath(jsonObject);
-        return context.deserialize(jsonObject, battleModelTypeClass);
+        return deserializeByClassPath(jsonObject, context);
     }
 }

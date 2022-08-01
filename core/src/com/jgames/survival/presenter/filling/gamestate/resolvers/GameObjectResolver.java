@@ -5,7 +5,6 @@ import java.util.List;
 
 import ru.jengine.beancontainer.annotations.Bean;
 
-import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
 import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.HealthComponent;
@@ -20,20 +19,18 @@ public class GameObjectResolver implements ModelDataResolver {
         List<ResolvingContext> resolvedContexts = new ArrayList<>();
 
         for (GameObject cellGameObject : cellGameObjects) {
-            DrawingContext drawingContext = new DrawingContext().setGameObject(cellGameObject);
-
             HealthComponent healthComponent = cellGameObject.getComponent(HealthComponent.class);
             if (healthComponent != null)  {
                 if (healthComponent.isKilled()) {
-                    resolvedContexts.add(new ResolvingContext(Constants.DEAD_BODY, drawingContext));
+                    resolvedContexts.add(new ResolvingContext(cellGameObject, Constants.DEAD_BODY));
                 } else {
                     cellGameObject.computeIfContains(TypeNameComponent.class, c ->
-                            resolvedContexts.add(new ResolvingContext(c.getTypeName(), drawingContext)));
-                    resolvedContexts.add(new ResolvingContext(HardcodeObjectNames.PERSON_HP, drawingContext));
+                            resolvedContexts.add(new ResolvingContext(cellGameObject, c.getTypeName())));
+                    resolvedContexts.add(new ResolvingContext(cellGameObject, HardcodeObjectNames.PERSON_HP));
                 }
             } else {
                 cellGameObject.computeIfContains(TypeNameComponent.class, component ->
-                        resolvedContexts.add(new ResolvingContext(component.getTypeName(), drawingContext)));
+                        resolvedContexts.add(new ResolvingContext(cellGameObject, component.getTypeName())));
             }
         }
 

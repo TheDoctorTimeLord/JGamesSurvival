@@ -1,7 +1,9 @@
 package com.jgames.survival.ui.uiscriptelements.mappanel;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
@@ -12,8 +14,8 @@ import com.jgames.survival.presenter.core.uiscripts.contextes.UIScriptElementCon
 import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
-import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.GameObjectsPresenter;
+import com.jgames.survival.presenter.filling.gamestate.presenters.MapFillingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.ui.widgets.GlobalMapWrapper;
 import com.jgames.survival.ui.widgets.MapCell;
@@ -47,11 +49,17 @@ public class UpdateMap implements UIRunnableScript<EmptyScriptState> {
             List<Integer> objectIds = mapFillingPresenter.getIdsOnCell(point);
             List<GameObject> gameObjectCollection = objectIds.stream().map(gameObjectsPresenter::getCurrentObjectState).toList();
             List<ResolvingContext> resolvingContexts = nameObjectResolvingModule.resolveModelData(gameObjectCollection);
-            List<Actor> actors = resolvingContexts.stream().map(resolvingContext -> drawingModulePresenter.getActor(
-                    resolvingContext.getObjectTypeName(),
-                    resolvingContext.getDrawingContext())).toList();
+            List<Actor> actors = resolvingContexts.stream()
+                    .flatMap(this::resolveByContext)
+                    .toList();
             globalMap.getTableCell(point.getX(), point.getY()).update(actors);
         }
+    }
+
+    private Stream<Actor> resolveByContext(ResolvingContext resolvingContext) {
+        GameObject gameObject = resolvingContext.getGameObject();
+        return Arrays.stream(resolvingContext.getFactoryTypeNames())
+                .map(type -> drawingModulePresenter.getActor(type, gameObject));
     }
 }
 

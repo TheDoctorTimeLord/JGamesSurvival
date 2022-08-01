@@ -3,13 +3,15 @@ package com.jgames.survival.presenter.filling.gamestate.modules;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import ru.jengine.beancontainer.annotations.Bean;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
-import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.ui.cellactorfactories.TextureFactory;
 import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;
@@ -46,13 +48,13 @@ public class DrawingModule implements PresentingStateModule<DrawingModulePresent
     }
 
     @Override
-    public Actor getActor(String objectTypeName, DrawingContext drawingContext) {
-        CellActorFactory cellActorFactory = cellActorFactoryMap.getOrDefault(objectTypeName, defaultFactory);
+    public Actor getActor(String factoryTypeName, @Nullable GameObject gameObject) {
+        CellActorFactory cellActorFactory = cellActorFactoryMap.getOrDefault(factoryTypeName, defaultFactory);
         try {
-            return cellActorFactory.create(drawingContext);
+            return cellActorFactory.create(gameObject);
         } catch (Exception e) {
-            Gdx.app.error("TEXTURE_DRAWING", "Error for type [%s] in factory [%s]".formatted(drawingContext, cellActorFactory), e);
-            return defaultFactory.create(drawingContext);
+            Gdx.app.error("TEXTURE_DRAWING", "Error for type [%s] in factory [%s]".formatted(gameObject, cellActorFactory), e);
+            return defaultFactory.create(gameObject);
         }
     }
 

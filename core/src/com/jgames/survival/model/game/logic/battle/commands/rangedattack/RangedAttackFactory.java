@@ -6,10 +6,8 @@ import static com.jgames.survival.model.game.logic.battle.attributes.constants.A
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.RIGHT_ARM;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue.DAMAGED;
 import static com.jgames.survival.model.game.logic.battle.vision.VisionScopeConstants.VISIBLE;
-import static ru.jengine.utils.AttributeUtils.extractInnerAttribute;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,8 +19,11 @@ import ru.jengine.battlemodule.core.models.BattleModel;
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 import ru.jengine.battlemodule.core.state.BattleState;
 import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
+import ru.jengine.battlemodule.standardfilling.visible.HasVision;
 import ru.jengine.battlemodule.standardfilling.visible.VisionInformationService;
 import ru.jengine.beancontainer.annotations.Bean;
+
+import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 
 @Bean
 public class RangedAttackFactory implements BattleCommandFactory<SelectionFromSetParameters<BattleModel>, RangedAttack> {
@@ -57,8 +58,8 @@ public class RangedAttackFactory implements BattleCommandFactory<SelectionFromSe
 
     public static boolean canRangedAttack(BattleModel model) {
         AttributesContainer attributes = model.getAttributes();
-        IntAttribute leftArmState = extractInnerAttribute(attributes, List.of(BODY_PARTS, LEFT_ARM), STATE);
-        IntAttribute rightArmStata = extractInnerAttribute(attributes, List.of(BODY_PARTS, RIGHT_ARM), STATE);
+        IntAttribute leftArmState = attributes.getAttributeByPath(BODY_PARTS, LEFT_ARM, STATE);
+        IntAttribute rightArmStata = attributes.getAttributeByPath(BODY_PARTS, RIGHT_ARM, STATE);
 
         return leftArmState != null && rightArmStata != null &&
                 (DAMAGED.isGreater(leftArmState.getValue()) || DAMAGED.isGreater(rightArmStata.getValue()));

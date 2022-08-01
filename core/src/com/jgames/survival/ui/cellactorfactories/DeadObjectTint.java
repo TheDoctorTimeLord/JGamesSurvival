@@ -1,5 +1,7 @@
 package com.jgames.survival.ui.cellactorfactories;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.jgames.survival.presenter.core.CellActorFactory;
-import com.jgames.survival.presenter.filling.gamestate.model.DrawingContext;
+import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
 import com.jgames.survival.ui.UIException;
 
 public class DeadObjectTint implements CellActorFactory {
@@ -18,7 +20,7 @@ public class DeadObjectTint implements CellActorFactory {
     }
 
     @Override
-    public Actor create(DrawingContext drawingContext) throws UIException {
+    public Actor create(@Nullable GameObject gameObject) throws UIException {
         return new Image(tint);
     }
 }

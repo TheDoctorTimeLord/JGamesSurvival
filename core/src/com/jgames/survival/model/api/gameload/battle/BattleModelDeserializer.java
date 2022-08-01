@@ -1,8 +1,8 @@
 package com.jgames.survival.model.api.gameload.battle;
 
-import static com.jgames.survival.utils.GsonUtils.extractObjectField;
-import static com.jgames.survival.utils.GsonUtils.extractObjectFieldAsPrimitive;
-import static com.jgames.survival.utils.GsonUtils.poolClassPath;
+import static com.jgames.survival.utils.deserialization.GsonUtils.deserializeByClassPath;
+import static com.jgames.survival.utils.deserialization.GsonUtils.extractObjectField;
+import static com.jgames.survival.utils.deserialization.GsonUtils.extractObjectFieldAsPrimitive;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -31,9 +31,8 @@ public class BattleModelDeserializer implements JsonConverterDeserializer<Battle
     {
         JsonObject jsonObject = json.getAsJsonObject();
         JsonObject battleModelTypeJson = extractObjectField(jsonObject, BATTLE_MODEL_TYPE, "objectTypeName", "attributesContainer");
-        Class<?> battleModelTypeClass = poolClassPath(battleModelTypeJson);
 
-        BattleModelType battleModelType = context.deserialize(battleModelTypeJson, battleModelTypeClass);
+        BattleModelType battleModelType = deserializeByClassPath(battleModelTypeJson, context);
         BattleModel battleModel = battleModelType
                 .createBattleModelByType(extractObjectFieldAsPrimitive(jsonObject, ID_FIELD).getAsInt());
 

@@ -1,4 +1,4 @@
-package com.jgames.survival.model.api.gameload.battle;
+package com.jgames.survival.utils.deserialization;
 
 import java.util.Collections;
 import java.util.List;

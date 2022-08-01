@@ -1,7 +1,8 @@
-package com.jgames.survival.utils;
+package com.jgames.survival.utils.deserialization;
 
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -53,6 +54,11 @@ public class GsonUtils {
         catch (ClassNotFoundException e) {
             throw new JsonParseException("Class path is incorrect", e);
         }
+    }
+
+    public static <T> T deserializeByClassPath(JsonObject object, JsonDeserializationContext context) throws JsonParseException {
+        Class<?> pooledClass = poolClassPath(object);
+        return context.deserialize(object, pooledClass);
     }
 
     private static void throwClassPathIsIncorrect(@Nullable JsonElement classPath, JsonElement element) {
