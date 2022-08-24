@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.jgames.survival.presenter.core.CellActorFactory;
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.ui.UIException;
 
 public class DeadObjectTint implements CellActorFactory {

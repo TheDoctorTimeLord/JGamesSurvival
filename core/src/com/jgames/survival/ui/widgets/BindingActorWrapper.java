@@ -38,8 +38,8 @@ public class BindingActorWrapper<T extends Actor> extends Actor implements Bindi
         float cos = MathUtils.cosDeg(rotation);
         float sin = MathUtils.sinDeg(rotation);
 
-        float xRotated = cos * x - sin * y + getOriginX();
-        float yRotated = sin * x + cos * y + getOriginY();
+        float xRotated = cos * x - sin * y;
+        float yRotated = sin * x + cos * y;
         float dx = boundedX - xRotated;
         float dy = boundedY - yRotated;
 

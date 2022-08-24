@@ -2,7 +2,7 @@ package com.jgames.survival.presenter.filling.gamestate.model.objectcomponents;
 
 import ru.jengine.battlemodule.core.serviceclasses.Direction;
 
-import com.jgames.survival.presenter.filling.gamestate.model.GameObjectComponent;
+import com.jgames.survival.presenter.core.model.GameObjectComponent;
 
 public class DirectionComponent extends GameObjectComponent {
     private Direction direction;

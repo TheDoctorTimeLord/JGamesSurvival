@@ -29,7 +29,7 @@ import com.jgames.survival.model.game.logic.battle.utils.ObjectPlacementUtils;
  * Базовая генерация состояния боя.
  */
 public class InitialBattleGenerator extends BattleGenerator {
-    private static final int MAP_SIZE = 8;
+    private static final int MAP_SIZE = 5;
 
     /**
      * Генерирует начальное состояние боя с динамическими и статическими объектами.

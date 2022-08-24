@@ -1,4 +1,4 @@
-package com.jgames.survival.presenter.filling.gamestate.model;
+package com.jgames.survival.presenter.core.model;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

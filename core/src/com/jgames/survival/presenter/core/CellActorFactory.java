@@ -3,7 +3,7 @@ package com.jgames.survival.presenter.core;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.ui.UIException;
 
 /**

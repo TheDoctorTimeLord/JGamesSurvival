@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.DirectionComponent;
 import com.jgames.survival.ui.UIException;
 import com.jgames.survival.ui.cellactorfactories.texturesfactory.TexturesFactory.TextureSelector;

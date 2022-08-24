@@ -1,4 +1,4 @@
-package com.jgames.survival.presenter.filling.gamestate.model;
+package com.jgames.survival.presenter.core.model;
 
 public abstract class GameObjectComponent implements Cloneable {
     @Override

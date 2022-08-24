@@ -1,6 +1,6 @@
 package com.jgames.survival.presenter.filling.gamestate.model.objectcomponents;
 
-import com.jgames.survival.presenter.filling.gamestate.model.GameObjectComponent;
+import com.jgames.survival.presenter.core.model.GameObjectComponent;
 
 public class TypeNameComponent extends GameObjectComponent {
     private final String name;

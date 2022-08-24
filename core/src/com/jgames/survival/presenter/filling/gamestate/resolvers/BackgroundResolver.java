@@ -4,7 +4,7 @@ import java.util.List;
 
 import ru.jengine.beancontainer.annotations.Bean;
 
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.ui.constants.SpecialObjectsNames;
 

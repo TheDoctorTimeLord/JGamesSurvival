@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.ResolvingContext;
 import com.jgames.survival.presenter.filling.gamestate.presenters.NameObjectResolvingPresenter;
 import com.jgames.survival.presenter.filling.gamestate.resolvers.ModelDataResolver;

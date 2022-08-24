@@ -11,7 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.jgames.survival.presenter.core.CellActorFactory;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.presenters.DrawingModulePresenter;
 import com.jgames.survival.ui.cellactorfactories.TextureFactory;
 import com.jgames.survival.ui.assets.SimpleTextureStorage.Constants;

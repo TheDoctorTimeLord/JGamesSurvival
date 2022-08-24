@@ -1,5 +1,7 @@
 package com.jgames.survival.presenter.filling.gamestate.model;
 
+import com.jgames.survival.presenter.core.model.GameObject;
+
 /**
  * Описание объекта, который резолвится.
  */

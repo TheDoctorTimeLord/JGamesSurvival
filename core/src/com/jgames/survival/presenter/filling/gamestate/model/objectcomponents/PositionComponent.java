@@ -2,7 +2,7 @@ package com.jgames.survival.presenter.filling.gamestate.model.objectcomponents;
 
 import ru.jengine.battlemodule.core.serviceclasses.Point;
 
-import com.jgames.survival.presenter.filling.gamestate.model.GameObjectComponent;
+import com.jgames.survival.presenter.core.model.GameObjectComponent;
 
 public class PositionComponent extends GameObjectComponent {
     private Point position;

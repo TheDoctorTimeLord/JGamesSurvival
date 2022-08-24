@@ -1,6 +1,6 @@
 package com.jgames.survival.presenter.filling.gamestate.model.objectcomponents;
 
-import com.jgames.survival.presenter.filling.gamestate.model.GameObjectComponent;
+import com.jgames.survival.presenter.core.model.GameObjectComponent;
 
 public class HealthComponent extends GameObjectComponent {
     private final int maxHp;

@@ -10,7 +10,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModule;
 import com.jgames.survival.presenter.core.gamestate.PresentingStateModuleMutator;
-import com.jgames.survival.presenter.filling.gamestate.model.GameObject;
+import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.DirectionComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.HealthComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.PositionComponent;
