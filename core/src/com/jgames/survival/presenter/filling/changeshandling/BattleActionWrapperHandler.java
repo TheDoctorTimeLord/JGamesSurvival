@@ -10,8 +10,6 @@ import com.jgames.survival.model.api.interaction.GameChange;
 import com.jgames.survival.model.api.interaction.changes.BattleActionWrapper;
 import com.jgames.survival.presenter.core.changeshangling.GameChangeHandler;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
-import com.jgames.survival.utils.pubsub.Publisher;
-import com.jgames.survival.utils.pubsub.Subscriber;
 
 @Bean
 public class BattleActionWrapperHandler implements GameChangeHandler {
@@ -27,7 +25,7 @@ public class BattleActionWrapperHandler implements GameChangeHandler {
     }
 
     @Override
-    public void notify(GameChange information, Publisher<GameChange, ? extends Subscriber<GameChange>> source) {
+    public void notify(GameChange information) {
         BattleAction battleAction = ((BattleActionWrapper)information).getWrapped();
         for (BattleActionHandler battleActionHandler : battleActionHandlers) {
             if (battleActionHandler.canHandle(battleAction)) {
