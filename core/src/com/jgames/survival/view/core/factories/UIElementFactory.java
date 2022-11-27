@@ -6,6 +6,6 @@ import com.jgames.survival.view.core.uielements.UIElement;
 import com.jgames.survival.view.core.uielements.UIElementWrapper;
 
 public interface UIElementFactory {
-    UIElement buildElement(Map<String, Object> properties);
-    UIElementWrapper buildElementWithWrapping(Map<String, Object> properties);
+    UIElement buildElement(String elementId, Map<String, Object> properties);
+    UIElementWrapper buildElementWrapper(UIElement wrapped, Map<String, Object> properties);
 }

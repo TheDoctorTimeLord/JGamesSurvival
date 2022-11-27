@@ -1,11 +1,14 @@
 package com.jgames.survival;
 
+import static ru.jengine.utils.CollectionUtils.toList;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 import ru.jengine.beancontainer.dataclasses.ContainerConfiguration;
 import ru.jengine.beancontainer.implementation.JEngineContainer;
+import ru.jengine.utils.Logger;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -17,81 +20,84 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jgames.survival.model.AbstractGameHandler;
 import com.jgames.survival.model.GameConfiguration;
 import com.jgames.survival.model.MainGameHandler;
-import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
-import com.jgames.survival.presenter.filling.clickactions.CommandButtonClickHandler;
-import com.jgames.survival.presenter.filling.clickactions.MapCellClickHandler;
-import com.jgames.survival.presenter.filling.clickactions.ButtonClickedHandler;
-import com.jgames.survival.presenter.modules.PresenterAndUIMainModule;
-import com.jgames.survival.ui.UIComponentRegistrar;
-import com.jgames.survival.ui.UIElements;
-import com.jgames.survival.ui.uifactories.CommandPanelFactory;
-import com.jgames.survival.ui.uifactories.LeftTopInformationFactory;
-import com.jgames.survival.ui.uifactories.MapTableFactory;
-import com.jgames.survival.ui.uifactories.PhaseAndTurnPanelFactory;
-import com.jgames.survival.ui.uifactories.SaveAndLoadPanelFactory;
-import com.jgames.survival.ui.uiscriptelements.mappanel.UpdateMapAction;
+import com.jgames.survival.utils.CriticalException;
 import com.jgames.survival.utils.GameProperties;
+import com.jgames.survival.utils.GdxLogger;
+import com.jgames.survival.view.core.UIManagementSystem;
+import com.jgames.survival.view.core.displays.Constraint;
+import com.jgames.survival.view.core.factories.JavaUIFactoringConfiguration;
+import com.jgames.survival.view.core.factories.impl.ButtonGenerator;
+import com.jgames.survival.view.core.factories.impl.ButtonsPanelDisplayFactory;
+import com.jgames.survival.view.core.factories.impl.ComplexConstraintDisplayFactory;
+import com.jgames.survival.view.impl.factories.BattlefieldDisplayFactory;
+import com.jgames.survival.viewmodel.core.UpdatingSystemsManager;
+import com.jgames.survival.viewmodel.jenginemodules.ViewModelBaseModule;
 
-public class SurvivalGame extends ApplicationAdapter { //TODO переделать на скрины
+public class SurvivalGame extends ApplicationAdapter {
     private boolean isDebugMode;
 
     private AbstractGameHandler gameHandler;
-    private Stage stage;
     private JEngineContainer container;
+    private UIManagementSystem uiManagementSystem;
+    private UpdatingSystemsManager updatingSystemsManager;
 
     @Override
     public void create() {
-        initGlobalParameters();
+        try {
+            initGlobalParameters();
+        }
+        catch (IOException e) {
+            throw new CriticalException("Global parameters can not be set", e);
+        }
 
-        stage = new Stage(new ScreenViewport());
+        Stage stage = new Stage(new ScreenViewport());
 
-        gameHandler = new MainGameHandler(new GameConfiguration()
+        Logger logger = new GdxLogger();
+        gameHandler = new MainGameHandler(new GameConfiguration(logger)
                 .setDebug(isDebugMode)
         );
         gameHandler.start();
 
         container = new JEngineContainer();
         container.initializeCommonContexts(ContainerConfiguration
-                .build(PresenterAndUIMainModule.class)
+                .builder(ViewModelBaseModule.class)
                 .addAdditionalBean(stage)
                 .addAdditionalBean(gameHandler)
-                .addAdditionalBean(gameHandler.getLogger())
+                .addAdditionalBean(logger)
+                .build()
         );
 
         gameHandler.onStart();
 
-        DispatcherUIScriptMachine scriptMachine = container.getBean(DispatcherUIScriptMachine.class);
-        ButtonClickedHandler buttonClickedHandler = new ButtonClickedHandler(scriptMachine);
+        List<Constraint> constraints = toList(container.getBean(Constraint.class));
+        List<ButtonGenerator> buttonGenerators = toList(container.getBean(ButtonGenerator.class));
 
-        UIComponentRegistrar componentRegistrar = container.getBean(UIComponentRegistrar.class);
-        componentRegistrar
-                .registerComponent(new MapTableFactory(new MapCellClickHandler(scriptMachine)))
-                .registerComponent(new LeftTopInformationFactory(300, 300))
-                .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
-                .registerComponent(new PhaseAndTurnPanelFactory(buttonClickedHandler))
-                .registerComponent(new SaveAndLoadPanelFactory(buttonClickedHandler));
+        updatingSystemsManager = container.getBean(UpdatingSystemsManager.class);
 
-        UIElements uiElements = componentRegistrar.createInterface();
-        scriptMachine.dispatch(new UpdateMapAction(), action -> {});
+        uiManagementSystem = container.getBean(UIManagementSystem.class);
+        uiManagementSystem.configure(JavaUIFactoringConfiguration.create()
+                .addDisplayFactory("complexConstraintFactory", new ComplexConstraintDisplayFactory(constraints, logger))
+                .addDisplayFactory("buttonsPanelDisplay", new ButtonsPanelDisplayFactory(buttonGenerators, logger))
+                .addDisplayFactory("battlefieldDisplay", new BattlefieldDisplayFactory())
+                .build());
+
+        uiManagementSystem.buildInterface();
 
         Gdx.input.setInputProcessor(stage);
-
-        if (isDebugMode) {
-            uiElements.setDebug(true);
-        }
+        uiManagementSystem.setDebug(isDebugMode);
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        uiManagementSystem.resize(width, height);
     }
 
     @Override
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
 
-        stage.act();
-        stage.draw();
+        updatingSystemsManager.updateElements();
+        uiManagementSystem.draw();
     }
 
     @Override
@@ -107,22 +113,15 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
         disposables.forEach(Disposable::dispose);
     }
 
-    private void initGlobalParameters() {
+    private void initGlobalParameters() throws IOException {
         GameProperties globalSettings = getGlobalSettings();
         isDebugMode = globalSettings.getProperty("isDebugEnable");
     }
 
-    private static GameProperties getGlobalSettings() {
-        try {
-            FileHandle globalSettingsUrl = Gdx.files.internal("gameconfig.properties");
-            Properties globalSettings = new Properties();
-            globalSettings.load(globalSettingsUrl.read());
-            return new GameProperties(globalSettings, true);
-        } catch (IOException e) {
-            Gdx.app.error(SurvivalGame.class.getSimpleName(), "Error with global settings", e);
-            GameProperties defaultProperties = new GameProperties();
-            defaultProperties.setProperty("isDebugEnable", false);
-            return defaultProperties;
-        }
+    private static GameProperties getGlobalSettings() throws IOException {
+        FileHandle globalSettingsUrl = Gdx.files.internal("gameconfig.properties");
+        Properties globalSettings = new Properties();
+        globalSettings.load(globalSettingsUrl.read());
+        return new GameProperties(globalSettings, true);
     }
 }

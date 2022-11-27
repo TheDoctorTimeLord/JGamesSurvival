@@ -8,7 +8,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.view.core.UIException;
 import com.jgames.survival.view.core.UIRuntimeException;
-import com.jgames.survival.view.core.uielements.displaies.Display;
+import com.jgames.survival.view.core.displays.Display;
 
 @Bean
 public class UIFactoringManager {

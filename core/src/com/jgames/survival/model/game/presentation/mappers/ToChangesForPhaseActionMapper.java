@@ -15,6 +15,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.GameChangeSender;
 import com.jgames.survival.model.api.interaction.GameChange;
+import com.jgames.survival.model.api.interaction.changes.phase.EndPhase;
 import com.jgames.survival.model.api.interaction.changes.phase.NewPhase;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
 import com.jgames.survival.model.game.presentation.ToGameChangeMapper;
@@ -50,6 +51,7 @@ public class ToChangesForPhaseActionMapper implements ToGameChangeMapper, Battle
         actions.stream()
                 .flatMap(this::convertActionToChange)
                 .forEach(changeSender::sendGameChange);
+        changeSender.sendGameChange(new EndPhase());
     }
 
     private Stream<GameChange> convertActionToChange(BattleAction battleAction) {

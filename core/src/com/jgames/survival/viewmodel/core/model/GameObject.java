@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.Gdx;
+import com.jgames.survival.viewmodel.core.ViewModelException;
 
 public class GameObject {
     private final int objectId;
@@ -29,6 +30,9 @@ public class GameObject {
     }
 
     public void addComponent(GameObjectComponent component) {
+        if (getComponent(component.getClass()) != null) {
+            throw new ViewModelException("Component [%s] was added already".formatted(component));
+        }
         components.add(component);
     }
 

@@ -1,5 +1,9 @@
 package com.jgames.survival.view.core;
 
+import static com.jgames.survival.view.core.Constants.DISPLAY_DEFAULT_BACKGROUND;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import ru.jengine.beancontainer.annotations.Bean;
@@ -10,47 +14,76 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.jgames.survival.ui.assets.TextureStorage;
+import com.jgames.survival.view.core.assets.TextureStorage;
+import com.jgames.survival.view.core.displays.Display;
+import com.jgames.survival.view.core.factories.UIFactoringConfiguration;
 import com.jgames.survival.view.core.factories.UIFactoringManager;
 import com.jgames.survival.view.core.uielements.UIElementManager;
-import com.jgames.survival.view.core.uielements.displaies.Display;
+import com.jgames.survival.viewmodel.core.UpdatableOnGameTick;
 
 @Bean
-public class UIManagementSystem {
-    private static final String DISPLAY_DEFAULT_BACKGROUND = "displayDefaultBackground";
-
-    private final Stage stage;
-    private final UIElementManager uiElementManager;
-    private final UIFactoringManager uiFactoringManager;
+public class UIManagementSystem implements UpdatableOnGameTick {
     private final DefaultDisplay defaultDisplay;
     private final Logger logger;
 
-    public UIManagementSystem(Stage stage, UIElementManager uiElementManager, UIFactoringManager uiFactoringManager,
-            TextureStorage textureStorage, Logger logger) {
+    private final List<Display> boundedDisplays = new ArrayList<>();
+    private final Stage stage;
+    private final UIElementManager uiElementManager;
+    private final UIFactoringManager uiFactoringManager;
+    private final InterfaceCreator interfaceCreator;
+
+    public UIManagementSystem(Logger logger, Stage stage, UIElementManager uiElementManager,
+            UIFactoringManager uiFactoringManager, TextureStorage textureStorage, InterfaceCreator interfaceCreator) {
         this.stage = stage;
         this.uiElementManager = uiElementManager;
         this.uiFactoringManager = uiFactoringManager;
         this.defaultDisplay = new DefaultDisplay(textureStorage.createSprite(DISPLAY_DEFAULT_BACKGROUND));
         this.logger = logger;
-
-        //TODO сделать самый верхнеуровневый дисплей
+        this.interfaceCreator = interfaceCreator;
     }
 
-    public void act() {
+    public void configure(UIFactoringConfiguration factoringConfiguration) {
+        uiFactoringManager.configure(factoringConfiguration);
+    }
+
+    public void buildInterface() {
+        interfaceCreator.create(this);
+    }
+
+    @Override
+    public void update() {
         stage.act();
     }
 
-    public void drawStage() {
+    public void draw() {
         stage.draw();
     }
 
-    public Display bindDisplay(String displayFactoringCode, Map<String, Object> properties) {
-        Display display;
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+
+        for (Display display : boundedDisplays) {
+            display.resize(width, height);
+        }
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public Display buildDisplay(String displayFactoringCode, Map<String, Object> properties) {
         try {
-            display = uiFactoringManager.getDisplayFactory(displayFactoringCode).buildDisplay(properties);
+            return uiFactoringManager.getDisplayFactory(displayFactoringCode).buildDisplay(properties);
         }
         catch (UIException e) {
             logger.error("UISystem", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public Display bindDisplay(String displayFactoringCode, Map<String, Object> properties) {
+        Display display = buildDisplay(displayFactoringCode, properties);
+        if (display == null) {
             display = defaultDisplay.clone();
         }
 
@@ -61,10 +94,24 @@ public class UIManagementSystem {
 
     public void bindDisplay(Display display) {
         stage.addActor(display.asActor());
+        boundedDisplays.add(display);
+        display.onBind();
+        display.show();
     }
 
     public void unbindDisplay(Display display) {
+        display.hide();
+        display.onUnbind();
         stage.getRoot().removeActor(display.asActor());
+        boundedDisplays.remove(display);
+    }
+
+    public UIElementManager getUiElementManager() {
+        return uiElementManager;
+    }
+
+    public void setDebug(boolean isDebug) {
+        stage.setDebugAll(isDebug);
     }
 
     public static class DefaultDisplay implements Display, Cloneable {
@@ -79,16 +126,6 @@ public class UIManagementSystem {
         @Override
         public Actor asActor() {
             return defaultBackgroundActor;
-        }
-
-        @Override
-        public void show() {
-            defaultBackgroundActor.setVisible(true);
-        }
-
-        @Override
-        public void hide() {
-            defaultBackgroundActor.setVisible(false);
         }
 
         @Override

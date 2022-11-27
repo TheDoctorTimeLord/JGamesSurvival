@@ -3,8 +3,6 @@ package com.jgames.survival.model;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import ru.jengine.utils.Logger;
-
 import com.jgames.survival.model.api.interaction.GameAction;
 import com.jgames.survival.model.api.interaction.GameChange;
 import com.jgames.survival.model.api.interaction.GameChangeListener;
@@ -45,6 +43,4 @@ public abstract class AbstractGameHandler extends Thread implements GameActionSe
     public abstract void onStart();
 
     public abstract void run();
-
-    public abstract Logger getLogger();
 }

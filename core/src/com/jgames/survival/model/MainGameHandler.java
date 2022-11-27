@@ -4,15 +4,12 @@ import ru.jengine.beancontainer.dataclasses.ContainerConfiguration;
 import ru.jengine.beancontainer.implementation.JEngineContainer;
 import ru.jengine.utils.Logger;
 
-import com.badlogic.gdx.Gdx;
 import com.jgames.survival.model.api.interaction.GameAction;
 import com.jgames.survival.model.api.interaction.GameActionHandler;
 import com.jgames.survival.model.api.interaction.GameActionHandlersManager;
 import com.jgames.survival.model.api.interaction.GameChange;
 import com.jgames.survival.model.game.logic.GameBattleHandler;
 import com.jgames.survival.model.game.modules.MainModule;
-import com.jgames.survival.presenter.filling.jsonloading.CoreResourceLoader;
-import com.jgames.survival.utils.GdxLogger;
 
 public class MainGameHandler extends AbstractGameHandler implements GameChangeSender {
     private final GameActionHandlersManager actionHandlersManager;
@@ -27,10 +24,11 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
         gameConfiguration = configuration;
 
         gameContainer = new JEngineContainer();
-        gameContainer.initializeCommonContexts(ContainerConfiguration.build(MainModule.class)
+        gameContainer.initializeCommonContexts(ContainerConfiguration.builder(MainModule.class)
                 .addAdditionalBean(this)
-                .addAdditionalBean(new GdxLogger())
-                .addAdditionalBean(new CoreResourceLoader()));
+                .addAdditionalBean(configuration.getLogger())
+                .build()
+        );
 
         battleHandler = new GameBattleHandler(gameContainer);
 
@@ -45,6 +43,8 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
 
     @Override
     public void run() {
+        Logger logger = gameConfiguration.getLogger();
+
         while (isGameRunning) {
             while (!actionPool.isEmpty()) {
                 GameAction action = actionPool.poll();
@@ -53,7 +53,7 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
                     handler.handle(action);
                 }
                 catch (Exception e) {
-                    Gdx.app.error("MainGameHandler", "Handling action error", e);
+                    logger.error("MainGameHandler", "Handling action error", e);
                 }
             }
 
@@ -71,14 +71,9 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
     }
 
     @Override
-    public Logger getLogger() {
-        return gameContainer.getBean(Logger.class);
-    }
-
-    @Override
     public void sendGameChange(GameChange gameChange) {
         if (gameConfiguration.isDebug()) {
-            Gdx.app.log("MainGameHandler_tracer", gameChange.toString());
+            gameConfiguration.getLogger().debug("MainGameHandler_tracer", gameChange.toString());
         }
 
         changesPublisher.notify(gameChange);

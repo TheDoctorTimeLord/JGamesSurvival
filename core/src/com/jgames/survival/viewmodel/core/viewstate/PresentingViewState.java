@@ -21,8 +21,7 @@ public class PresentingViewState {
         connectMutatorsWithModules();
     }
 
-    public PresentingViewState addStateModule(
-            ViewStateModule<?> module) {
+    public PresentingViewState addStateModule(ViewStateModule<?> module) {
         modules.put(module.getModuleName(), module);
         return this;
     }
@@ -31,8 +30,7 @@ public class PresentingViewState {
         return addModuleMutator(mutator.getClass(), mutator);
     }
 
-    public PresentingViewState addModuleMutator(Class<? extends ModuleMutator> mutatorClass,
-            ModuleMutator mutator) {
+    public PresentingViewState addModuleMutator(Class<? extends ModuleMutator> mutatorClass, ModuleMutator mutator) {
         moduleMutators.put(mutatorClass, mutator);
         return this;
     }
