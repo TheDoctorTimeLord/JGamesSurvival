@@ -52,11 +52,11 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
 
         container = new JEngineContainer();
         container.initializeCommonContexts(ContainerConfiguration
-                .build(PresenterAndUIMainModule.class)
+                .builder(PresenterAndUIMainModule.class)
                 .addAdditionalBean(stage)
                 .addAdditionalBean(gameHandler)
                 .addAdditionalBean(gameHandler.getLogger())
-        );
+                .build());
 
         gameHandler.onStart();
 

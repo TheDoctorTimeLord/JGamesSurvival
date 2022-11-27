@@ -27,10 +27,11 @@ public class MainGameHandler extends AbstractGameHandler implements GameChangeSe
         gameConfiguration = configuration;
 
         gameContainer = new JEngineContainer();
-        gameContainer.initializeCommonContexts(ContainerConfiguration.build(MainModule.class)
+        gameContainer.initializeCommonContexts(ContainerConfiguration.builder(MainModule.class)
                 .addAdditionalBean(this)
                 .addAdditionalBean(new GdxLogger())
-                .addAdditionalBean(new CoreResourceLoader()));
+                .addAdditionalBean(new CoreResourceLoader())
+                .build());
 
         battleHandler = new GameBattleHandler(gameContainer);
 
