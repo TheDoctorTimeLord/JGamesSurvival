@@ -20,16 +20,16 @@ public class SelectionFromSetParameters<T> implements CommandExecutionParameters
         return elements;
     }
 
-    public void selectModel(T selectedEnemy) {
-        if (!elements.contains(selectedEnemy)) {
+    public void selectElement(T selectedElement) {
+        if (!elements.contains(selectedElement)) {
             List<String> ids = elements.stream()
                     .map(Object::toString)
                     .toList();
             throw new BattleException("Selected element [%s] is not in [%s]"
-                    .formatted(selectedEnemy, String.join(", ", ids)));
+                    .formatted(selectedElement, String.join(", ", ids)));
         }
 
-        this.selectedElement = selectedEnemy;
+        this.selectedElement = selectedElement;
     }
 
     @Nullable

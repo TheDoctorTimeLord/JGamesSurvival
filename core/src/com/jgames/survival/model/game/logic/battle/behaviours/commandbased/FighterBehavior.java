@@ -26,21 +26,21 @@ public class FighterBehavior extends CommandsBasedBehavior {
                 .bindCommand(MeleeAttackCommand.class, (id, command) -> {
                     SelectionFromSetParameters<BattleModel> parametersTemplate = command.createParametersTemplate();
                     BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getElements());
-                    parametersTemplate.selectModel(selected);
+                    parametersTemplate.selectElement(selected);
 
                     return new BattleCommandPerformElement<>(id, command, parametersTemplate);
                 })
                 .bindCommand(RangedAttack.class, (id, command) -> {
                     SelectionFromSetParameters<BattleModel> parametersTemplate = command.createParametersTemplate();
                     BattleModel selected = RandomUtils.chooseInCollection(parametersTemplate.getElements());
-                    parametersTemplate.selectModel(selected);
+                    parametersTemplate.selectElement(selected);
 
                     return new BattleCommandPerformElement<>(id, command, parametersTemplate);
                 })
                 .bindCommand(MoveCommand.class, (id, command) -> {
                     SelectionFromSetParameters<Point> parametersTemplate = command.createParametersTemplate();
                     Point selected = RandomUtils.chooseInCollection(parametersTemplate.getElements());
-                    parametersTemplate.selectModel(selected);
+                    parametersTemplate.selectElement(selected);
 
                     return new BattleCommandPerformElement<>(id, command, parametersTemplate);
                 })

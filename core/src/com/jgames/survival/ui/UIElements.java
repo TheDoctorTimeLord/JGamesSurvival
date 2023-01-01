@@ -5,9 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.jgames.survival.model.GameActionSender;
 import com.jgames.survival.presenter.core.gamestate.PresentingGameState;
 import com.jgames.survival.presenter.core.uiscripts.UIScriptMachine;
-import com.jgames.survival.model.GameActionSender;
 import com.jgames.survival.ui.assets.TextureStorage;
 
 public class UIElements {

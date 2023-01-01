@@ -6,6 +6,8 @@ import java.util.Properties;
 
 import ru.jengine.beancontainer.dataclasses.ContainerConfiguration;
 import ru.jengine.beancontainer.implementation.JEngineContainer;
+import ru.jengine.jsonconverter.JsonConverter;
+import ru.jengine.jsonconverter.resources.ResourceMetadata;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -21,6 +23,7 @@ import com.jgames.survival.presenter.core.uiscripts.DispatcherUIScriptMachine;
 import com.jgames.survival.presenter.filling.clickactions.CommandButtonClickHandler;
 import com.jgames.survival.presenter.filling.clickactions.MapCellClickHandler;
 import com.jgames.survival.presenter.filling.clickactions.ButtonClickedHandler;
+import com.jgames.survival.presenter.filling.jsonloading.CoreResourceLoader;
 import com.jgames.survival.presenter.modules.PresenterAndUIMainModule;
 import com.jgames.survival.ui.UIComponentRegistrar;
 import com.jgames.survival.ui.UIElements;
@@ -29,6 +32,7 @@ import com.jgames.survival.ui.uifactories.LeftTopInformationFactory;
 import com.jgames.survival.ui.uifactories.MapTableFactory;
 import com.jgames.survival.ui.uifactories.PhaseAndTurnPanelFactory;
 import com.jgames.survival.ui.uifactories.SaveAndLoadPanelFactory;
+import com.jgames.survival.ui.uifactories.config.UIFactoryConfig;
 import com.jgames.survival.ui.uiscriptelements.mappanel.UpdateMapAction;
 import com.jgames.survival.utils.GameProperties;
 
@@ -56,6 +60,7 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
                 .addAdditionalBean(stage)
                 .addAdditionalBean(gameHandler)
                 .addAdditionalBean(gameHandler.getLogger())
+                .addAdditionalBean(new CoreResourceLoader())
                 .build());
 
         gameHandler.onStart();
@@ -63,13 +68,17 @@ public class SurvivalGame extends ApplicationAdapter { //TODO переделат
         DispatcherUIScriptMachine scriptMachine = container.getBean(DispatcherUIScriptMachine.class);
         ButtonClickedHandler buttonClickedHandler = new ButtonClickedHandler(scriptMachine);
 
+        JsonConverter jsonConverter = container.getBean(JsonConverter.class);
+        ResourceMetadata uiConfig = new ResourceMetadata("core", "uiConfig");
+        UIFactoryConfig uiFactoryConfig = jsonConverter.convertFromJson(uiConfig, UIFactoryConfig.class);
+
         UIComponentRegistrar componentRegistrar = container.getBean(UIComponentRegistrar.class);
         componentRegistrar
                 .registerComponent(new MapTableFactory(new MapCellClickHandler(scriptMachine)))
                 .registerComponent(new LeftTopInformationFactory(300, 300))
                 .registerComponent(new CommandPanelFactory(new CommandButtonClickHandler(scriptMachine)))
-                .registerComponent(new PhaseAndTurnPanelFactory(buttonClickedHandler))
-                .registerComponent(new SaveAndLoadPanelFactory(buttonClickedHandler));
+                .registerComponent(new PhaseAndTurnPanelFactory(uiFactoryConfig, buttonClickedHandler))
+                .registerComponent(new SaveAndLoadPanelFactory(uiFactoryConfig, buttonClickedHandler));
 
         UIElements uiElements = componentRegistrar.createInterface();
         scriptMachine.dispatch(new UpdateMapAction(), action -> {});

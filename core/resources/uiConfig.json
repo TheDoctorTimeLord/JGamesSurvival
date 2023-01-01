@@ -1,0 +1,17 @@
+{
+  "phaseAndTurn": {
+    "align": 20,
+    "buttonMiddleWidth": 120,
+    "buttonMiddleHeight": 50,
+    "nextPhaseName": "Next Phase",
+    "nextTurnName": "Next Turn"
+  },
+  "saveAndLoad": {
+    "align": 12,
+    "buttonMiddleWidth": 100,
+    "buttonMiddleHeight": 50,
+    "saveName": "Sav",
+    "loadName": "Load",
+    "saveFileName": "save.json"
+  }
+}
