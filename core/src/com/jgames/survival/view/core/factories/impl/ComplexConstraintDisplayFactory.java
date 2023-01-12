@@ -33,7 +33,7 @@ public class ComplexConstraintDisplayFactory implements DisplayFactory<ComplexCo
     }
 
     @Override
-    public ComplexConstraintDisplayImpl buildDisplay(Map<String, Object> properties) {
+    public ComplexConstraintDisplayImpl buildDisplay(String displayName, Map<String, Object> properties) {
         List<String> constraintNames = getConstraintNames(properties);
         ConstraintManager constraintManager = new ConstraintManager();
 
@@ -48,7 +48,7 @@ public class ComplexConstraintDisplayFactory implements DisplayFactory<ComplexCo
 
         boolean isFillScreen = getPropertyOrDefault(IS_FILL_SCREEN, properties, Boolean.FALSE);
 
-        return new ComplexConstraintDisplayImpl(constraintManager, isFillScreen);
+        return new ComplexConstraintDisplayImpl(displayName, constraintManager, isFillScreen);
     }
 
     private List<String> getConstraintNames(Map<String, Object> properties) {

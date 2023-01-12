@@ -32,9 +32,8 @@ public class ButtonsPanelDisplayFactory implements DisplayFactory<ButtonsPanelDi
     }
 
     @Override
-    public ButtonsPanelDisplay buildDisplay(Map<String, Object> properties) {
+    public ButtonsPanelDisplay buildDisplay(String displayName, Map<String, Object> properties) {
         List<String> availableButtons = getProperty(AVAILABLE_BUTTONS, properties);
-        boolean vertical = getPropertyOrDefault(VERTICAL, properties, false);
 
         List<Button> buttons = new ArrayList<>(availableButtons.size());
         for (String availableButtonName : availableButtons) {
@@ -47,7 +46,8 @@ public class ButtonsPanelDisplayFactory implements DisplayFactory<ButtonsPanelDi
             }
         }
 
-        return new ButtonsPanelDisplay(buttons, vertical, new ButtonsAdditionalParameters()
+        return new ButtonsPanelDisplay(displayName, buttons, new ButtonsAdditionalParameters()
+                .vertical(getPropertyOrDefault(VERTICAL, properties, false))
                 .buttonPadding(getPropertyOrDefault(BUTTON_PADDING, properties, 0f))
         );
     }

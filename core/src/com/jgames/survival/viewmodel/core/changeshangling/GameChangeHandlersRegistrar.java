@@ -18,7 +18,9 @@ public class GameChangeHandlersRegistrar {
         this.registrar = registrar;
         this.gameState = gameState;
 
-        gameChangeHandlers.forEach(this::registerGameChangeHandler);
+        for (GameChangeHandler gameChangeHandler : gameChangeHandlers) {
+            registerGameChangeHandler(gameChangeHandler);
+        }
     }
 
     public GameChangeHandlersRegistrar registerGameChangeHandler(GameChangeHandler handler) {

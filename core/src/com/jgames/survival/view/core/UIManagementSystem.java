@@ -2,9 +2,9 @@ package com.jgames.survival.view.core;
 
 import static com.jgames.survival.view.core.Constants.DISPLAY_DEFAULT_BACKGROUND;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.utils.Logger;
@@ -16,9 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.jgames.survival.view.core.assets.TextureStorage;
 import com.jgames.survival.view.core.displays.Display;
+import com.jgames.survival.view.core.displays.impl.RootDisplay;
 import com.jgames.survival.view.core.factories.UIFactoringConfiguration;
 import com.jgames.survival.view.core.factories.UIFactoringManager;
-import com.jgames.survival.view.core.uielements.UIElementManager;
 import com.jgames.survival.viewmodel.core.UpdatableOnGameTick;
 
 @Bean
@@ -26,20 +26,22 @@ public class UIManagementSystem implements UpdatableOnGameTick {
     private final DefaultDisplay defaultDisplay;
     private final Logger logger;
 
-    private final List<Display> boundedDisplays = new ArrayList<>();
+    private final RootDisplay rootDisplay;
     private final Stage stage;
-    private final UIElementManager uiElementManager;
     private final UIFactoringManager uiFactoringManager;
     private final InterfaceCreator interfaceCreator;
+    private final UIEventBus eventBus;
 
-    public UIManagementSystem(Logger logger, Stage stage, UIElementManager uiElementManager,
-            UIFactoringManager uiFactoringManager, TextureStorage textureStorage, InterfaceCreator interfaceCreator) {
+    public UIManagementSystem(Logger logger, Stage stage, UIFactoringManager uiFactoringManager,
+            TextureStorage textureStorage, InterfaceCreator interfaceCreator, UIEventBus eventBus) {
         this.stage = stage;
-        this.uiElementManager = uiElementManager;
         this.uiFactoringManager = uiFactoringManager;
         this.defaultDisplay = new DefaultDisplay(textureStorage.createSprite(DISPLAY_DEFAULT_BACKGROUND));
         this.logger = logger;
         this.interfaceCreator = interfaceCreator;
+        this.eventBus = eventBus;
+
+        this.rootDisplay = new RootDisplay(stage, eventBus);
     }
 
     public void configure(UIFactoringConfiguration factoringConfiguration) {
@@ -60,20 +62,20 @@ public class UIManagementSystem implements UpdatableOnGameTick {
     }
 
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-
-        for (Display display : boundedDisplays) {
-            display.resize(width, height);
-        }
+        rootDisplay.resize(width, height);
     }
 
     public Stage getStage() {
         return stage;
     }
 
-    public Display buildDisplay(String displayFactoringCode, Map<String, Object> properties) {
+    public RootDisplay getRootDisplay() {
+        return rootDisplay;
+    }
+
+    public Display buildDisplay(String displayFactoringCode, String displayName, Map<String, Object> properties) {
         try {
-            return uiFactoringManager.getDisplayFactory(displayFactoringCode).buildDisplay(properties);
+            return uiFactoringManager.getDisplayFactory(displayFactoringCode).buildDisplay(displayName, properties);
         }
         catch (UIException e) {
             logger.error("UISystem", e.getMessage(), e);
@@ -81,8 +83,8 @@ public class UIManagementSystem implements UpdatableOnGameTick {
         }
     }
 
-    public Display bindDisplay(String displayFactoringCode, Map<String, Object> properties) {
-        Display display = buildDisplay(displayFactoringCode, properties);
+    public Display bindDisplay(String displayFactoringCode, String displayName, Map<String, Object> properties) {
+        Display display = buildDisplay(displayFactoringCode, displayName, properties);
         if (display == null) {
             display = defaultDisplay.clone();
         }
@@ -93,30 +95,41 @@ public class UIManagementSystem implements UpdatableOnGameTick {
     }
 
     public void bindDisplay(Display display) {
-        stage.addActor(display.asActor());
-        boundedDisplays.add(display);
-        display.onBind();
-        display.show();
+        rootDisplay.bindDisplay(display);
     }
 
     public void unbindDisplay(Display display) {
-        display.hide();
-        display.onUnbind();
-        stage.getRoot().removeActor(display.asActor());
-        boundedDisplays.remove(display);
+        rootDisplay.unbindDisplay(display);
     }
 
-    public UIElementManager getUiElementManager() {
-        return uiElementManager;
+    @Nullable
+    public CanBeActor findByPath(String... path) {
+        if (path.length == 0) {
+            return null;
+        }
+
+        Display currentDisplay = rootDisplay;
+        for (int i = 0; i < path.length - 1; i++) {
+            String pathPart = path[i];
+            CanBeActor canBeActor = currentDisplay.findNamedElement(pathPart);
+            if (!(canBeActor instanceof Display display)) {
+                return null;
+            }
+
+            currentDisplay = display;
+        }
+
+        return currentDisplay.findNamedElement(path[path.length - 1]);
     }
 
     public void setDebug(boolean isDebug) {
         stage.setDebugAll(isDebug);
+        eventBus.setEnableDebugEventInfo(isDebug);
     }
 
     public static class DefaultDisplay implements Display, Cloneable {
-        private TextureRegionDrawable defaultBackground;
-        private Image defaultBackgroundActor;
+        private final TextureRegionDrawable defaultBackground;
+        private final Image defaultBackgroundActor;
 
         public DefaultDisplay(TextureRegion defaultBackground) {
             this.defaultBackground = new TextureRegionDrawable(defaultBackground);
@@ -131,6 +144,28 @@ public class UIManagementSystem implements UpdatableOnGameTick {
         @Override
         public DefaultDisplay clone() {
             return new DefaultDisplay(defaultBackground.getRegion());
+        }
+
+        @Override
+        public String getName() {
+            return "defaultDisplay";
+        }
+
+        @Override
+        public void onBind(UIEventBus eventBus, @Nullable Display parent) { }
+
+        @Override
+        public void onUnbind(UIEventBus eventBus) { }
+
+        @Nullable
+        @Override
+        public Display getParent() {
+            return null;
+        }
+
+        @Override
+        public CanBeActor findNamedElement(String elementName) {
+            return null;
         }
     }
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import com.jgames.survival.view.core.displays.Display;
 
 public interface DisplayFactory<D extends Display> {
-    D buildDisplay(Map<String, Object> properties);
+    D buildDisplay(String displayName, Map<String, Object> properties);
 
     @SuppressWarnings("unchecked")
     default <T> T getProperty(String property, Map<String, Object> properties) {

@@ -19,7 +19,11 @@ public class Multimap<K, V> {
         map.computeIfAbsent(key, k -> new HashSet<>()).add(value);
     }
 
-    public void removeFromValues(V value) {
+    public void removeKey(K key) {
+        map.remove(key);
+    }
+
+    public void removeValues(V value) {
         List<K> keysForRemove = new ArrayList<>();
 
         for (Entry<K, Set<V>> entry : map.entrySet()) {

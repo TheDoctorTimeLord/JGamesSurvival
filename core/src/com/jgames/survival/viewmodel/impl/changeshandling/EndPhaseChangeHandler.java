@@ -25,8 +25,8 @@ public class EndPhaseChangeHandler extends BaseGameChangeHandler {
     }
 
     @Override
-    public boolean needNotify(GameChange gameChange) {
-        return gameChange instanceof NewPhase;
+    public boolean needNotify(GameChange information) {
+        return information instanceof NewPhase;
     }
 
     @Nullable

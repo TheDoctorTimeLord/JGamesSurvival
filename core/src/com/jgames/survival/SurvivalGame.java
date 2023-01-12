@@ -29,7 +29,6 @@ import com.jgames.survival.view.core.factories.JavaUIFactoringConfiguration;
 import com.jgames.survival.view.core.factories.impl.ButtonGenerator;
 import com.jgames.survival.view.core.factories.impl.ButtonsPanelDisplayFactory;
 import com.jgames.survival.view.core.factories.impl.ComplexConstraintDisplayFactory;
-import com.jgames.survival.view.impl.factories.BattlefieldDisplayFactory;
 import com.jgames.survival.viewmodel.core.UpdatingSystemsManager;
 import com.jgames.survival.viewmodel.jenginemodules.ViewModelBaseModule;
 
@@ -75,16 +74,15 @@ public class SurvivalGame extends ApplicationAdapter {
         updatingSystemsManager = container.getBean(UpdatingSystemsManager.class);
 
         uiManagementSystem = container.getBean(UIManagementSystem.class);
+        uiManagementSystem.setDebug(isDebugMode);
+
         uiManagementSystem.configure(JavaUIFactoringConfiguration.create()
                 .addDisplayFactory("complexConstraintFactory", new ComplexConstraintDisplayFactory(constraints, logger))
                 .addDisplayFactory("buttonsPanelDisplay", new ButtonsPanelDisplayFactory(buttonGenerators, logger))
-                .addDisplayFactory("battlefieldDisplay", new BattlefieldDisplayFactory())
                 .build());
-
         uiManagementSystem.buildInterface();
 
         Gdx.input.setInputProcessor(stage);
-        uiManagementSystem.setDebug(isDebugMode);
     }
 
     @Override

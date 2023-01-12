@@ -7,7 +7,7 @@ import ru.jengine.jsonconverter.modules.EnableJsonConverterWithStandardTools;
 
 import com.jgames.survival.utils.CommonConstants;
 
-@ContainerModule(contextName = CommonConstants.VIEW_CONTEXT, beanSources = CommonConstants.VIEW_MODEL_CONTEXT)
+@ContainerModule(contextName = CommonConstants.CLIENT_CONTEXT)
 @PackageScan("com.jgames.survival.view.jenginemodules")
 @EnableJsonConverterWithStandardTools
 public class ViewBaseModule extends AnnotationModule {

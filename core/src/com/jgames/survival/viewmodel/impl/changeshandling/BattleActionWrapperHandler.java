@@ -24,8 +24,8 @@ public class BattleActionWrapperHandler extends BaseGameChangeHandler {
     }
 
     @Override
-    public boolean needNotify(GameChange gameChange) {
-        return gameChange instanceof BattleActionWrapper;
+    public boolean needNotify(GameChange information) {
+        return information instanceof BattleActionWrapper;
     }
 
     @Nullable

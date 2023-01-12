@@ -7,20 +7,23 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.jgames.survival.utils.Multimap;
+import com.jgames.survival.view.core.Bindable;
+import com.jgames.survival.view.core.CanBeActor;
+import com.jgames.survival.view.core.HasName;
 import com.jgames.survival.view.core.displays.ComplexConstraintDisplay;
 import com.jgames.survival.view.core.displays.Constraint;
 import com.jgames.survival.view.core.displays.ConstraintManager;
 import com.jgames.survival.view.core.displays.Display;
 import com.jgames.survival.view.core.uielements.UIElement;
-import com.jgames.survival.view.core.uielements.UIElementWrapper;
 
-public class ComplexConstraintDisplayImpl implements ComplexConstraintDisplay {
-    private final Multimap<Constraint, Actor> boundedElements = new Multimap<>();
+public class ComplexConstraintDisplayImpl extends BaseDisplay implements ComplexConstraintDisplay {
+    private final Multimap<CanBeActor, Constraint> boundedElements = new Multimap<>();
     private final ConstraintManager constraintManager;
     private final WidgetGroup display;
     private final boolean isFillingScreen;
 
-    public ComplexConstraintDisplayImpl(ConstraintManager constraintManager, boolean isFillScreen) {
+    public ComplexConstraintDisplayImpl(String displayName, ConstraintManager constraintManager, boolean isFillScreen) {
+        super(displayName);
         this.constraintManager = constraintManager;
         this.display = new WidgetGroup();
         this.isFillingScreen = isFillScreen;
@@ -35,53 +38,62 @@ public class ComplexConstraintDisplayImpl implements ComplexConstraintDisplay {
 
     @Override
     public void bindDisplay(Display display, String withConstraint) {
-        Constraint constraint = constraintManager.getConstraint(withConstraint);
-
-        Actor displayActor = display.asActor();
-        this.display.addActor(displayActor);
-        constraint.applyConstraint(displayActor, displayActor.getParent());
-
-        boundedElements.add(constraint, displayActor);
-
-        display.onBind();
+        bindComponent(display, withConstraint);
         display.show();
     }
 
     @Override
     public void unbindDisplay(Display display) {
-        Actor actor = display.asActor();
-
         display.hide();
-        display.onUnbind();
-        this.display.removeActor(actor);
-        boundedElements.removeFromValues(actor);
+        unbindComponent(display);
     }
 
     @Override
-    public void bindElement(UIElementWrapper elementWrapper, String withConstraint) {
-        Constraint constraint = constraintManager.getConstraint(withConstraint);
-
-        Actor elementActor = elementWrapper.asActor();
-        this.display.addActor(elementActor);
-        constraint.applyConstraint(elementActor, elementActor.getParent());
-
-        boundedElements.add(constraint, elementActor);
+    public void bindElement(UIElement element, String withConstraint) {
+        bindComponent(element, withConstraint);
     }
 
     @Override
     public void unbindElement(UIElement element) {
-        Actor actor = element.asActor();
+        unbindComponent(element);
+    }
 
-        this.display.removeActor(actor);
-        boundedElements.removeFromValues(actor);
+    private <T extends CanBeActor & Bindable> void bindComponent(T component, String withConstraint) {
+        Constraint constraint = constraintManager.getConstraint(withConstraint);
+
+        Actor actor = component.asActor();
+        this.display.addActor(actor);
+        constraint.applyConstraint(actor, actor.getParent());
+
+        boundedElements.add(component, constraint);
+
+        component.onBind(getEventBus(), this);
+    }
+
+    private <T extends CanBeActor & Bindable> void unbindComponent(T component) {
+        component.onUnbind(getEventBus());
+        this.display.removeActor(component.asActor());
+        boundedElements.removeKey(component);
+    }
+
+    @Override
+    public CanBeActor findNamedElement(String elementName) {
+        for (CanBeActor canBeActor : boundedElements.asMap().keySet()) {
+            if (canBeActor instanceof HasName hasName && hasName.getName().equals(elementName)) {
+                return canBeActor;
+            }
+        }
+        return null;
     }
 
     @Override
     public void resize(int width, int height) {
-        for (Entry<Constraint, Set<Actor>> entry : boundedElements.asMap().entrySet()) {
-            for (Actor actor : entry.getValue()) {
-                Group parent = isFillingScreen ? actor.getStage().getRoot() : actor.getParent();
-                entry.getKey().applyResizedConstraint(actor, parent, width, height);
+        for (Entry<CanBeActor, Set<Constraint>> entry : boundedElements.asMap().entrySet()) {
+            Actor actor = entry.getKey().asActor();
+            Group parent = isFillingScreen ? actor.getStage().getRoot() : actor.getParent();
+
+            for (Constraint constraint : entry.getValue()) {
+                constraint.applyResizedConstraint(actor, parent, width, height);
             }
         }
     }

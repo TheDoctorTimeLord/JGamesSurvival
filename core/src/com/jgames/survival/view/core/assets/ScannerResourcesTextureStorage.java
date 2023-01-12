@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.reflections.vfs.Vfs;
 import org.reflections.vfs.Vfs.Dir;
 
@@ -24,7 +26,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.Null;
 import com.jgames.survival.view.core.UIException;
 import com.jgames.survival.view.core.UIRuntimeException;
 
@@ -88,13 +89,13 @@ public class ScannerResourcesTextureStorage implements TextureStorage {
         }
     }
 
-    @Null
+    @Nullable
     @Override
     public Texture getTexture(String textureName) {
         return textureStorage.get(textureName);
     }
 
-    @Null
+    @Nullable
     @Override
     public Sprite createSprite(String spriteName) {
         Texture texture = getTexture(spriteName);
@@ -106,13 +107,13 @@ public class ScannerResourcesTextureStorage implements TextureStorage {
         return new Sprite(getTexture(spriteName));
     }
 
-    @Null
+    @Nullable
     @Override
     public NinePatch createNinePatch(String patchName, int boardSize) {
         return createNinePatch(patchName, boardSize, boardSize, boardSize, boardSize);
     }
 
-    @Null
+    @Nullable
     @Override
     public NinePatch createNinePatch(String patchName, int left, int right, int top, int bottom) {
         return new NinePatch(createSprite(patchName), left, right, top, bottom);

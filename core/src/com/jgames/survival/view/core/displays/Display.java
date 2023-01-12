@@ -1,16 +1,14 @@
 package com.jgames.survival.view.core.displays;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Null;
-import com.jgames.survival.view.core.CanBeActor;
+import javax.annotation.Nullable;
 
-public interface Display extends CanBeActor {
-    default void onBind() { }
-    default void onUnbind() { }
-    @Null
-    default Actor findNamedElement(String elementName) {
-        return null;
-    }
+import com.jgames.survival.view.core.Bindable;
+import com.jgames.survival.view.core.CanBeActor;
+import com.jgames.survival.view.core.HasName;
+
+public interface Display extends CanBeActor, HasName, Bindable {
+    @Nullable
+    CanBeActor findNamedElement(String elementName);
 
     default void resize(int width, int height) {}
 

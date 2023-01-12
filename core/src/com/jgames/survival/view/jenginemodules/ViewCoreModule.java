@@ -6,7 +6,7 @@ import ru.jengine.beancontainer.implementation.moduleimpls.AnnotationModule;
 
 import com.jgames.survival.utils.CommonConstants;
 
-@ContainerModule(contextName = CommonConstants.VIEW_CONTEXT)
+@ContainerModule(contextName = CommonConstants.CLIENT_CONTEXT)
 @PackageScan("com.jgames.survival.view.core")
 public class ViewCoreModule extends AnnotationModule {
 }
