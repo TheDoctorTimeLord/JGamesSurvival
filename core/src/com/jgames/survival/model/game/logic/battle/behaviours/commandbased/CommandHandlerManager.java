@@ -3,7 +3,6 @@ package com.jgames.survival.model.game.logic.battle.behaviours.commandbased;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -35,19 +34,13 @@ public class CommandHandlerManager {
             return new MainCommandHandlerBuilder();
         }
 
-        @SuppressWarnings("unchecked")
         public <T extends BattleCommand<?>> MainCommandHandlerBuilder bindCommand(Class<T> boundedTo,
-                BiFunction<Integer, T, BattleCommandPerformElement<?>> handler)
+                CommandHandlerFunction<T> handler)
         {
-            commandHandlers.add(new CommonCommandHandler(
-                    boundedTo,
-                    (BiFunction<Integer, BattleCommand<?>, BattleCommandPerformElement<?>>)handler
-            ));
+            commandHandlers.add(new CommonCommandHandler(boundedTo, handler));
             return this;
         }
-        public MainCommandHandler build(
-                BiFunction<Integer, List<BattleCommand<?>>, BattleCommandPerformElement<?>> defaultHandler)
-        {
+        public MainCommandHandler build(DefaultCommandHandlerFunction defaultHandler) {
             return new MainCommandHandler(commandHandlers, new DefaultCommandHandler(defaultHandler));
         }
 
@@ -62,14 +55,15 @@ public class CommandHandlerManager {
             this.defaultHandler = defaultHandler;
         }
 
+        @SuppressWarnings("unchecked")
         public BattleCommandPerformElement<?> handle(int characterId, Map<Class<? extends BattleCommand<?>>, BattleCommand<?>> availableCommands) {
             for (CommonCommandHandler commandHandler : commandHandlers) {
                 BattleCommand<?> handlingCommand = commandHandler.getHandlingCommand(availableCommands);
                 if (handlingCommand != null) {
-                    return commandHandler.handler.apply(characterId, handlingCommand);
+                    return ((CommandHandlerFunction<BattleCommand<?>>)commandHandler.handler).handle(characterId, handlingCommand);
                 }
             }
-            return defaultHandler.handler.apply(characterId, null);
+            return defaultHandler.handler.handle(characterId, null);
         }
 
     }
@@ -91,15 +85,25 @@ public class CommandHandlerManager {
         }
     }
 
-    private static class CommonCommandHandler extends CommandHandler<BiFunction<Integer, BattleCommand<?>, BattleCommandPerformElement<?>>> {
-        private CommonCommandHandler(Class<? extends BattleCommand<?>> commandClass,
-                BiFunction<Integer, BattleCommand<?>, BattleCommandPerformElement<?>> handler) {
+    @FunctionalInterface
+    public interface CommandHandlerFunction<C extends BattleCommand<?>> {
+        BattleCommandPerformElement<?> handle(Integer id, C command);
+    }
+
+    private static class CommonCommandHandler extends CommandHandler<CommandHandlerFunction<?>> {
+
+        private CommonCommandHandler(Class<? extends BattleCommand<?>> commandClass, CommandHandlerFunction<?> handler) {
             super(commandClass, handler);
         }
     }
 
-    private static class DefaultCommandHandler extends CommandHandler<BiFunction<Integer, List<BattleCommand<?>>, BattleCommandPerformElement<?>>> {
-        private DefaultCommandHandler(BiFunction<Integer, List<BattleCommand<?>>, BattleCommandPerformElement<?>> handler) {
+    @FunctionalInterface
+    public interface DefaultCommandHandlerFunction {
+        BattleCommandPerformElement<?> handle(Integer id, List<BattleCommand<?>> command);
+    }
+
+    private static class DefaultCommandHandler extends CommandHandler<DefaultCommandHandlerFunction> {
+        private DefaultCommandHandler(DefaultCommandHandlerFunction handler) {
             super(null, handler);
         }
     }

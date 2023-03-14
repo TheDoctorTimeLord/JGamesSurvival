@@ -11,15 +11,15 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import ru.jengine.utils.CollectionUtils;
 import ru.jengine.utils.algorithms.BFS;
 
 import com.jgames.survival.model.game.logic.ai.cognition.Cognition;
-import com.jgames.survival.model.game.logic.ai.cognition.CognitionDataBase;
+import com.jgames.survival.model.game.logic.ai.cognition.CognitionCluster;
 import com.jgames.survival.model.game.logic.ai.cognition.CognitionRelation;
 
-public class CognitionDataBaseImpl implements CognitionDataBase {
+public class GraphCognitionCluster implements CognitionCluster {
     private final CognitionStorage cognitionStorage = new CognitionStorage();
     private final RelationStorage relationStorage = new RelationStorage();
 
@@ -50,7 +50,7 @@ public class CognitionDataBaseImpl implements CognitionDataBase {
     }
 
     @Override
-    public Cognition findCognition(String code) {
+    public Collection<Cognition> findCognition(String code) {
         return cognitionStorage.getCognition(code);
     }
 
@@ -72,9 +72,13 @@ public class CognitionDataBaseImpl implements CognitionDataBase {
 
         BFS.runAlgorithm(
                 firstCognition,
-                cognition -> firstCognition != cognition
-                        ? relationStorage.getRelated(relation, cognition)
-                        : CollectionUtils.concat(startCognition, relationStorage.getRelated(relation, cognition)),
+                cognition -> {
+                    Stream<Cognition> relatedCognition = relationStorage.getRelated(relation, cognition).stream();
+                    Stream<Cognition> cognitionForFiltering = firstCognition != cognition
+                            ? relatedCognition
+                            : Stream.concat(startCognition.stream(), relatedCognition);
+                    return cognitionForFiltering.filter(cognitionFilter).toList();
+                },
                 null,
                 foundedCognition::add,
                 null

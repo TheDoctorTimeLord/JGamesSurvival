@@ -1,7 +1,7 @@
 package com.jgames.survival.model.game.logic.ai.rules;
 
-import com.jgames.survival.model.game.logic.ai.cognition.CognitionDataBase;
+import com.jgames.survival.model.game.logic.ai.cognition.CognitionCluster;
 
 public interface RuleAction {
-    void applyAction(RuleCheckResult checkResult, CognitionDataBase cognitionDataBase);
+    void applyAction(RuleCheckContext ruleCheckContext, CognitionCluster cognitionCluster);
 }

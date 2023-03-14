@@ -1,36 +1,43 @@
 package com.jgames.survival.model.game.logic.ai.cognition.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 import com.jgames.survival.model.game.logic.ai.cognition.Cognition;
+import com.jgames.survival.utils.Multimap;
 
 public class CognitionStorage {
-    private final Map<String, Cognition> knowledges = new HashMap<>();
+    private final Multimap<String, Cognition> knowledge = new Multimap<>();
 
-    public void addCognition(Cognition node) {
-        String nodeCode = node.getCode();
-        if (!knowledges.containsKey(nodeCode)) {
-            knowledges.put(nodeCode, node);
-        }
+    public void addCognition(Cognition cognition) {
+        knowledge.add(cognition.getCode(), cognition);
     }
 
     public void removeCognition(Cognition cognition) {
-        knowledges.remove(cognition.getCode());
+        String cognitionCode = cognition.getCode();
+
+        Set<Cognition> cognitionWithSameCode = knowledge.get(cognitionCode);
+        if (cognitionWithSameCode == null) {
+            return;
+        }
+
+        cognitionWithSameCode.remove(cognition);
+        if (cognitionWithSameCode.isEmpty()) {
+            knowledge.removeKey(cognitionCode);
+        }
     }
 
-    public boolean containsCognition(Cognition node) {
-        return containsCognition(node.getCode());
+    public boolean containsCognition(Cognition cognition) {
+        Set<Cognition> cognitionWithSameCode = knowledge.get(cognition.getCode());
+        return cognitionWithSameCode != null && cognitionWithSameCode.contains(cognition);
     }
 
-    public boolean containsCognition(String nodeCode) {
-        return knowledges.containsKey(nodeCode);
+    public boolean containsCognition(String cognitionCode) {
+        return knowledge.get(cognitionCode) != null;
     }
 
-    @Nullable
-    public Cognition getCognition(String nodeCode) {
-        return knowledges.get(nodeCode);
+    public Collection<Cognition> getCognition(String cognitionCode) {
+        return knowledge.asMap().getOrDefault(cognitionCode, Collections.emptySet());
     }
 }

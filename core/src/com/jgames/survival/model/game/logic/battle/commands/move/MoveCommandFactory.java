@@ -61,7 +61,7 @@ public class MoveCommandFactory implements BattleCommandFactory<SelectionFromSet
         Point modelPosition = canMoved.getPosition();
         Direction modelDirection = canMoved.getDirection();
         List<Point> pointNeighbour = LocationUtils.getNeighbours(modelPosition, battleState,
-                LocationUtils.getFiveAroundOffsets(modelDirection));
+                LocationUtils.getVerticalAndHorizontalOffsets(modelDirection));
 
         return pointNeighbour.stream()
                 .filter(point -> battleState.getOnPosition(point).isEmpty())

@@ -1,9 +1,5 @@
 package com.jgames.survival.model.game.logic.battle.attributes.rules;
 
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.BODY_PARTS;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.LEFT_LEG;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.RIGHT_LEG;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features.CAN_MOVE;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features.FEATURES;
 
@@ -21,7 +17,6 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.p
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.PuttedProcessedAttribute;
 
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts;
 
 /**
  * Правило, по которому изменяется атрибут moveDistance некоторой модели на поле боя
@@ -30,44 +25,21 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.Attribut
 public class MoveDistanceAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
-        return List.of(new CodeWithPathPrefixCondition(CAN_MOVE, List.of(FEATURES)),
-                new CodeWithPathPrefixCondition(STATE, List.of(BODY_PARTS, LEFT_LEG)),
-                new CodeWithPathPrefixCondition(STATE, List.of(BODY_PARTS, RIGHT_LEG)));
+        return List.of(new CodeWithPathPrefixCondition(CAN_MOVE, List.of(FEATURES)));
     }
 
     @Override
     public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
-        if (context.getChangedAttribute() instanceof IntAttribute state) {
+        if (context.getChangedAttribute() instanceof AttributeMarker) {
             BattleModel battleModel = context.getModel();
             IntAttribute moveDistance =  battleModel.getAttributes()
                     .getAsContainer(Attributes.ATTRIBUTES)
                     .getAsInt(Attributes.MOVE_DISTANCE);
 
-            int legState = state.getValue();
-            int anotherLegState = getAnotherLegState(battleModel, state);
-
-            moveDistance.setValue(Math.min(legState, anotherLegState));
-
-            return List.of(new PuttedProcessedAttribute(moveDistance));
+            return List.of(new PuttedProcessedAttribute(moveDistance.setValue(3)));
         }
 
         return List.of();
-    }
-
-    /**
-     * Отвечает за получение состояния другой ноги персонажа
-     * @param battleModel объект, представляющий персонажа в бою
-     * @param currentLegState состояние одной из ног персонажа
-     * @return состояние другой ноги персонажа
-     */
-    private static int getAnotherLegState(BattleModel battleModel, IntAttribute currentLegState) {
-        IntAttribute leftLegState = battleModel.getAttributes().getAsContainer(BodyParts.BODY_PARTS)
-                .getAsContainer(LEFT_LEG)
-                .getAsInt(STATE);
-        IntAttribute rightLegState = battleModel.getAttributes().getAsContainer(BodyParts.BODY_PARTS)
-                .getAsContainer(RIGHT_LEG)
-                .getAsInt(STATE);
-        return currentLegState.equals(leftLegState) ? rightLegState.getValue() : leftLegState.getValue();
     }
 
     @Override

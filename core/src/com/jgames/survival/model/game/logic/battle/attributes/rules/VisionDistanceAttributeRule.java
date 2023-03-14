@@ -2,9 +2,6 @@ package com.jgames.survival.model.game.logic.battle.attributes.rules;
 
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes.ATTRIBUTES;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes.VISION_DISTANCE;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.BODY_PARTS;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.HEAD;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features.CAN_VISION;
 import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Features.FEATURES;
 
@@ -19,10 +16,8 @@ import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.h
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.handlingconditions.HandlingCondition;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.AbstractProcessedAttribute;
 import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.PuttedProcessedAttribute;
-import ru.jengine.battlemodule.standardfilling.battleattributes.attributerules.processedattributes.RemovedProcessedAttribute;
 
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
-import com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue;
 import com.jgames.survival.model.game.logic.battle.attributes.constants.VisionDistance;
 
 /**
@@ -32,22 +27,17 @@ import com.jgames.survival.model.game.logic.battle.attributes.constants.VisionDi
 public class VisionDistanceAttributeRule implements AttributeRule {
     @Override
     public List<HandlingCondition> getHandledAttributeCodes() {
-        return List.of(new CodeWithPathPrefixCondition(CAN_VISION, List.of(FEATURES)),
-                new CodeWithPathPrefixCondition(STATE, List.of(BODY_PARTS, HEAD)));
+        return List.of(new CodeWithPathPrefixCondition(CAN_VISION, List.of(FEATURES)));
     }
 
     @Override
     public List<AbstractProcessedAttribute> processPuttedAttribute(ChangedAttributesContext context) {
-        if (context.getChangedAttribute() instanceof IntAttribute state) {
-            StateValue headState = StateValue.resolveByOrdinal(state.getValue());
+        if (context.getChangedAttribute() instanceof AttributeMarker) {
             IntAttribute visionDistance = context.getModel().getAttributes()
                     .getAsContainer(ATTRIBUTES)
                     .get(Attributes.VISION_DISTANCE);
 
-            if (headState != null) {
-                visionDistance.setValue(mapToVisionDistance(headState));
-                return List.of(new PuttedProcessedAttribute(visionDistance));
-            }
+            return List.of(new PuttedProcessedAttribute(visionDistance.setValue(VisionDistance.FAR.ordinal())));
         }
 
         return List.of();
@@ -58,20 +48,11 @@ public class VisionDistanceAttributeRule implements AttributeRule {
         if (context.getChangedAttribute() instanceof AttributeMarker) {
             IntAttribute visionDistance = context.getModel().getAttributes()
                     .getAsContainer(ATTRIBUTES)
-                    .getAsInt(VISION_DISTANCE)
-                    .setValue(VisionDistance.NONE.ordinal());
+                    .getAsInt(VISION_DISTANCE);
 
-            return List.of(new RemovedProcessedAttribute(visionDistance));
+            return List.of(new PuttedProcessedAttribute(visionDistance.setValue(VisionDistance.NONE.ordinal())));
         }
 
         return List.of();
-    }
-
-    private static int mapToVisionDistance(StateValue state) {
-        return switch (state) {
-            case GOOD -> VisionDistance.FAR.ordinal();
-            case DAMAGED -> VisionDistance.NEAR.ordinal();
-            default -> VisionDistance.NONE.ordinal();
-        };
     }
 }

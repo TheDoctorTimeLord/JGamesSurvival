@@ -28,19 +28,19 @@ public class LocationUtils {
     }
 
     public static Point[] getThreeFrontOffsets(Direction direction) {
-        Point topPoint = direction.getOffset();
-        Point leftTopPoint = topPoint.add(direction.rotateLeft().getOffset());
-        Point rightTopPoint = topPoint.add(direction.rotateRight().getOffset());
+        Point frontPoint = direction.getOffset();
+        Point leftTopPoint = frontPoint.add(direction.rotateLeft().getOffset());
+        Point rightTopPoint = frontPoint.add(direction.rotateRight().getOffset());
 
-        return new Point[] { topPoint, leftTopPoint, rightTopPoint };
+        return new Point[] { frontPoint, leftTopPoint, rightTopPoint };
     }
 
-    public static Point[] getFiveAroundOffsets(Direction direction) {
-        Point[] frontOffsets = getThreeFrontOffsets(direction);
-        Point[] offsets = Arrays.copyOf(frontOffsets, frontOffsets.length + 2);
-        offsets[frontOffsets.length] = direction.rotateLeft().getOffset();
-        offsets[frontOffsets.length + 1] = direction.rotateRight().getOffset();
+    public static Point[] getVerticalAndHorizontalOffsets(Direction direction) {
+        Point frontPoint = direction.getOffset();
+        Point leftPoint = direction.rotateLeft().getOffset();
+        Point rightPoint = direction.rotateRight().getOffset();
+        Point backPoint = direction.rotateLeft().rotateLeft().getOffset();
 
-        return offsets;
+        return new Point[] { frontPoint, leftPoint, rightPoint, backPoint };
     }
 }

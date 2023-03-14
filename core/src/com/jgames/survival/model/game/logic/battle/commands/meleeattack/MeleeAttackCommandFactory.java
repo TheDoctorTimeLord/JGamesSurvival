@@ -15,7 +15,6 @@ import ru.jengine.battlemodule.standardfilling.dynamicmodel.DynamicModel;
 import ru.jengine.beancontainer.annotations.Bean;
 
 import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
-import com.jgames.survival.model.game.logic.battle.commands.meleeattack.meleeattackstrategies.ChooseDamagedBodyPartStrategy;
 import com.jgames.survival.model.game.logic.battle.models.CanHit;
 import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
 
@@ -26,12 +25,6 @@ import com.jgames.survival.model.game.logic.battle.utils.LocationUtils;
  */
 @Bean
 public class MeleeAttackCommandFactory implements BattleCommandFactory<SelectionFromSetParameters<BattleModel>, MeleeAttackCommand> {
-    private final ChooseDamagedBodyPartStrategy chooseDamagedBodyPartStrategy;
-
-    public MeleeAttackCommandFactory(ChooseDamagedBodyPartStrategy strategy) {
-        this.chooseDamagedBodyPartStrategy = strategy;
-    }
-
     @Override
     public boolean canExecute(BattleModel model, BattleContext battleContext) {
         return model instanceof CanHit canHit && canHit.canHit();
@@ -39,23 +32,12 @@ public class MeleeAttackCommandFactory implements BattleCommandFactory<Selection
 
     @Override
     public boolean isAvailableCommand(BattleModel model, BattleContext battleContext) {
-        return model instanceof CanHit canHit && hasOpponentsNearby(canHit, battleContext.getBattleState());
+        return model instanceof CanHit canHit && !getNearestBattleModels(canHit, battleContext.getBattleState()).isEmpty();
     }
 
     @Override
     public MeleeAttackCommand createBattleCommand(BattleModel model, BattleContext battleContext) {
-        return new MeleeAttackCommand(getNearestBattleModels((CanHit)model, battleContext.getBattleState()),
-                chooseDamagedBodyPartStrategy);
-    }
-
-    /**
-     * Проверяет наличие противников рядом с бойцом
-     * @param battleState контекст битвы
-     * @return true, если рядом есть противники, иначе false
-     */
-    private static boolean hasOpponentsNearby(CanHit model, BattleState battleState) {
-        Set<BattleModel> enemies = getNearestBattleModels(model, battleState);
-        return !enemies.isEmpty();
+        return new MeleeAttackCommand(getNearestBattleModels((CanHit)model, battleContext.getBattleState()));
     }
 
     public static Set<BattleModel> getNearestBattleModels(CanHit model, BattleState battleState) {

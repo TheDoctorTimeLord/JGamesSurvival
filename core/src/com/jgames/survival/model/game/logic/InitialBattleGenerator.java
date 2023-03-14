@@ -42,7 +42,7 @@ public class InitialBattleGenerator extends BattleGenerator {
         List<BattleModel> staticModels = new ArrayList<>();
         BattlefieldLimiter battleFieldLimiter = new SquareBattleFieldLimiter(PointPool.obtain(0, 0), MAP_SIZE);
 
-        EntityType fighterType = new EntityType("person", AttributeGenerator.getInitialAttributesKit());
+        EntityType fighterType = new EntityType("person", AttributeGenerator.getFighterAttributesKit());
         StaticModelType staticModelType = new StaticModelType("wall", new AttributesContainer());
 
         for (int i = 0; i < 5; i++) {

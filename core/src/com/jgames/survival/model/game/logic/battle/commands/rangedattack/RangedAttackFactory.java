@@ -1,10 +1,5 @@
 package com.jgames.survival.model.game.logic.battle.commands.rangedattack;
 
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.Attributes.STATE;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.BODY_PARTS;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.LEFT_ARM;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.BodyParts.RIGHT_ARM;
-import static com.jgames.survival.model.game.logic.battle.attributes.constants.StateValue.DAMAGED;
 import static com.jgames.survival.model.game.logic.battle.vision.VisionScopeConstants.VISIBLE;
 
 import java.util.Collection;
@@ -23,6 +18,7 @@ import ru.jengine.battlemodule.standardfilling.visible.HasVision;
 import ru.jengine.battlemodule.standardfilling.visible.VisionInformationService;
 import ru.jengine.beancontainer.annotations.Bean;
 
+import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
 import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 
 @Bean
@@ -58,10 +54,8 @@ public class RangedAttackFactory implements BattleCommandFactory<SelectionFromSe
 
     public static boolean canRangedAttack(BattleModel model) {
         AttributesContainer attributes = model.getAttributes();
-        IntAttribute leftArmState = attributes.getAttributeByPath(BODY_PARTS, LEFT_ARM, STATE);
-        IntAttribute rightArmStata = attributes.getAttributeByPath(BODY_PARTS, RIGHT_ARM, STATE);
+        IntAttribute leftArmState = attributes.getAttributeByPath(Attributes.ATTRIBUTES, Attributes.DISTANCE_DAMAGE_POINT);
 
-        return leftArmState != null && rightArmStata != null &&
-                (DAMAGED.isGreater(leftArmState.getValue()) || DAMAGED.isGreater(rightArmStata.getValue()));
+        return leftArmState != null && leftArmState.getValue() > 0;
     }
 }
