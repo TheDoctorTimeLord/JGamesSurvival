@@ -1,9 +1,7 @@
 package com.jgames.survival.ui.cellactorfactories;
 
 import static com.jgames.survival.ui.assets.SimpleTextureStorage.Constants.DEAD_BODY;
-import static com.jgames.survival.ui.constants.HardcodeObjectNames.PERSON;
-import static com.jgames.survival.ui.constants.HardcodeObjectNames.PERSON_HP;
-import static com.jgames.survival.ui.constants.HardcodeObjectNames.WALL;
+import static com.jgames.survival.ui.constants.HardcodeObjectNames.*;
 import static com.jgames.survival.ui.constants.SpecialObjectsNames.BACKGROUND;
 import static com.jgames.survival.ui.constants.SpecialObjectsNames.TINT;
 
@@ -27,12 +25,22 @@ public class ActorFactoryConfig {
             .put(BACKGROUND, textureStorage -> new TextureFactory(textureStorage.createSprite(Constants.CELL_BACKGROUND)))
             .put(TINT, textureStorage -> new DeadObjectTint(textureStorage.createSprite(Constants.COMMON)))
             .put(PERSON_HP, textureStorage -> new HpLabelFactory())
+            .put(PERSON_TEAM, textureStorage -> new TeamFactory())
             .put(DEAD_BODY, textureStorage -> new TextureFactory(textureStorage.createSprite(DEAD_BODY)))
             .build();
 
     public static final Map<String, Function<TextureStorage, CellActorFactory>> ACTOR_FACTORIES_MAP = new
             ImmutableMap.Builder<String, Function<TextureStorage, CellActorFactory>>()
-            .put(PERSON, textureStorage -> new TexturesFactory(
+            .put(FIGHTER, textureStorage -> new TexturesFactory(
+                    List.of(
+                            textureStorage.createSprite(Constants.PERSON_UP),
+                            textureStorage.createSprite(Constants.PERSON_RIGHT),
+                            textureStorage.createSprite(Constants.PERSON_DOWN),
+                            textureStorage.createSprite(Constants.PERSON_LEFT)
+                    ),
+                    new PersonTextureSelector()
+            ))
+            .put(ARCHER, textureStorage -> new TexturesFactory(
                     List.of(
                             textureStorage.createSprite(Constants.PERSON_UP),
                             textureStorage.createSprite(Constants.PERSON_RIGHT),

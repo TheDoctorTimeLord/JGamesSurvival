@@ -27,6 +27,7 @@ public class GameObjectResolver implements ModelDataResolver {
                     cellGameObject.computeIfContains(TypeNameComponent.class, c ->
                             resolvedContexts.add(new ResolvingContext(cellGameObject, c.getTypeName())));
                     resolvedContexts.add(new ResolvingContext(cellGameObject, HardcodeObjectNames.PERSON_HP));
+                    resolvedContexts.add(new ResolvingContext(cellGameObject, HardcodeObjectNames.PERSON_TEAM));
                 }
             } else {
                 cellGameObject.computeIfContains(TypeNameComponent.class, component ->

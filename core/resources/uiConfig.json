@@ -7,10 +7,10 @@
     "nextTurnName": "Next Turn"
   },
   "saveAndLoad": {
-    "align": 12,
-    "buttonMiddleWidth": 100,
+    "align": 18,
+    "buttonMiddleWidth": 120,
     "buttonMiddleHeight": 50,
-    "saveName": "Sav",
+    "saveName": "Save",
     "loadName": "Load",
     "saveFileName": "save.json"
   }

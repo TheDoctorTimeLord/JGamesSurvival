@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.jgames.survival.presenter.core.CellActorFactory;
@@ -27,7 +26,7 @@ public class AlignedLabelFactory implements CellActorFactory {
     }
 
     @Override
-    public Actor create(@Nullable GameObject gameObject) throws UIException {
+    public Label create(@Nullable GameObject gameObject) throws UIException {
         Label label = new Label(labelText, createLabelStyle());
         label.setAlignment(align);
         return label;

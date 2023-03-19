@@ -3,6 +3,7 @@ package com.jgames.survival.model.game.logic.battle.commands.rangedattack;
 import static com.jgames.survival.model.game.logic.battle.vision.VisionScopeConstants.VISIBLE;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import ru.jengine.battlemodule.standardfilling.visible.HasVision;
 import ru.jengine.battlemodule.standardfilling.visible.VisionInformationService;
 import ru.jengine.beancontainer.annotations.Bean;
 
+import com.jgames.survival.model.game.logic.InitialBattleGenerator;
 import com.jgames.survival.model.game.logic.battle.attributes.constants.AttributesConstants.Attributes;
 import com.jgames.survival.model.game.logic.battle.commands.SelectionFromSetParameters;
 
@@ -43,19 +45,29 @@ public class RangedAttackFactory implements BattleCommandFactory<SelectionFromSe
         VisionInformationService visionInformationService = battleContext.getInformationCenter()
                 .getService(VisionInformationService.class);
         Set<Point> visiblePoints = visionInformationService.getVisiblePoints(model.getId(), VISIBLE);
+
+        String team = model.getAttributes().getAsString(InitialBattleGenerator.TEAM_ATTRIBUTE).getValue();
+
         return visiblePoints.stream()
                 .map(battleState::getModelsOnPosition)
-                .filter(models -> !models.isEmpty())
                 .flatMap(Collection::stream)
-                .filter(battleModel -> !model.equals(battleModel))
-                .filter(battleModel -> battleModel instanceof DynamicModel)
+                .filter(battleModel -> {
+                    if (model.equals(battleModel) || !(battleModel instanceof DynamicModel dynamic)) {
+                        return false;
+                    }
+
+                    String targetTeam = dynamic.getAttributes()
+                            .getAsString(InitialBattleGenerator.TEAM_ATTRIBUTE)
+                            .getValue();
+                    return !Objects.equals(team, targetTeam);
+                })
                 .collect(Collectors.toSet());
     }
 
     public static boolean canRangedAttack(BattleModel model) {
         AttributesContainer attributes = model.getAttributes();
-        IntAttribute leftArmState = attributes.getAttributeByPath(Attributes.ATTRIBUTES, Attributes.DISTANCE_DAMAGE_POINT);
+        IntAttribute distance = attributes.getAttributeByPath(Attributes.ATTRIBUTES, Attributes.DISTANCE_DAMAGE_POINT);
 
-        return leftArmState != null && leftArmState.getValue() > 0;
+        return distance != null && distance.getValue() > 0;
     }
 }

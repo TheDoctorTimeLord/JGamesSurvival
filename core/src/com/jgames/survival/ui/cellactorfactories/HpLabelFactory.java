@@ -3,7 +3,6 @@ package com.jgames.survival.ui.cellactorfactories;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.jgames.survival.presenter.core.model.GameObject;
@@ -16,7 +15,7 @@ public class HpLabelFactory extends AlignedLabelFactory {
     }
 
     @Override
-    public Actor create(@Nullable GameObject gameObject) throws UIException {
+    public Label create(@Nullable GameObject gameObject) throws UIException {
         Label actor = (Label)super.create(gameObject);
         if (gameObject == null) {
             throw new UIException("Game object is null but it is required");

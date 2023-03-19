@@ -33,7 +33,7 @@ public class MeleeAttackCommand implements BattleCommand<SelectionFromSetParamet
         if (model instanceof CanHit canHit) {
             BattleModel enemy = executionParameters.getSelectedElement();
             Set<BattleModel> nearEnemies = MeleeAttackCommandFactory
-                    .getNearestBattleModels(canHit, battleContext.getBattleState());
+                    .getNearestBattleModels(model, battleContext.getBattleState());
             if (nearEnemies.contains(enemy)) {
                 DispatcherBattleWrapper dispatcher = battleContext.getDispatcher();
                 if (enemy == null)

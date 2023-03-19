@@ -14,6 +14,7 @@ import com.jgames.survival.presenter.core.model.GameObject;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.DirectionComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.HealthComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.PositionComponent;
+import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.TeamComponent;
 import com.jgames.survival.presenter.filling.gamestate.model.objectcomponents.TypeNameComponent;
 import com.jgames.survival.presenter.filling.gamestate.modules.GameObjectsModule;
 import com.jgames.survival.presenter.filling.gamestate.modules.MapFillingModule;
@@ -54,6 +55,10 @@ public class GameObjectsMutator implements PresentingStateModuleMutator {
 
     public void setHp(int objectId, int hp) {
         gameObjectsModule.getOrCreateLastObjectState(objectId).addComponent(new HealthComponent(hp));
+    }
+
+    public void setTeam(int objectId, String team) {
+        gameObjectsModule.getOrCreateLastObjectState(objectId).addComponent(new TeamComponent(team));
     }
 
     public void moveObject(int objectId, Point newPosition) {

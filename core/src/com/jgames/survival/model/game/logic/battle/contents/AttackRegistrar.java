@@ -6,8 +6,6 @@ import ru.jengine.battlemodule.core.contentregistrars.AbstractContentRegistrar;
 import ru.jengine.battlemodule.core.events.DispatcherBattleWrapper;
 import ru.jengine.battlemodule.core.state.BattleState;
 
-import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEventHandler;
-import com.jgames.survival.model.game.logic.battle.events.bodypartdamage.BodyPartDamageEventNotifier;
 import com.jgames.survival.model.game.logic.battle.events.deadmodel.DeadDynamicModelHandler;
 import com.jgames.survival.model.game.logic.battle.events.deadmodel.DeadDynamicModelNotifier;
 import com.jgames.survival.model.game.logic.battle.events.dealingdamage.DamageEventHandler;
@@ -20,9 +18,6 @@ public class AttackRegistrar extends AbstractContentRegistrar {
         BattleActionRegistrar actionRegistrar = battleContext.getBattleActionRegistrar();
         DispatcherBattleWrapper dispatcher = battleContext.getDispatcher();
         BattleState battleState = battleContext.getBattleState();
-
-        registerPostHandler(new BodyPartDamageEventHandler(battleState, dispatcher));
-        registerPostHandler(new BodyPartDamageEventNotifier(actionRegistrar));
 
         registerPostHandler(new DamageEventHandler(battleState, dispatcher));
         registerPostHandler(new DamageEventNotifier(actionRegistrar));
